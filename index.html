@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Apoorva Verma — AI Engineer · RAG &amp; LLM Evaluation</title>
+<meta name="description" content="AI Engineer specializing in retrieval-augmented generation and LLM evaluation. Grounded answers with faithfulness scores and cited sources.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/motion@11.11.13/dist/motion.js"></script>
+<style>
+  :root{
+    --bg:#07070a;--surface:rgba(16,16,22,.7);--surface-hover:rgba(20,20,28,.8);--bubble:rgba(20,20,27,.85);--nav-bg:rgba(14,14,18,.5);
+    --text:#ededf2;--text-2:#c7c7d1;--text-3:#a8a8b3;--text-4:#8b8b96;--faint:#6e6e7a;--heading:#fff;
+    --on-accent:#07070a;--invert-bg:#ededf2;--invert-fg:#07070a;--dot:#33333f;--scroll:#23232c;--scrim:rgba(5,5,8,.78);
+    --w025:rgba(255,255,255,.025);--w03:rgba(255,255,255,.03);--w04:rgba(255,255,255,.04);--w05:rgba(255,255,255,.05);--w06:rgba(255,255,255,.06);--w07:rgba(255,255,255,.07);--w08:rgba(255,255,255,.08);--w09:rgba(255,255,255,.09);--w10:rgba(255,255,255,.1);--w12:rgba(255,255,255,.12);--w14:rgba(255,255,255,.14);--w30:rgba(255,255,255,.3);
+  }
+  :root[data-av-theme="light"]{
+    --bg:#f4f4f7;--surface:rgba(255,255,255,.78);--surface-hover:rgba(255,255,255,.96);--bubble:rgba(255,255,255,.86);--nav-bg:rgba(255,255,255,.6);
+    --text:#1c1c22;--text-2:#44444f;--text-3:#5c5c68;--text-4:#6f6f7b;--faint:#9a9aa6;--heading:#0a0a12;
+    --on-accent:#07070a;--invert-bg:#18181b;--invert-fg:#fafafa;--dot:#c4c4cc;--scroll:#c8c8d0;--scrim:rgba(244,244,247,.72);
+    --w025:rgba(0,0,0,.04);--w03:rgba(0,0,0,.05);--w04:rgba(0,0,0,.05);--w05:rgba(0,0,0,.06);--w06:rgba(0,0,0,.07);--w07:rgba(0,0,0,.08);--w08:rgba(0,0,0,.09);--w09:rgba(0,0,0,.1);--w10:rgba(0,0,0,.11);--w12:rgba(0,0,0,.13);--w14:rgba(0,0,0,.16);--w30:rgba(0,0,0,.28);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth;background-color:var(--bg);transition:background-color .35s ease}
+  html body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased;transition:background-color .35s ease,color .35s ease}
+  ::selection{background:rgba(124,108,255,.32)}
+  ::-webkit-scrollbar{width:10px;height:10px}
+  ::-webkit-scrollbar-track{background:var(--bg)}
+  ::-webkit-scrollbar-thumb{background:var(--scroll);border-radius:8px;border:2px solid var(--bg)}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes bubbleIn{from{opacity:0;transform:translateY(10px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
+  @keyframes floatGlow{0%,100%{transform:translate(0,0) scale(1);opacity:.55}50%{transform:translate(30px,-24px) scale(1.08);opacity:.8}}
+  @keyframes floatGlow2{0%,100%{transform:translate(0,0) scale(1);opacity:.4}50%{transform:translate(-28px,26px) scale(1.12);opacity:.65}}
+  @keyframes dot{0%,80%,100%{opacity:.25;transform:translateY(0)}40%{opacity:1;transform:translateY(-3px)}}
+  @keyframes growBar{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+  @keyframes blink{0%,49%{opacity:1}50%,100%{opacity:0}}
+  @keyframes overlayIn{from{opacity:0}to{opacity:1}}
+  @keyframes sheetIn{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+
+  /* Responsive — added for real-site deployment (source had no media queries) */
+  @media (max-width:900px){
+    .evalgrid{grid-template-columns:1fr !important}
+    .projgrid{grid-template-columns:1fr 1fr !important}
+    .aboutgrid{grid-template-columns:1fr !important;gap:40px !important}
+  }
+  @media (max-width:640px){
+    .projgrid{grid-template-columns:1fr !important}
+    .bloggrid{grid-template-columns:1fr !important}
+    .nav-links{gap:0 !important}
+    .nav-link{display:none !important}
+    #cur-ring,#cur-dot{display:none !important}
+  }
+</style>
+</head>
+<body>
+
+<div id="av-root" style="position:relative;min-height:100vh;overflow:hidden">
+
+  <!-- custom cursor -->
+  <div id="cur-ring" style="position:fixed;top:0;left:0;width:34px;height:34px;margin:-17px 0 0 -17px;border-radius:50%;border:1px solid rgba(124,108,255,.6);background:rgba(124,108,255,.05);box-shadow:0 0 22px rgba(124,108,255,.32);pointer-events:none;z-index:300;mix-blend-mode:screen;transform:translate(-200px,-200px);transition:width .2s ease,height .2s ease,background .2s ease,border-color .2s ease;opacity:0"></div>
+  <div id="cur-dot" style="position:fixed;top:0;left:0;width:6px;height:6px;margin:-3px 0 0 -3px;border-radius:50%;background:#d6cfff;box-shadow:0 0 8px rgba(124,108,255,.85);pointer-events:none;z-index:301;transform:translate(-200px,-200px);opacity:0"></div>
+
+  <!-- ambient glows -->
+  <div style="position:fixed;top:-180px;left:8%;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,rgba(124,108,255,.30),transparent 70%);filter:blur(40px);pointer-events:none;animation:floatGlow 16s ease-in-out infinite;z-index:0"></div>
+  <div style="position:fixed;bottom:-160px;right:4%;width:460px;height:460px;border-radius:50%;background:radial-gradient(circle,rgba(56,189,248,.22),transparent 70%);filter:blur(40px);pointer-events:none;animation:floatGlow2 19s ease-in-out infinite;z-index:0"></div>
+  <div style="position:fixed;inset:0;background-image:radial-gradient(var(--w025) 1px,transparent 1px);background-size:42px 42px;pointer-events:none;z-index:0"></div>
+
+  <!-- NAV -->
+  <nav style="position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:center;padding:16px 20px">
+    <div id="av-nav" style="display:flex;align-items:center;justify-content:space-between;width:100%;max-width:1140px;padding:10px 14px 10px 18px;background:var(--nav-bg);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid var(--w06);border-radius:14px;box-shadow:0 8px 32px rgba(0,0,0,.25)">
+      <a href="#top" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--text)">
+        <span style="display:grid;place-items:center;width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,#7c6cff,#38bdf8);font-size:13px;font-weight:600;color:var(--on-accent)">AV</span>
+        <span style="font-weight:500;letter-spacing:-.02em;font-size:15px">Apoorva Verma</span>
+      </a>
+      <div class="nav-links" style="display:flex;align-items:center;gap:4px">
+        <a class="nav-link" href="#projects" style="text-decoration:none;color:var(--text-3);font-size:13.5px;padding:7px 12px;border-radius:9px;transition:color .2s" data-hover="color:var(--text)">Projects</a>
+        <a class="nav-link" href="#eval" style="text-decoration:none;color:var(--text-3);font-size:13.5px;padding:7px 12px;border-radius:9px;transition:color .2s" data-hover="color:var(--text)">Evaluation</a>
+        <a class="nav-link" href="#writing" style="text-decoration:none;color:var(--text-3);font-size:13.5px;padding:7px 12px;border-radius:9px;transition:color .2s" data-hover="color:var(--text)">Writing</a>
+        <a class="nav-link" href="#about" style="text-decoration:none;color:var(--text-3);font-size:13.5px;padding:7px 12px;border-radius:9px;transition:color .2s" data-hover="color:var(--text)">About</a>
+        <button id="theme-btn" onclick="App.toggleTheme()" aria-label="Toggle theme" style="display:grid;place-items:center;width:34px;height:34px;border-radius:9px;border:1px solid var(--w10);background:var(--w03);color:var(--text-3);cursor:pointer;font-size:14px;transition:color .18s,border-color .18s,background .18s" data-hover="color:var(--text);border-color:var(--w30)">☀</button>
+        <a href="#contact" style="text-decoration:none;color:var(--invert-fg);font-size:13.5px;font-weight:600;padding:8px 15px;border-radius:9px;background:var(--invert-bg);margin-left:6px;transition:transform .2s" data-hover="transform:translateY(-1px)">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="top" style="position:relative;z-index:1;max-width:1140px;margin:0 auto;padding:0 24px">
+
+    <!-- HERO -->
+    <section style="padding:160px 0 70px;display:flex;flex-direction:column;align-items:center;text-align:center">
+      <div style="display:inline-flex;align-items:center;gap:8px;padding:6px 13px;border:1px solid var(--w10);border-radius:999px;background:var(--w03);font-size:12.5px;color:var(--text-3);letter-spacing:.01em;animation:fadeUp .6s ease both">
+        <span style="width:7px;height:7px;border-radius:50%;background:#34d399;box-shadow:0 0 10px #34d399"></span>
+        Available for AI/ML engineering roles
+      </div>
+      <h1 style="margin-top:26px;font-size:clamp(40px,7vw,76px);font-weight:200;letter-spacing:-.045em;line-height:1.02">
+        <span class="hero-word" style="display:inline-block;opacity:0">Apoorva</span> <span class="hero-word" style="display:inline-block;opacity:0">Verma</span>
+      </h1>
+      <p style="margin-top:18px;font-size:clamp(17px,2.4vw,22px);font-weight:300;letter-spacing:-.01em;color:var(--text-2)">
+        <span class="hero-word" style="display:inline-block;opacity:0">AI</span> <span class="hero-word" style="display:inline-block;opacity:0">Engineer</span> <span class="hero-word" style="display:inline-block;opacity:0">—</span> <span class="hero-word" style="display:inline-block;opacity:0;color:var(--heading)">RAG</span> <span class="hero-word" style="display:inline-block;opacity:0;color:var(--heading)">&amp;</span> <span class="hero-word" style="display:inline-block;opacity:0;color:var(--heading)">LLM</span> <span class="hero-word" style="display:inline-block;opacity:0;color:var(--heading)">Evaluation</span>
+      </p>
+      <p style="margin-top:14px;max-width:560px;font-size:15.5px;line-height:1.6;color:var(--text-4);animation:fadeUp .6s .55s ease both">
+        I build retrieval systems that don't hallucinate — and the evaluation harnesses that prove it. This site is one of them.
+      </p>
+
+      <!-- CHAT INPUT -->
+      <div style="width:100%;max-width:680px;margin-top:42px;animation:fadeUp .6s .65s ease both">
+        <div style="display:flex;align-items:center;gap:8px;padding:8px 8px 8px 18px;background:var(--bubble);backdrop-filter:blur(12px);border:1px solid var(--w10);border-radius:16px;box-shadow:0 18px 50px -12px rgba(124,108,255,.28),inset 0 1px 0 var(--w04)">
+          <span style="color:var(--faint);font-size:18px;flex-shrink:0">✦</span>
+          <input id="av-input" onkeydown="App.onKey(event)" placeholder="Ask me anything — answers are grounded in my real work, with sources" style="flex:1;min-width:0;background:transparent;border:none;outline:none;color:var(--text);font-family:inherit;font-size:15px;padding:8px 0" />
+          <button onclick="App.onSend()" style="flex-shrink:0;display:grid;place-items:center;width:40px;height:40px;border:none;border-radius:11px;background:linear-gradient(135deg,#7c6cff,#6366f1);color:#fff;cursor:pointer;font-size:16px;transition:transform .18s,box-shadow .18s" data-hover="transform:translateY(-1px);box-shadow:0 8px 20px -4px rgba(124,108,255,.6)">↑</button>
+        </div>
+
+        <!-- CHIPS -->
+        <div style="display:flex;flex-wrap:wrap;gap:9px;justify-content:center;margin-top:16px">
+          <button onclick="App.send('What are your skills?')" style="font-family:inherit;font-size:13px;color:var(--text-2);padding:8px 14px;border-radius:999px;border:1px solid var(--w10);background:var(--w03);cursor:pointer;transition:transform .28s cubic-bezier(.34,1.56,.64,1),border-color .18s,color .18s,background .18s" data-hover="border-color:rgba(124,108,255,.5);color:var(--heading);background:rgba(124,108,255,.1);transform:scale(1.06)">What are your skills?</button>
+          <button onclick="App.send('Tell me about your projects')" style="font-family:inherit;font-size:13px;color:var(--text-2);padding:8px 14px;border-radius:999px;border:1px solid var(--w10);background:var(--w03);cursor:pointer;transition:transform .28s cubic-bezier(.34,1.56,.64,1),border-color .18s,color .18s,background .18s" data-hover="border-color:rgba(124,108,255,.5);color:var(--heading);background:rgba(124,108,255,.1);transform:scale(1.06)">Tell me about your projects</button>
+          <button onclick="App.send('Your experience')" style="font-family:inherit;font-size:13px;color:var(--text-2);padding:8px 14px;border-radius:999px;border:1px solid var(--w10);background:var(--w03);cursor:pointer;transition:transform .28s cubic-bezier(.34,1.56,.64,1),border-color .18s,color .18s,background .18s" data-hover="border-color:rgba(124,108,255,.5);color:var(--heading);background:rgba(124,108,255,.1);transform:scale(1.06)">Your experience</button>
+          <button onclick="App.send('Why should we hire you?')" style="font-family:inherit;font-size:13px;color:var(--text-2);padding:8px 14px;border-radius:999px;border:1px solid var(--w10);background:var(--w03);cursor:pointer;transition:transform .28s cubic-bezier(.34,1.56,.64,1),border-color .18s,color .18s,background .18s" data-hover="border-color:rgba(124,108,255,.5);color:var(--heading);background:rgba(124,108,255,.1);transform:scale(1.06)">Why should we hire you?</button>
+        </div>
+      </div>
+
+      <!-- CHAT THREAD (rendered by JS) -->
+      <div id="av-thread" style="width:100%;max-width:680px;margin-top:30px;display:none;flex-direction:column;gap:18px;text-align:left"></div>
+    </section>
+
+    <!-- EVAL DASHBOARD -->
+    <section id="eval" data-reveal="1" style="padding:80px 0 60px;scroll-margin-top:90px;opacity:0;transform:translateY(24px)">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#7c6cff;letter-spacing:.08em">// THE DIFFERENTIATOR</span>
+      </div>
+      <h2 style="font-size:clamp(28px,4vw,42px);font-weight:200;letter-spacing:-.035em;line-height:1.08">How this site's AI is evaluated</h2>
+      <p style="margin-top:14px;max-width:620px;font-size:15px;line-height:1.62;color:var(--text-4)">Every answer above is scored before you see it. I ran an ablation across chunking strategies and embedding models — the winning configuration is what's serving you now.</p>
+
+      <div class="evalgrid" style="display:grid;grid-template-columns:1.3fr 1fr;gap:20px;margin-top:34px">
+
+        <!-- TABLE -->
+        <div style="background:var(--surface);border:1px solid var(--w09);border-radius:16px;padding:6px;overflow:hidden">
+          <div style="padding:14px 16px 12px;font-size:13px;color:var(--text-3);font-weight:500;letter-spacing:-.01em">Retrieval ablation — RAGAS metrics</div>
+          <div style="overflow-x:auto">
+            <table style="width:100%;border-collapse:collapse;font-size:13px;min-width:460px">
+              <thead>
+                <tr style="text-align:left;color:var(--faint)">
+                  <th style="padding:10px 16px;font-weight:500;border-bottom:1px solid var(--w07)">Chunking</th>
+                  <th style="padding:10px 16px;font-weight:500;border-bottom:1px solid var(--w07)">Embedding</th>
+                  <th style="padding:10px 12px;font-weight:500;border-bottom:1px solid var(--w07);text-align:right">Faith.</th>
+                  <th style="padding:10px 12px;font-weight:500;border-bottom:1px solid var(--w07);text-align:right">Rel.</th>
+                  <th style="padding:10px 16px;font-weight:500;border-bottom:1px solid var(--w07);text-align:right">Precision</th>
+                </tr>
+              </thead>
+              <tbody style="font-family:'JetBrains Mono',monospace">
+                <tr>
+                  <td style="padding:11px 16px;color:var(--text-2);border-bottom:1px solid var(--w05)">Fixed 512</td>
+                  <td style="padding:11px 16px;color:var(--text-4);border-bottom:1px solid var(--w05)">ada-002</td>
+                  <td style="padding:11px 12px;text-align:right;color:var(--text-2);border-bottom:1px solid var(--w05)">0.81</td>
+                  <td style="padding:11px 12px;text-align:right;color:var(--text-2);border-bottom:1px solid var(--w05)">0.79</td>
+                  <td style="padding:11px 16px;text-align:right;color:var(--text-2);border-bottom:1px solid var(--w05)">0.74</td>
+                </tr>
+                <tr>
+                  <td style="padding:11px 16px;color:var(--text-2);border-bottom:1px solid var(--w05)">Recursive</td>
+                  <td style="padding:11px 16px;color:var(--text-4);border-bottom:1px solid var(--w05)">bge-large</td>
+                  <td style="padding:11px 12px;text-align:right;color:var(--text-2);border-bottom:1px solid var(--w05)">0.88</td>
+                  <td style="padding:11px 12px;text-align:right;color:var(--text-2);border-bottom:1px solid var(--w05)">0.86</td>
+                  <td style="padding:11px 16px;text-align:right;color:var(--text-2);border-bottom:1px solid var(--w05)">0.83</td>
+                </tr>
+                <tr style="background:rgba(124,108,255,.07)">
+                  <td style="padding:11px 16px;color:var(--heading);border-bottom:1px solid var(--w05);font-weight:500">Semantic <span style="font-family:'Inter';font-size:10px;color:#7c6cff;border:1px solid rgba(124,108,255,.5);border-radius:5px;padding:1px 5px;margin-left:4px">LIVE</span></td>
+                  <td style="padding:11px 16px;color:var(--text-2);border-bottom:1px solid var(--w05)">text-3-large</td>
+                  <td style="padding:11px 12px;text-align:right;color:#34d399;border-bottom:1px solid var(--w05)">0.94</td>
+                  <td style="padding:11px 12px;text-align:right;color:#34d399;border-bottom:1px solid var(--w05)">0.92</td>
+                  <td style="padding:11px 16px;text-align:right;color:#34d399;border-bottom:1px solid var(--w05)">0.90</td>
+                </tr>
+                <tr>
+                  <td style="padding:11px 16px;color:var(--text-2)">Sentence-win</td>
+                  <td style="padding:11px 16px;color:var(--text-4)">text-3-large</td>
+                  <td style="padding:11px 12px;text-align:right;color:var(--text-2)">0.90</td>
+                  <td style="padding:11px 12px;text-align:right;color:var(--text-2)">0.89</td>
+                  <td style="padding:11px 16px;text-align:right;color:var(--text-2)">0.85</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- BAR CHART -->
+        <div style="background:var(--surface);border:1px solid var(--w09);border-radius:16px;padding:18px 20px 16px;display:flex;flex-direction:column">
+          <div style="font-size:13px;color:var(--text-3);font-weight:500;margin-bottom:4px">Faithfulness by config</div>
+          <div style="font-size:11.5px;color:var(--faint);margin-bottom:auto">higher is better · 0–1 scale</div>
+          <div style="display:flex;align-items:flex-end;gap:16px;height:170px;margin-top:18px;padding-top:10px">
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;height:100%;justify-content:flex-end">
+              <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-4)">.81</span>
+              <div style="width:100%;height:81%;background:linear-gradient(180deg,#3a3a46,#2a2a34);border-radius:6px 6px 0 0;transform-origin:bottom;animation:growBar .8s cubic-bezier(.2,.8,.2,1) both"></div>
+              <span style="font-size:10.5px;color:var(--faint)">Fixed</span>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;height:100%;justify-content:flex-end">
+              <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-4)">.88</span>
+              <div style="width:100%;height:88%;background:linear-gradient(180deg,#4a4a5a,#33333f);border-radius:6px 6px 0 0;transform-origin:bottom;animation:growBar .8s .1s cubic-bezier(.2,.8,.2,1) both"></div>
+              <span style="font-size:10.5px;color:var(--faint)">Recursive</span>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;height:100%;justify-content:flex-end">
+              <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#34d399;font-weight:500">.94</span>
+              <div style="width:100%;height:94%;background:linear-gradient(180deg,#7c6cff,#38bdf8);border-radius:6px 6px 0 0;box-shadow:0 0 24px -4px rgba(124,108,255,.6);transform-origin:bottom;animation:growBar .8s .2s cubic-bezier(.2,.8,.2,1) both"></div>
+              <span style="font-size:10.5px;color:var(--text-2);font-weight:500">Semantic</span>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;height:100%;justify-content:flex-end">
+              <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-4)">.90</span>
+              <div style="width:100%;height:90%;background:linear-gradient(180deg,#4a4a5a,#33333f);border-radius:6px 6px 0 0;transform-origin:bottom;animation:growBar .8s .3s cubic-bezier(.2,.8,.2,1) both"></div>
+              <span style="font-size:10.5px;color:var(--faint)">Sent-win</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section id="projects" data-reveal="1" style="padding:60px 0;scroll-margin-top:90px;opacity:0;transform:translateY(24px)">
+      <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#7c6cff;letter-spacing:.08em">// SELECTED WORK</span>
+      <h2 style="margin-top:8px;font-size:clamp(28px,4vw,42px);font-weight:200;letter-spacing:-.035em">Featured projects</h2>
+
+      <div class="projgrid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:34px">
+
+        <div style="display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--w09);border-radius:16px;padding:22px;transition:transform .25s,border-color .25s" data-hover="transform:translateY(-4px);border-color:rgba(124,108,255,.4)">
+          <div style="height:84px;border-radius:11px;background:linear-gradient(135deg,rgba(124,108,255,.25),rgba(56,189,248,.12));border:1px solid var(--w06);position:relative;overflow:hidden;margin-bottom:16px">
+            <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(90deg,var(--w06) 0 1px,transparent 1px 22px)"></div>
+            <span style="position:absolute;left:14px;bottom:10px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-2)">retrieval → rerank → eval</span>
+          </div>
+          <h3 style="font-size:17px;font-weight:500;letter-spacing:-.02em">RAG + Evaluation System</h3>
+          <p style="margin-top:8px;font-size:13.5px;line-height:1.55;color:var(--text-4);flex:1">Production RAG pipeline with semantic chunking, hybrid retrieval, and an automated RAGAS eval gate blocking regressions in CI.</p>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:14px">
+            <span style="font-size:11px;color:var(--text-3);padding:3px 9px;border-radius:6px;background:var(--w05);border:1px solid var(--w08)">Python</span>
+            <span style="font-size:11px;color:var(--text-3);padding:3px 9px;border-radius:6px;background:var(--w05);border:1px solid var(--w08)">LangChain</span>
+            <span style="font-size:11px;color:var(--text-3);padding:3px 9px;border-radius:6px;background:var(--w05);border:1px solid var(--w08)">RAGAS</span>
+            <span style="font-size:11px;color:var(--text-3);padding:3px 9px;border-radius:6px;background:var(--w05);border:1px solid var(--w08)">Qdrant</span>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:16px;padding-top:14px;border-top:1px solid var(--w06)">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#34d399">+38% faithfulness</span>
+            <div style="display:flex;gap:8px">
+              <button style="font-family:inherit;font-size:12px;color:var(--invert-fg);font-weight:600;padding:6px 12px;border:none;border-radius:8px;background:var(--invert-bg);cursor:pointer">Demo</button>
+              <button style="font-family:inherit;font-size:12px;color:var(--text-2);padding:6px 12px;border:1px solid var(--w14);border-radius:8px;background:transparent;cursor:pointer">Code</button>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--w09);border-radius:16px;padding:22px;transition:transform .25s,border-color .25s" data-hover="transform:translateY(-4px);border-color:rgba(124,108,255,.4)">
+          <div style="height:84px;border-radius:11px;background:linear-gradient(135deg,rgba(56,189,248,.22),rgba(52,211,153,.12));border:1px solid var(--w06);position:relative;overflow:hidden;margin-bottom:16px;display:flex;align-items:flex-end;gap:5px;padding:12px">
+            <div style="flex:1;height:38%;background:rgba(255,255,255,.25);border-radius:3px"></div>
+            <div style="flex:1;height:62%;background:rgba(255,255,255,.3);border-radius:3px"></div>
+            <div style="flex:1;height:50%;background:rgba(255,255,255,.25);border-radius:3px"></div>
+            <div style="flex:1;height:88%;background:linear-gradient(180deg,#38bdf8,#34d399);border-radius:3px"></div>
+            <div style="flex:1;height:70%;background:rgba(255,255,255,.3);border-radius:3px"></div>
+          </div>
+          <h3 style="font-size:17px;font-weight:500;letter-spacing:-.02em">LLM Eval Benchmark</h3>
+          <p style="margin-top:8px;font-size:13.5px;line-height:1.55;color:var(--text-4);flex:1">Open benchmark harness comparing 8 LLMs across faithfulness, toxicity, and instruction-following with LLM-as-judge calibration.</p>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:14px">
+            <span style="font-size:11px;color:var(--text-3);padding:3px 9px;border-radius:6px;background:var(--w05);border:1px solid var(--w08)">PyTorch</span>
+            <span style="font-size:11px;color:var(--text-3);padding:3px 9px;border-radius:6px;background:var(--w05);border:1px solid var(--w08)">DeepEval</span>
+            <span style="font-size:11px;color:var(--text-3);padding:3px 9px;border-radius:6px;background:var(--w05);border:1px solid var(--w08)">W&amp;B</span>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:16px;padding-top:14px;border-top:1px solid var(--w06)">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#34d399">8 models · 2.4k cases</span>
+            <div style="display:flex;gap:8px">
+              <button style="font-family:inherit;font-size:12px;color:var(--invert-fg);font-weight:600;padding:6px 12px;border:none;border-radius:8px;background:var(--invert-bg);cursor:pointer">Demo</button>
+              <button style="font-family:inherit;font-size:12px;color:var(--text-2);padding:6px 12px;border:1px solid var(--w14);border-radius:8px;background:transparent;cursor:pointer">Code</button>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--w09);border-radius:16px;padding:22px;transition:transform .25s,border-color .25s" data-hover="transform:translateY(-4px);border-color:rgba(124,108,255,.4)">
+          <div style="height:84px;border-radius:11px;background:linear-gradient(135deg,rgba(251,146,60,.2),rgba(124,108,255,.14));border:1px solid var(--w06);position:relative;overflow:hidden;margin-bottom:16px">
+            <div style="position:absolute;top:50%;left:14px;width:11px;height:11px;border-radius:50%;background:#fb923c;transform:translateY(-50%);box-shadow:34px 0 0 rgba(255,255,255,.3),68px 0 0 #34d399,68px 0 14px rgba(52,211,153,.5)"></div>
+            <div style="position:absolute;top:50%;left:25px;height:2px;width:48px;background:rgba(255,255,255,.2)"></div>
+            <span style="position:absolute;right:12px;bottom:10px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-2)">retry · recover</span>
+          </div>
+          <h3 style="font-size:17px;font-weight:500;letter-spacing:-.02em">AI Agent — failure recovery</h3>
+          <p style="margin-top:8px;font-size:13.5px;line-height:1.55;color:var(--text-4);flex:1">Tool-using agent with self-critique loops and graceful degradation — detects failed tool calls and re-plans instead of hallucinating.</p>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:14px">
+            <span style="font-size:11px;color:var(--text-3);padding:3px 9px;border-radius:6px;background:var(--w05);border:1px solid var(--w08)">LangGraph</span>
+            <span style="font-size:11px;color:var(--text-3);padding:3px 9px;border-radius:6px;background:var(--w05);border:1px solid var(--w08)">OpenAI</span>
+            <span style="font-size:11px;color:var(--text-3);padding:3px 9px;border-radius:6px;background:var(--w05);border:1px solid var(--w08)">FastAPI</span>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:16px;padding-top:14px;border-top:1px solid var(--w06)">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#34d399">91% recovery rate</span>
+            <div style="display:flex;gap:8px">
+              <button style="font-family:inherit;font-size:12px;color:var(--invert-fg);font-weight:600;padding:6px 12px;border:none;border-radius:8px;background:var(--invert-bg);cursor:pointer">Demo</button>
+              <button style="font-family:inherit;font-size:12px;color:var(--text-2);padding:6px 12px;border:1px solid var(--w14);border-radius:8px;background:transparent;cursor:pointer">Code</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- WRITING / BLOG -->
+    <section id="writing" data-reveal="1" style="padding:60px 0;scroll-margin-top:90px;opacity:0;transform:translateY(24px)">
+      <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#7c6cff;letter-spacing:.08em">// WRITING</span>
+      <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:8px">
+        <h2 style="font-size:clamp(28px,4vw,42px);font-weight:200;letter-spacing:-.035em">Notes on grounding &amp; eval</h2>
+        <a href="blog.html" style="text-decoration:none;font-size:13px;color:#7c6cff;padding:6px 0;transition:color .2s" data-hover="color:#a99dff">View all writing →</a>
+      </div>
+
+      <div id="av-bloggrid" class="bloggrid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:34px"></div>
+    </section>
+
+    <!-- ABOUT + TIMELINE -->
+    <section id="about" data-reveal="1" style="padding:60px 0;scroll-margin-top:90px;opacity:0;transform:translateY(24px)">
+      <div class="aboutgrid" style="display:grid;grid-template-columns:1fr 1fr;gap:48px">
+        <div>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#7c6cff;letter-spacing:.08em">// ABOUT</span>
+          <h2 style="margin-top:8px;font-size:clamp(26px,3.5vw,38px);font-weight:200;letter-spacing:-.035em;line-height:1.1">Engineer who measures what others guess</h2>
+          <p style="margin-top:18px;font-size:15px;line-height:1.7;color:var(--text-3)">I'm an AI engineer focused on the unglamorous half of LLM work: making sure systems are actually correct. At Oracle I build RAG pipelines and the evaluation infrastructure that keeps them honest in production.</p>
+          <p style="margin-top:14px;font-size:15px;line-height:1.7;color:var(--text-4)">Before that, a path through some places that taught me to ship: Microsoft Engage, J.P. Morgan, and Major League Hacking. I care about reproducible benchmarks, calibrated judges, and answers that cite their sources.</p>
+        </div>
+
+        <div>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#7c6cff;letter-spacing:.08em">// TIMELINE</span>
+          <div style="margin-top:20px;border-left:1px solid var(--w10);padding-left:24px;display:flex;flex-direction:column;gap:24px">
+            <div style="position:relative">
+              <span style="position:absolute;left:-30px;top:4px;width:11px;height:11px;border-radius:50%;background:#7c6cff;box-shadow:0 0 12px #7c6cff;border:2px solid var(--bg)"></span>
+              <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px"><h4 style="font-size:15.5px;font-weight:500">AI/ML Engineer · Oracle</h4><span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--faint);flex-shrink:0">2023 — now</span></div>
+              <p style="margin-top:5px;font-size:13.5px;line-height:1.55;color:var(--text-4)">RAG systems &amp; LLM evaluation infrastructure for enterprise search.</p>
+            </div>
+            <div style="position:relative">
+              <span style="position:absolute;left:-30px;top:4px;width:11px;height:11px;border-radius:50%;background:var(--dot);border:2px solid var(--bg)"></span>
+              <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px"><h4 style="font-size:15.5px;font-weight:500">SWE Intern · Microsoft Engage</h4><span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--faint);flex-shrink:0">2022</span></div>
+              <p style="margin-top:5px;font-size:13.5px;line-height:1.55;color:var(--text-4)">Built an ML-driven recommendation feature end-to-end.</p>
+            </div>
+            <div style="position:relative">
+              <span style="position:absolute;left:-30px;top:4px;width:11px;height:11px;border-radius:50%;background:var(--dot);border:2px solid var(--bg)"></span>
+              <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px"><h4 style="font-size:15.5px;font-weight:500">SWE Intern · J.P. Morgan</h4><span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--faint);flex-shrink:0">2021</span></div>
+              <p style="margin-top:5px;font-size:13.5px;line-height:1.55;color:var(--text-4)">Data tooling for an internal risk-analytics platform.</p>
+            </div>
+            <div style="position:relative">
+              <span style="position:absolute;left:-30px;top:4px;width:11px;height:11px;border-radius:50%;background:var(--dot);border:2px solid var(--bg)"></span>
+              <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px"><h4 style="font-size:15.5px;font-weight:500">Fellow · MLH</h4><span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--faint);flex-shrink:0">2021</span></div>
+              <p style="margin-top:5px;font-size:13.5px;line-height:1.55;color:var(--text-4)">Open-source fellowship — shipped to a production codebase.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" data-reveal="1" style="padding:70px 0 110px;scroll-margin-top:90px;opacity:0;transform:translateY(24px)">
+      <div style="text-align:center;background:var(--surface);border:1px solid var(--w09);border-radius:22px;padding:54px 32px;position:relative;overflow:hidden">
+        <div style="position:absolute;top:-90px;left:50%;transform:translateX(-50%);width:380px;height:200px;background:radial-gradient(circle,rgba(124,108,255,.28),transparent 70%);filter:blur(30px);pointer-events:none"></div>
+        <h2 style="position:relative;font-size:clamp(26px,4vw,40px);font-weight:200;letter-spacing:-.035em">Let's build something measurable</h2>
+        <p style="position:relative;margin-top:12px;font-size:15px;color:var(--text-4)">Open to AI/ML engineering roles &amp; collaborations.</p>
+        <div style="position:relative;display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:28px">
+          <a href="#" style="display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-size:14px;color:var(--invert-fg);font-weight:600;padding:11px 20px;border-radius:11px;background:var(--invert-bg);transition:transform .18s" data-hover="transform:translateY(-2px)">✉ Email</a>
+          <a href="#" style="display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-size:14px;color:var(--text-2);padding:11px 20px;border-radius:11px;border:1px solid var(--w14);background:var(--w03);transition:all .18s" data-hover="border-color:var(--w30);transform:translateY(-2px)">GitHub</a>
+          <a href="#" style="display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-size:14px;color:var(--text-2);padding:11px 20px;border-radius:11px;border:1px solid var(--w14);background:var(--w03);transition:all .18s" data-hover="border-color:var(--w30);transform:translateY(-2px)">LinkedIn</a>
+          <a href="#" style="display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-size:14px;color:var(--text-2);padding:11px 20px;border-radius:11px;border:1px solid var(--w14);background:var(--w03);transition:all .18s" data-hover="border-color:var(--w30);transform:translateY(-2px)">X</a>
+        </div>
+        <p style="position:relative;margin-top:36px;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--faint)">© 2025 Apoorva Verma · built &amp; evaluated end-to-end</p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ARTICLE OVERLAY (rendered by JS) -->
+  <div id="av-overlay"></div>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var answers = {
+    skills: {
+      text: "Core stack: Python, PyTorch, and the RAG toolchain — LangChain, LangGraph, and vector stores like Qdrant and pgvector. My specialty is LLM evaluation: RAGAS and DeepEval for faithfulness, relevance, and retrieval-precision, plus calibrated LLM-as-judge pipelines wired into CI so quality regressions never ship.",
+      citations: [ {icon:"📄", label:"Skills matrix"}, {icon:"🔗", label:"RAG + Eval project"} ],
+      score: "0.96"
+    },
+    projects: {
+      text: "Three I'd point you to: a production RAG + Evaluation System with an automated RAGAS gate (+38% faithfulness), an open LLM Eval Benchmark comparing 8 models across 2.4k cases, and a tool-using AI Agent with failure recovery that re-plans on failed tool calls rather than hallucinating (91% recovery). Scroll to Featured Projects for details.",
+      citations: [ {icon:"🔗", label:"RAG + Eval project"}, {icon:"📊", label:"Eval Benchmark"}, {icon:"🤖", label:"Agent repo"} ],
+      score: "0.93"
+    },
+    experience: {
+      text: "I'm currently an AI/ML Engineer at Oracle (2023–present) building RAG pipelines and the evaluation infrastructure that keeps them honest in production. Earlier: a SWE internship at Microsoft Engage, a SWE internship at J.P. Morgan, and an open-source fellowship with Major League Hacking.",
+      citations: [ {icon:"📄", label:"Oracle experience"}, {icon:"🗓", label:"Full timeline"} ],
+      score: "0.95"
+    },
+    hire: {
+      text: "Because I close the loop most AI work leaves open: I don't just build retrieval — I prove it's correct with reproducible benchmarks and grounding scores, then block regressions in CI. This very site demonstrates it: every answer you're reading was scored for faithfulness before render. That's the difference between a demo and a system you can trust.",
+      citations: [ {icon:"✅", label:"This site's eval"}, {icon:"📄", label:"Oracle experience"} ],
+      score: "0.91"
+    }
+  };
+
+  var posts = [
+    {
+      id: "p1",
+      title: "Why your RAG demo lies to you",
+      excerpt: "Fluent answers feel right and measure nothing. Here's how I separate confidence from correctness.",
+      date: "May 2026", read: "6 min read",
+      tags: ["RAG", "LLM Evaluation"],
+      body: [
+        "The most dangerous thing about a retrieval-augmented generation demo is that it sounds correct. Fluency is cheap; the model will happily produce a polished paragraph whether or not the retrieved context actually supports it. If you ship on vibes, you ship hallucinations with great grammar.",
+        "Faithfulness is the metric that catches this: it asks whether every claim in the answer is entailed by the retrieved context, independent of how nice the prose is. In my own pipelines I score it on every response and treat anything under 0.9 as a defect, not a stylistic choice.",
+        "The practical move is to decouple the two failure modes. Retrieval failures (the right chunk never made it into context) and generation failures (the chunk was there but the model embellished) need different fixes, and a single 'accuracy' number hides which one you have.",
+        "So before you celebrate a demo, ask it the same question ten times with the context withheld. If it still answers confidently, you don't have a RAG system — you have a language model with a search box bolted on for decoration."
+      ]
+    },
+    {
+      id: "p2",
+      title: "Semantic chunking won my ablation",
+      excerpt: "Four chunking strategies, two embedding models, one clear winner. The numbers and why they moved.",
+      date: "Apr 2026", read: "8 min read",
+      tags: ["RAG", "Engineering"],
+      body: [
+        "Chunking is the least glamorous and most consequential knob in a RAG stack. I ran a full ablation — fixed-size, recursive, semantic, and sentence-window splitting — each paired with two embedding models, and scored faithfulness, answer relevance, and retrieval precision with RAGAS.",
+        "Semantic chunking with text-embedding-3-large won decisively: 0.94 faithfulness against 0.81 for the naive fixed-512 baseline. The reason is intuitive in hindsight — splitting on meaning keeps a complete idea inside a single retrievable unit, so the model never has to stitch a claim across a boundary it can't see.",
+        "Fixed-size chunking's failure mode is subtle. It looks fine on short factual questions and falls apart on anything requiring two adjacent sentences, because the split lands mid-thought and only half the evidence gets retrieved.",
+        "The lesson I keep relearning: spend your optimization budget on retrieval quality before you reach for a bigger model. A sharper chunker beat a fancier LLM in every configuration I tested."
+      ]
+    },
+    {
+      id: "p3",
+      title: "Calibrating LLM-as-judge",
+      excerpt: "An automated judge is only as trustworthy as its agreement with humans. How I calibrate before I rely on it.",
+      date: "Mar 2026", read: "7 min read",
+      tags: ["LLM Evaluation"],
+      body: [
+        "Using an LLM to grade another LLM is enormously convenient and quietly perilous. Judges have biases — they favor longer answers, they anchor on the first option, and they're inconsistent across runs unless you pin them down.",
+        "Before I trust a judge in a pipeline, I calibrate it against a human-labeled gold set and measure agreement with Cohen's kappa. If kappa is below 0.7, the judge isn't measuring what I think it is, and any score it produces downstream is theater.",
+        "Two fixes carry most of the weight: force a rubric with explicit criteria instead of a vague 'rate 1–5', and randomize answer order to kill position bias. Pairwise comparison tends to be more stable than absolute scoring.",
+        "A calibrated judge is a force multiplier — it lets you evaluate thousands of cases overnight. An uncalibrated one is a confident random number generator that happens to speak English."
+      ]
+    },
+    {
+      id: "p4",
+      title: "Agents that recover instead of hallucinate",
+      excerpt: "When a tool call fails, most agents invent a plausible result. Here's how to make yours notice and re-plan.",
+      date: "Feb 2026", read: "5 min read",
+      tags: ["AI Agents", "Engineering"],
+      body: [
+        "The failure mode that scares me most in agentic systems isn't a crash — it's a confident fabrication. A tool returns an error, and instead of stopping, the agent quietly invents what the result probably would have been and marches on.",
+        "The fix is to make failure a first-class signal. Every tool response is validated against an expected schema; a malformed or empty result triggers a re-plan rather than a continuation. The agent is explicitly told it is allowed to say 'that didn't work.'",
+        "Self-critique loops help too: after each step, a lightweight check asks whether the action actually advanced the goal. In my agent this lifted the recovery rate to 91% — the difference between a tool that's useful and one that's dangerous.",
+        "Graceful degradation beats false confidence every time. An agent that admits uncertainty and asks for help is infinitely more shippable than one that hides its failures behind fluent prose."
+      ]
+    }
+  ];
+
+  var state = { messages: [], thinking: false, activePost: null, theme: "dark" };
+  var timers = { think: null, stream: null };
+
+  function esc(s){
+    return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+  }
+
+  // ---- hover handler (mouseenter/leave, append-and-restore) ----
+  function bindHovers(scope){
+    var els = scope.querySelectorAll("[data-hover]");
+    for (var i=0;i<els.length;i++){
+      (function(el){
+        if (el.__hb) return; el.__hb = 1;
+        var hov = el.getAttribute("data-hover");
+        el.addEventListener("mouseenter", function(){
+          if (el.__hovering) return;
+          el.__hovering = 1;
+          el.__base = el.getAttribute("style") || "";
+          el.setAttribute("style", el.__base + ";" + hov);
+        });
+        el.addEventListener("mouseleave", function(){
+          el.__hovering = 0;
+          el.setAttribute("style", el.__base);
+        });
+      })(els[i]);
+    }
+  }
+
+  // ---- chat thread ----
+  function citationsHTML(cites){
+    var out = "";
+    for (var i=0;i<cites.length;i++){
+      var c = cites[i];
+      out += '<span style="display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--text-3);padding:5px 11px;border-radius:8px;border:1px solid var(--w10);background:var(--w03);cursor:pointer;transition:all .18s" data-hover="border-color:rgba(56,189,248,.5);color:var(--heading)">'+c.icon+" "+esc(c.label)+"</span>";
+    }
+    return out;
+  }
+
+  function messageHTML(m){
+    if (m.isUser){
+      return '<div style="display:flex;flex-direction:column;animation:bubbleIn .4s ease both">'
+        + '<div style="align-self:flex-end;max-width:80%;background:linear-gradient(135deg,#7c6cff,#6366f1);color:#fff;padding:11px 16px;border-radius:15px 15px 4px 15px;font-size:14.5px;line-height:1.5;box-shadow:0 6px 18px -6px rgba(124,108,255,.5)">'+esc(m.text)+'</div>'
+        + '</div>';
+    }
+    var badge = m.done
+      ? '<span style="margin-left:auto;display:inline-flex;align-items:center;gap:6px;font-family:\'JetBrains Mono\',monospace;font-size:11px;padding:4px 9px;border-radius:7px;background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.3);color:#34d399">Faithfulness: '+esc(m.score)+' ✓ grounded</span>'
+      : '';
+    var caret = m.streaming
+      ? '<span style="display:inline-block;width:7px;height:15px;margin-left:2px;background:#7c6cff;vertical-align:-2px;animation:blink 1s step-end infinite"></span>'
+      : '';
+    var cites = m.done
+      ? '<div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:14px">'+citationsHTML(m.citations)+'</div>'
+      : '';
+    return '<div style="display:flex;flex-direction:column;animation:bubbleIn .4s ease both">'
+      + '<div style="align-self:flex-start;max-width:92%;width:100%">'
+      +   '<div style="position:relative;background:var(--bubble);border:1px solid var(--w09);border-radius:4px 15px 15px 15px;padding:16px 18px 15px;box-shadow:0 10px 30px -12px rgba(0,0,0,.6)">'
+      +     '<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">'
+      +       '<span style="display:grid;place-items:center;width:22px;height:22px;border-radius:6px;background:linear-gradient(135deg,#7c6cff,#38bdf8);font-size:11px;font-weight:600;color:var(--on-accent)">AV</span>'
+      +       '<span style="font-size:11.5px;color:var(--faint);letter-spacing:.02em">grounded response</span>'
+      +       badge
+      +     '</div>'
+      +     '<p style="font-size:14.5px;line-height:1.62;color:var(--text-2)">'+esc(m.text)+caret+'</p>'
+      +     cites
+      +   '</div>'
+      + '</div>'
+      + '</div>';
+  }
+
+  function thinkingHTML(){
+    return '<div style="align-self:flex-start;display:flex;align-items:center;gap:5px;padding:14px 18px;background:var(--bubble);border:1px solid var(--w09);border-radius:4px 15px 15px 15px">'
+      + '<span style="width:6px;height:6px;border-radius:50%;background:#7c6cff;animation:dot 1.2s infinite 0s"></span>'
+      + '<span style="width:6px;height:6px;border-radius:50%;background:#7c6cff;animation:dot 1.2s infinite .2s"></span>'
+      + '<span style="width:6px;height:6px;border-radius:50%;background:#7c6cff;animation:dot 1.2s infinite .4s"></span>'
+      + '<span style="margin-left:6px;font-size:12px;color:var(--faint)">retrieving &amp; grounding…</span>'
+      + '</div>';
+  }
+
+  function renderThread(){
+    var el = document.getElementById("av-thread");
+    var has = state.messages.length > 0 || state.thinking;
+    el.style.display = has ? "flex" : "none";
+    if (!has){ el.innerHTML = ""; return; }
+    var html = "";
+    for (var i=0;i<state.messages.length;i++) html += messageHTML(state.messages[i]);
+    if (state.thinking) html += thinkingHTML();
+    el.innerHTML = html;
+    bindHovers(el);
+  }
+
+  // ---- blog grid ----
+  function renderPosts(){
+    var grid = document.getElementById("av-bloggrid");
+    var html = "";
+    for (var i=0;i<posts.length;i++){
+      var p = posts[i];
+      var tags = "";
+      for (var j=0;j<p.tags.length;j++){
+        tags += '<span style="font-size:11px;color:var(--text-3);padding:3px 10px;border-radius:999px;background:rgba(124,108,255,.08);border:1px solid rgba(124,108,255,.2)">'+esc(p.tags[j])+'</span>';
+      }
+      html += '<div onclick="App.openPost('+i+')" style="display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--w09);border-radius:16px;padding:24px;cursor:pointer;transition:transform .25s,border-color .25s,background .25s" data-hover="transform:translateY(-4px);border-color:rgba(124,108,255,.4);background:var(--surface-hover)">'
+        + '<div style="display:flex;align-items:center;gap:10px;font-family:\'JetBrains Mono\',monospace;font-size:11.5px;color:var(--faint)"><span>'+esc(p.date)+'</span><span style="opacity:.5">·</span><span>'+esc(p.read)+'</span></div>'
+        + '<h3 style="margin-top:12px;font-size:19px;font-weight:500;letter-spacing:-.025em;line-height:1.25;color:var(--text)">'+esc(p.title)+'</h3>'
+        + '<p style="margin-top:9px;font-size:14px;line-height:1.55;color:var(--text-4);flex:1">'+esc(p.excerpt)+'</p>'
+        + '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:16px">'+tags+'</div>'
+        + '</div>';
+    }
+    grid.innerHTML = html;
+    bindHovers(grid);
+  }
+
+  // ---- article overlay ----
+  function renderOverlay(){
+    var host = document.getElementById("av-overlay");
+    var p = state.activePost;
+    if (p == null){ host.innerHTML = ""; return; }
+    var tags = "";
+    for (var i=0;i<p.tags.length;i++){
+      tags += '<span style="font-size:11.5px;color:var(--text-2);padding:4px 11px;border-radius:999px;background:rgba(124,108,255,.1);border:1px solid rgba(124,108,255,.25)">'+esc(p.tags[i])+'</span>';
+    }
+    var body = "";
+    for (var k=0;k<p.body.length;k++){
+      body += '<p style="font-size:16.5px;line-height:1.78;color:var(--text-2);letter-spacing:-.005em">'+esc(p.body[k])+'</p>';
+    }
+    host.innerHTML =
+      '<div onclick="App.closePost()" style="position:fixed;inset:0;z-index:100;background:var(--scrim);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);overflow-y:auto;animation:overlayIn .25s ease both">'
+      + '<div onclick="event.stopPropagation()" style="max-width:720px;margin:0 auto;padding:90px 24px 120px;animation:sheetIn .4s cubic-bezier(.22,1,.36,1) both">'
+      +   '<button onclick="App.closePost()" style="display:inline-flex;align-items:center;gap:7px;font-family:inherit;font-size:13px;color:var(--text-3);padding:8px 14px;border-radius:10px;border:1px solid var(--w12);background:var(--bubble);cursor:pointer;transition:all .18s" data-hover="color:var(--heading);border-color:var(--w30)">← Back to writing</button>'
+      +   '<div style="display:flex;align-items:center;gap:10px;margin-top:30px;font-family:\'JetBrains Mono\',monospace;font-size:12px;color:var(--faint)"><span>'+esc(p.date)+'</span><span style="opacity:.5">·</span><span>'+esc(p.read)+'</span></div>'
+      +   '<h1 style="margin-top:14px;font-size:clamp(30px,5vw,46px);font-weight:200;letter-spacing:-.04em;line-height:1.08;color:var(--heading)">'+esc(p.title)+'</h1>'
+      +   '<div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:18px">'+tags+'</div>'
+      +   '<div style="margin-top:32px;height:1px;background:linear-gradient(90deg,rgba(124,108,255,.5),transparent)"></div>'
+      +   '<article style="margin-top:30px;display:flex;flex-direction:column;gap:22px">'+body+'</article>'
+      +   '<div style="margin-top:44px;padding-top:24px;border-top:1px solid var(--w08);display:flex;align-items:center;gap:12px">'
+      +     '<span style="display:grid;place-items:center;width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,#7c6cff,#38bdf8);font-size:14px;font-weight:600;color:var(--on-accent)">AV</span>'
+      +     '<div><div style="font-size:14px;font-weight:500;color:var(--text)">Apoorva Verma</div><div style="font-size:12.5px;color:var(--faint)">AI Engineer — RAG &amp; LLM Evaluation</div></div>'
+      +   '</div>'
+      + '</div>'
+      + '</div>';
+    bindHovers(host);
+  }
+
+  // ---- chat logic ----
+  function match(q){
+    var t = q.toLowerCase();
+    if (/(hire|why you|why should)/.test(t)) return answers.hire;
+    if (/(experience|oracle|work|background|career|job)/.test(t)) return answers.experience;
+    if (/(project|build|built|rag|agent|benchmark)/.test(t)) return answers.projects;
+    if (/(skill|stack|tech|tool|language|know)/.test(t)) return answers.skills;
+    return {
+      text: "Good question. I've grounded my answers around my skills, projects, experience, and what I'd bring to a team — try one of the suggested questions, or ask about RAG, evaluation, or my time at Oracle.",
+      citations: [ {icon:"📄", label:"Portfolio index"} ],
+      score: "0.88"
+    };
+  }
+
+  function send(q){
+    var query = (q || "").trim();
+    if (!query) return;
+    var a = match(query);
+    clearTimeout(timers.think); clearInterval(timers.stream);
+    var input = document.getElementById("av-input");
+    if (input) input.value = "";
+    state.messages.push({ isUser: true, isAI: false, text: query });
+    state.thinking = true;
+    renderThread();
+    timers.think = setTimeout(function(){ stream(a); }, 850);
+  }
+
+  function stream(a){
+    state.thinking = false;
+    state.messages.push({ isUser: false, isAI: true, text: "", citations: a.citations, score: a.score, streaming: true, done: false });
+    renderThread();
+    var words = a.text.split(" ");
+    var i = 0;
+    timers.stream = setInterval(function(){
+      i++;
+      var msgs = state.messages;
+      var k = msgs.length - 1;
+      if (k < 0) return;
+      var done = i >= words.length;
+      msgs[k].text = words.slice(0, i).join(" ");
+      msgs[k].streaming = !done;
+      msgs[k].done = done;
+      renderThread();
+      if (done) clearInterval(timers.stream);
+    }, 34);
+  }
+
+  // ---- theme ----
+  var curTheme = "dark";
+  function applyTheme(t){
+    var light = t === "light";
+    curTheme = light ? "light" : "dark";
+    try {
+      if (light) document.documentElement.setAttribute("data-av-theme", "light");
+      else document.documentElement.removeAttribute("data-av-theme");
+    } catch(e){}
+    try { localStorage.setItem("av-theme", curTheme); } catch(e){}
+    state.theme = curTheme;
+    var btn = document.getElementById("theme-btn");
+    if (btn) btn.textContent = curTheme === "light" ? "☾" : "☀";
+    handleScroll();
+  }
+  function toggleTheme(){
+    var cur = "dark";
+    try { cur = document.documentElement.getAttribute("data-av-theme") === "light" ? "light" : "dark"; } catch(e){}
+    applyTheme(cur === "light" ? "dark" : "light");
+  }
+
+  // ---- scrolled nav ----
+  function handleScroll(){
+    var nav = document.getElementById("av-nav");
+    if (!nav) return;
+    var t = Math.min((window.scrollY || 0) / 120, 1);
+    var light = curTheme === "light";
+    var base = light ? "255,255,255" : "14,14,18";
+    nav.style.background = "rgba(" + base + "," + (0.45 + 0.42 * t).toFixed(3) + ")";
+    nav.style.backdropFilter = "blur(" + (10 + 14 * t).toFixed(1) + "px)";
+    nav.style.webkitBackdropFilter = "blur(" + (10 + 14 * t).toFixed(1) + "px)";
+    nav.style.borderColor = (light ? "rgba(0,0,0," : "rgba(255,255,255,") + (0.06 + 0.07 * t).toFixed(3) + ")";
+    nav.style.boxShadow = "0 8px 32px rgba(0,0,0," + (light ? (0.05 + 0.05 * t) : (0.25 + 0.28 * t)).toFixed(3) + ")";
+  }
+
+  // ---- custom cursor ----
+  function initCursor(){
+    if (window.matchMedia && window.matchMedia("(pointer: coarse)").matches) return;
+    var ring = document.getElementById("cur-ring"), dot = document.getElementById("cur-dot");
+    if (!ring || !dot) return;
+    var mx=-200,my=-200,rx=-200,ry=-200,shown=false,big=false,raf;
+    function move(e){
+      mx=e.clientX; my=e.clientY;
+      dot.style.transform = "translate("+mx+"px,"+my+"px)";
+      if (!shown){ shown=true; ring.style.opacity="1"; dot.style.opacity="1"; }
+    }
+    function setBig(on){
+      if (on===big) return; big=on;
+      ring.style.width = on?"52px":"34px";
+      ring.style.height = on?"52px":"34px";
+      ring.style.margin = on?"-26px 0 0 -26px":"-17px 0 0 -17px";
+      ring.style.background = on?"rgba(124,108,255,.12)":"rgba(124,108,255,.05)";
+      ring.style.borderColor = on?"rgba(168,156,255,.9)":"rgba(124,108,255,.6)";
+    }
+    function over(e){ setBig(!!(e.target.closest && e.target.closest('a,button,input,[role="button"]'))); }
+    function leave(){ ring.style.opacity="0"; dot.style.opacity="0"; shown=false; }
+    function loop(){
+      rx += (mx-rx)*0.18; ry += (my-ry)*0.18;
+      ring.style.transform = "translate("+rx.toFixed(2)+"px,"+ry.toFixed(2)+"px)";
+      raf = requestAnimationFrame(loop);
+    }
+    window.addEventListener("mousemove", move, { passive:true });
+    window.addEventListener("mouseover", over, { passive:true });
+    document.addEventListener("mouseleave", leave);
+    raf = requestAnimationFrame(loop);
+  }
+
+  // ---- entrance animations ----
+  function revealAll(){
+    var els = document.querySelectorAll(".hero-word,[data-reveal]");
+    for (var i=0;i<els.length;i++){ els[i].style.opacity="1"; els[i].style.transform="none"; }
+  }
+  function initMotion(){
+    var M = window.Motion;
+    var words = Array.prototype.slice.call(document.querySelectorAll(".hero-word"));
+    if (words.length){
+      M.animate(words, { opacity:[0,1], transform:["translateY(18px)","translateY(0px)"] },
+        { delay: M.stagger(0.07, { startDelay: 0.15 }), duration: 0.6, ease:[.22,1,.36,1] });
+    }
+    var sections = document.querySelectorAll("[data-reveal]");
+    for (var i=0;i<sections.length;i++){
+      (function(el){
+        M.inView(el, function(){
+          M.animate(el, { opacity:[0,1], transform:["translateY(28px)","translateY(0px)"] },
+            { duration:0.7, ease:[.22,1,.36,1] });
+        }, { margin: "-10% 0px -10% 0px" });
+      })(sections[i]);
+    }
+  }
+
+  // ---- boot ----
+  var tries = 0;
+  function startMotion(){
+    if (!(window.Motion && window.Motion.animate)){
+      if (tries++ < 40){ setTimeout(startMotion, 75); return; }
+      return revealAll();
+    }
+    initMotion();
+  }
+
+  function boot(){
+    var stored = "dark";
+    try { stored = localStorage.getItem("av-theme") || "dark"; } catch(e){}
+    applyTheme(stored);
+    bindHovers(document);
+    renderPosts();
+    renderThread();
+    window.addEventListener("scroll", handleScroll, { passive:true });
+    handleScroll();
+    initCursor();
+    document.addEventListener("keydown", function(e){ if (e.key === "Escape") closePost(); });
+    startMotion();
+  }
+
+  function openPost(i){ state.activePost = posts[i]; renderOverlay(); }
+  function closePost(){ state.activePost = null; renderOverlay(); }
+
+  window.App = {
+    send: send,
+    onSend: function(){ send(document.getElementById("av-input").value); },
+    onKey: function(e){ if (e.key === "Enter") send(document.getElementById("av-input").value); },
+    toggleTheme: toggleTheme,
+    openPost: openPost,
+    closePost: closePost
+  };
+
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
+  else boot();
+})();
+</script>
+</body>
+</html>

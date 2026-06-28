@@ -107,7 +107,7 @@
       <div style="width:100%;max-width:680px;margin-top:42px;animation:fadeUp .6s .65s ease both">
         <div style="display:flex;align-items:center;gap:8px;padding:8px 8px 8px 18px;background:var(--bubble);backdrop-filter:blur(12px);border:1px solid var(--w10);border-radius:16px;box-shadow:0 18px 50px -12px rgba(124,108,255,.28),inset 0 1px 0 var(--w04)">
           <span style="color:var(--faint);font-size:18px;flex-shrink:0">✦</span>
-          <input id="av-input" onkeydown="App.onKey(event)" placeholder="Ask me anything — answers are grounded in my real work, with sources" style="flex:1;min-width:0;background:transparent;border:none;outline:none;color:var(--text);font-family:inherit;font-size:15px;padding:8px 0" />
+          <input id="av-input" onkeydown="App.onKey(event)" placeholder="Ask me anything — answers are grounded in my real work" style="flex:1;min-width:0;background:transparent;border:none;outline:none;color:var(--text);font-family:inherit;font-size:15px;padding:8px 0" />
           <button onclick="App.onSend()" style="flex-shrink:0;display:grid;place-items:center;width:40px;height:40px;border:none;border-radius:11px;background:linear-gradient(135deg,#7c6cff,#6366f1);color:#fff;cursor:pointer;font-size:16px;transition:transform .18s,box-shadow .18s" data-hover="transform:translateY(-1px);box-shadow:0 8px 20px -4px rgba(124,108,255,.6)">↑</button>
         </div>
 
@@ -365,29 +365,6 @@
 (function(){
   "use strict";
 
-  var answers = {
-    skills: {
-      text: "Core stack: Python, PyTorch, and the RAG toolchain — LangChain, LangGraph, and vector stores like Qdrant and pgvector. My specialty is LLM evaluation: RAGAS and DeepEval for faithfulness, relevance, and retrieval-precision, plus calibrated LLM-as-judge pipelines wired into CI so quality regressions never ship.",
-      citations: [ {icon:"📄", label:"Skills matrix"}, {icon:"🔗", label:"RAG + Eval project"} ],
-      score: "0.96"
-    },
-    projects: {
-      text: "Three I'd point you to: a production RAG + Evaluation System with an automated RAGAS gate (+38% faithfulness), an open LLM Eval Benchmark comparing 8 models across 2.4k cases, and a tool-using AI Agent with failure recovery that re-plans on failed tool calls rather than hallucinating (91% recovery). Scroll to Featured Projects for details.",
-      citations: [ {icon:"🔗", label:"RAG + Eval project"}, {icon:"📊", label:"Eval Benchmark"}, {icon:"🤖", label:"Agent repo"} ],
-      score: "0.93"
-    },
-    experience: {
-      text: "I'm currently an AI/ML Engineer at Oracle (2023–present) building RAG pipelines and the evaluation infrastructure that keeps them honest in production. Earlier: a SWE internship at Microsoft Engage, a SWE internship at J.P. Morgan, and an open-source fellowship with Major League Hacking.",
-      citations: [ {icon:"📄", label:"Oracle experience"}, {icon:"🗓", label:"Full timeline"} ],
-      score: "0.95"
-    },
-    hire: {
-      text: "Because I close the loop most AI work leaves open: I don't just build retrieval — I prove it's correct with reproducible benchmarks and grounding scores, then block regressions in CI. This very site demonstrates it: every answer you're reading was scored for faithfulness before render. That's the difference between a demo and a system you can trust.",
-      citations: [ {icon:"✅", label:"This site's eval"}, {icon:"📄", label:"Oracle experience"} ],
-      score: "0.91"
-    }
-  };
-
   var posts = [
     {
       id: "p1",
@@ -444,7 +421,6 @@
   ];
 
   var state = { messages: [], thinking: false, activePost: null, theme: "dark" };
-  var timers = { think: null, stream: null };
 
   function esc(s){
     return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
@@ -472,30 +448,17 @@
   }
 
   // ---- chat thread ----
-  function citationsHTML(cites){
-    var out = "";
-    for (var i=0;i<cites.length;i++){
-      var c = cites[i];
-      out += '<span style="display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--text-3);padding:5px 11px;border-radius:8px;border:1px solid var(--w10);background:var(--w03);cursor:pointer;transition:all .18s" data-hover="border-color:rgba(56,189,248,.5);color:var(--heading)">'+c.icon+" "+esc(c.label)+"</span>";
-    }
-    return out;
-  }
-
   function messageHTML(m){
     if (m.isUser){
       return '<div style="display:flex;flex-direction:column;animation:bubbleIn .4s ease both">'
         + '<div style="align-self:flex-end;max-width:80%;background:linear-gradient(135deg,#7c6cff,#6366f1);color:#fff;padding:11px 16px;border-radius:15px 15px 4px 15px;font-size:14.5px;line-height:1.5;box-shadow:0 6px 18px -6px rgba(124,108,255,.5)">'+esc(m.text)+'</div>'
         + '</div>';
     }
-    var badge = m.done
-      ? '<span style="margin-left:auto;display:inline-flex;align-items:center;gap:6px;font-family:\'JetBrains Mono\',monospace;font-size:11px;padding:4px 9px;border-radius:7px;background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.3);color:#34d399">Faithfulness: '+esc(m.score)+' ✓ grounded</span>'
-      : '';
+    var badge = '';
     var caret = m.streaming
       ? '<span style="display:inline-block;width:7px;height:15px;margin-left:2px;background:#7c6cff;vertical-align:-2px;animation:blink 1s step-end infinite"></span>'
       : '';
-    var cites = m.done
-      ? '<div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:14px">'+citationsHTML(m.citations)+'</div>'
-      : '';
+    var cites = '';
     return '<div style="display:flex;flex-direction:column;animation:bubbleIn .4s ease both">'
       + '<div style="align-self:flex-start;max-width:92%;width:100%">'
       +   '<div style="position:relative;background:var(--bubble);border:1px solid var(--w09);border-radius:4px 15px 15px 15px;padding:16px 18px 15px;box-shadow:0 10px 30px -12px rgba(0,0,0,.6)">'
@@ -585,50 +548,73 @@
   }
 
   // ---- chat logic ----
-  function match(q){
-    var t = q.toLowerCase();
-    if (/(hire|why you|why should)/.test(t)) return answers.hire;
-    if (/(experience|oracle|work|background|career|job)/.test(t)) return answers.experience;
-    if (/(project|build|built|rag|agent|benchmark)/.test(t)) return answers.projects;
-    if (/(skill|stack|tech|tool|language|know)/.test(t)) return answers.skills;
-    return {
-      text: "Good question. I've grounded my answers around my skills, projects, experience, and what I'd bring to a team — try one of the suggested questions, or ask about RAG, evaluation, or my time at Oracle.",
-      citations: [ {icon:"📄", label:"Portfolio index"} ],
-      score: "0.88"
-    };
-  }
-
   function send(q){
     var query = (q || "").trim();
     if (!query) return;
-    var a = match(query);
-    clearTimeout(timers.think); clearInterval(timers.stream);
     var input = document.getElementById("av-input");
     if (input) input.value = "";
     state.messages.push({ isUser: true, isAI: false, text: query });
     state.thinking = true;
     renderThread();
-    timers.think = setTimeout(function(){ stream(a); }, 850);
+    streamChat(query);
   }
 
-  function stream(a){
-    state.thinking = false;
-    state.messages.push({ isUser: false, isAI: true, text: "", citations: a.citations, score: a.score, streaming: true, done: false });
+  function appendLast(t){
+    var msgs = state.messages, k = msgs.length - 1;
+    if (k < 0 || !msgs[k].isAI) return;
+    msgs[k].text += t; msgs[k].streaming = true;
     renderThread();
-    var words = a.text.split(" ");
-    var i = 0;
-    timers.stream = setInterval(function(){
-      i++;
-      var msgs = state.messages;
-      var k = msgs.length - 1;
-      if (k < 0) return;
-      var done = i >= words.length;
-      msgs[k].text = words.slice(0, i).join(" ");
-      msgs[k].streaming = !done;
-      msgs[k].done = done;
+  }
+  function finishLast(){
+    var msgs = state.messages, k = msgs.length - 1;
+    if (k < 0 || !msgs[k].isAI) return;
+    msgs[k].streaming = false; msgs[k].done = true;
+    renderThread();
+  }
+  function failChat(){
+    state.thinking = false;
+    var msgs = state.messages, last = msgs[msgs.length - 1];
+    var fallback = "Sorry — I couldn't reach the assistant just now. Please try again in a moment.";
+    if (last && last.isAI && !last.done){
+      if (!last.text) last.text = fallback;
+      last.streaming = false; last.done = true;
+    } else {
+      msgs.push({ isUser:false, isAI:true, text: fallback, streaming:false, done:true });
+    }
+    renderThread();
+  }
+
+  function streamChat(query){
+    fetch("/api/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ question: query })
+    }).then(function(res){
+      if (!res.ok || !res.body) throw new Error("bad response");
+      state.thinking = false;
+      state.messages.push({ isUser:false, isAI:true, text:"", streaming:true, done:false });
       renderThread();
-      if (done) clearInterval(timers.stream);
-    }, 34);
+      var reader = res.body.getReader(), decoder = new TextDecoder(), buf = "";
+      function pump(){
+        return reader.read().then(function(r){
+          if (r.done){ finishLast(); return; }
+          buf += decoder.decode(r.value, { stream:true });
+          var parts = buf.split("\n\n");
+          buf = parts.pop();
+          for (var i=0;i<parts.length;i++){
+            var line = parts[i].trim();
+            if (line.indexOf("data:") !== 0) continue;
+            var payload;
+            try { payload = JSON.parse(line.slice(5).trim()); } catch(e){ continue; }
+            if (payload.text) appendLast(payload.text);
+            if (payload.error){ appendLast(payload.error); finishLast(); }
+            if (payload.done) finishLast();
+          }
+          return pump();
+        });
+      }
+      return pump();
+    }).catch(failChat);
   }
 
   // ---- theme ----

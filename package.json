@@ -1,0 +1,10 @@
+{
+  "name": "personal-website",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Apoorva Verma — AI engineer portfolio with a live, grounded chat backend.",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.40.0"
+  }
+}

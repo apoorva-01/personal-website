@@ -102,54 +102,45 @@
   var posts = [
     {
       id: "p1",
-      title: "Why your RAG demo lies to you",
-      excerpt: "Fluent answers feel right and measure nothing. Here's how I separate confidence from correctness.",
-      date: "May 2026", read: "6 min read",
+      title: "I graded 50 RAG answers with a hand-built harness. Half the metrics were lying to me.",
+      excerpt: "Faithfulness sat at 1.0 across every config I tried. That number told me nothing, and here's the one I actually trust instead.",
+      date: "Jul 2026", read: "6 min read",
       tags: ["RAG", "LLM Evaluation"],
       body: [
-        "The most dangerous thing about a retrieval-augmented generation demo is that it sounds correct. Fluency is cheap; the model will happily produce a polished paragraph whether or not the retrieved context actually supports it. If you ship on vibes, you ship hallucinations with great grammar.",
-        "Faithfulness is the metric that catches this: it asks whether every claim in the answer is entailed by the retrieved context, independent of how nice the prose is. In my own pipelines I score it on every response and treat anything under 0.9 as a defect, not a stylistic choice.",
-        "The practical move is to decouple the two failure modes. Retrieval failures (the right chunk never made it into context) and generation failures (the chunk was there but the model embellished) need different fixes, and a single 'accuracy' number hides which one you have.",
-        "So before you celebrate a demo, ask it the same question ten times with the context withheld. If it still answers confidently, you don't have a RAG system — you have a language model with a search box bolted on for decoration."
-      ]
-    },
-    {
-      id: "p2",
-      title: "Semantic chunking won my ablation",
-      excerpt: "Four chunking strategies, two embedding models, one clear winner. The numbers and why they moved.",
-      date: "Apr 2026", read: "8 min read",
-      tags: ["RAG", "Engineering"],
-      body: [
-        "Chunking is the least glamorous and most consequential knob in a RAG stack. I ran a full ablation — fixed-size, recursive, semantic, and sentence-window splitting — each paired with two embedding models, and scored faithfulness, answer relevance, and retrieval precision with RAGAS.",
-        "Semantic chunking with text-embedding-3-large won decisively: 0.94 faithfulness against 0.81 for the naive fixed-512 baseline. The reason is intuitive in hindsight — splitting on meaning keeps a complete idea inside a single retrievable unit, so the model never has to stitch a claim across a boundary it can't see.",
-        "Fixed-size chunking's failure mode is subtle. It looks fine on short factual questions and falls apart on anything requiring two adjacent sentences, because the split lands mid-thought and only half the evidence gets retrieved.",
-        "The lesson I keep relearning: spend your optimization budget on retrieval quality before you reach for a bigger model. A sharper chunker beat a fancier LLM in every configuration I tested."
-      ]
-    },
-    {
-      id: "p3",
-      title: "Calibrating LLM-as-judge",
-      excerpt: "An automated judge is only as trustworthy as its agreement with humans. How I calibrate before I rely on it.",
-      date: "Mar 2026", read: "7 min read",
-      tags: ["LLM Evaluation"],
-      body: [
-        "Using an LLM to grade another LLM is enormously convenient and quietly perilous. Judges have biases — they favor longer answers, they anchor on the first option, and they're inconsistent across runs unless you pin them down.",
-        "Before I trust a judge in a pipeline, I calibrate it against a human-labeled gold set and measure agreement with Cohen's kappa. If kappa is below 0.7, the judge isn't measuring what I think it is, and any score it produces downstream is theater.",
-        "Two fixes carry most of the weight: force a rubric with explicit criteria instead of a vague 'rate 1–5', and randomize answer order to kill position bias. Pairwise comparison tends to be more stable than absolute scoring.",
-        "A calibrated judge is a force multiplier — it lets you evaluate thousands of cases overnight. An uncalibrated one is a confident random number generator that happens to speak English."
-      ]
-    },
-    {
-      id: "p4",
-      title: "Agents that recover instead of hallucinate",
-      excerpt: "When a tool call fails, most agents invent a plausible result. Here's how to make yours notice and re-plan.",
-      date: "Feb 2026", read: "5 min read",
-      tags: ["AI Agents", "Engineering"],
-      body: [
-        "The failure mode that scares me most in agentic systems isn't a crash — it's a confident fabrication. A tool returns an error, and instead of stopping, the agent quietly invents what the result probably would have been and marches on.",
-        "The fix is to make failure a first-class signal. Every tool response is validated against an expected schema; a malformed or empty result triggers a re-plan rather than a continuation. The agent is explicitly told it is allowed to say 'that didn't work.'",
-        "Self-critique loops help too: after each step, a lightweight check asks whether the action actually advanced the goal. In my agent this lifted the recovery rate to 91% — the difference between a tool that's useful and one that's dangerous.",
-        "Graceful degradation beats false confidence every time. An agent that admits uncertainty and asks for help is infinitely more shippable than one that hides its failures behind fluent prose."
+        "I built a RAG system over 15 arXiv papers, the usual chat-with-your-documents thing. Then I did the part most people skip: I wrote an evaluation harness, made a gold set of 50 questions, and graded every single answer across every config I could think of. Retrieval ladder, chunking strategies, two embedding models, the works.",
+        "The point wasn't the chatbot. The chatbot is a weekend. The point was to find out which knobs actually matter, with numbers, instead of shipping on vibes.",
+        "Most of the numbers lied to me. Here's how I figured out which ones.",
+        { h: "The metrics that saturate tell you nothing" },
+        "First thing I ran was the generation matrix: two chunking strategies crossed with two embedding models, scored with DeepEval on faithfulness, answer relevance, context precision, context recall. Four configs, four grounding-quality metrics each.",
+        "Faithfulness came back at 1.0. On every config. Citation precision, same story, 1.0 across the board.",
+        "For about ten minutes I felt great. Then it clicked that a metric which reads 1.0 no matter what you feed it isn't measuring your config. It's measuring the generator. Claude, handed a decent prompt and some numbered sources, basically doesn't make things up. That's a fact about the model, not about my fixed-vs-semantic chunking decision. If I'd picked a config based on faithfulness I would have been reading tea leaves.",
+        "So the first lesson is boring and important: a metric that's already pinned at the ceiling has no opinion. It can't separate your options. Drop it from the comparison and go find one that moves.",
+        { h: "The numbers that actually moved" },
+        "Two things moved, and they're where all the real signal was.",
+        "Retrieval was the big one. I ran a ladder from naive to senior:",
+        { table: { head: ["retriever", "NDCG@5", "Recall@5", "MRR"], rows: [
+          ["dense (single-vector)", "0.333", "0.44", "0.299"],
+          ["+ BM25 hybrid (RRF)", "0.433", "0.58", "0.384"],
+          ["+ cross-encoder rerank", "0.618", "0.76", "0.570"]
+        ] } },
+        "Naive dense to hybrid-plus-rerank is NDCG@5 0.33 to 0.62. That's an 86% lift, and it's monotonic, every rung helps. The single biggest jump is the cross-encoder (0.43 to 0.62). If you have one afternoon to spend on your RAG stack, spend it there, not on a bigger generation model.",
+        "The other thing that moved was context precision, and it was the only generation metric that did. It went 0.754 to 0.846 across the matrix, and the winner was semantic chunking with e5-large. Worth knowing e5-large costs about 3x the embedding compute of bge-small, so that 0.09 is a real tradeoff, not a free lunch. There's also one config (semantic chunking with bge-small) that quietly trades recall down to 0.733 to buy precision, which is the kind of thing you only see when you grade the whole grid instead of one happy-path run.",
+        "Everything else was flat. Four metrics, one of them told me anything.",
+        { h: "The honest part: I don't fully trust my own gold set" },
+        "Here's the bit I could have hidden and didn't.",
+        "My gold set is synthetic. I had Claude generate each question and reference answer from a chunk, then lightly filtered. Which means for retrieval it's structurally circular: every question's only ground truth is the exact chunk it was born from, so that chunk tends to rank well under any retriever you throw at it. I de-lexicalized the questions so they don't just echo keywords from their source passage, and you can see that biting in the numbers (dense alone only hits 0.33 because paraphrase kills pure embedding match). But de-lexicalizing fixes keyword leakage, not the structural coupling. Single-positive ground truth also deflates Recall@k whenever some other chunk was also relevant and I never labeled it.",
+        "So those retrieval absolutes are conservative lower bounds. The 86% lift is real because it's a relative comparison on the same flawed gold set, and the flaws cancel. The absolute 0.62 is a number I'd argue with.",
+        "This is the trap with eval work. You build a measuring stick, and then you forget the stick itself has error bars. A benchmark you generated from the thing you're testing is going to flatter the thing you're testing.",
+        { h: "So I built a metric that never touches the gold set" },
+        "If I don't fully trust the gold set, I shouldn't lead with a metric that depends on it. So the number I actually put my name behind is a custom citation-faithfulness metric, framed the way the attribution-eval (ALCE) literature does it, and it's gold-independent by design. It audits the answer against its own cited sources and never looks at the gold set at all.",
+        "Two parts. Citation precision: of the claims that carry a `[n]`, what fraction are actually stated by the source they cite. When you cite, are you right? Citation recall: of all the factual claims in the answer, what fraction carry at least one citation. Do you cite everything you assert, or just some of it?",
+        "The detail I care about most: honest refusals (\"the sources don't cover this\") have no claims to cite, so they're excluded, not scored zero. A model that correctly says \"I don't know\" shouldn't get punished by your eval for being honest. That's the difference between measuring grounding and measuring confidence.",
+        "And because \"the metric said 1.0\" is exactly the kind of claim you shouldn't take on faith, the behavior is pinned down by tests. A correctly-cited answer scores 1.0 / 1.0. An answer that cites the wrong source and leaves one claim uncited scores precision 0.0 and recall 0.5, by construction. The metric is graded before I let it grade anything else.",
+        { h: "What I'd tell you to take from this" },
+        "Grade the whole grid, not the happy path. The interesting failures live in the cells you didn't bother to run.",
+        "When a metric reads the same everywhere, that's not your system being perfect. That's the metric being blind to the difference you care about. Go find one that can see it.",
+        "And be suspicious of any eval built on data you generated yourself. Ask what the metric depends on, and prefer the one that depends on the least. In my case the bottleneck turned out to be retrieval, not generation, and the only score I'd defend in a code review is the one that doesn't lean on a gold set I can't fully verify.",
+        "The harness, the custom metric, the tests, and every number above are in the repo: [github.com/apoorva-01/rag-eval-harness](https://github.com/apoorva-01/rag-eval-harness). Run `python eval/run_matrix.py` and it regenerates the tables. If your numbers come out different, I'd genuinely like to know why."
       ]
     }
   ];
@@ -158,6 +149,41 @@
 
   function esc(s){
     return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+  }
+  // inline markdown: `code` and [text](url), applied after esc()
+  function inline(s){
+    var out = esc(s);
+    out = out.replace(/`([^`]+)`/g, '<code style="font-family:\'JetBrains Mono\',monospace;font-size:.88em;background:var(--bubble);border:1px solid var(--w09);padding:1px 6px;border-radius:6px">$1</code>');
+    out = out.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noopener" style="color:#7c6cff;text-decoration:none;border-bottom:1px solid rgba(124,108,255,.4)">$1</a>');
+    return out;
+  }
+  // one body block -> html. string = paragraph; {h} = heading; {table:{head,rows}} = table; {code} = code block
+  function renderBlock(b){
+    if (typeof b === "string"){
+      return '<p style="font-size:16.5px;line-height:1.78;color:var(--text-2);letter-spacing:-.005em">'+inline(b)+'</p>';
+    }
+    if (b.h){
+      return '<h2 style="margin-top:14px;font-size:24px;font-weight:400;letter-spacing:-.03em;line-height:1.25;color:var(--heading)">'+esc(b.h)+'</h2>';
+    }
+    if (b.code){
+      return '<pre style="margin:0;overflow-x:auto;background:var(--bubble);border:1px solid var(--w09);border-radius:12px;padding:16px 18px"><code style="font-family:\'JetBrains Mono\',monospace;font-size:13.5px;line-height:1.6;color:var(--text-2)">'+esc(b.code)+'</code></pre>';
+    }
+    if (b.table){
+      var th = "";
+      for (var i=0;i<b.table.head.length;i++){
+        th += '<th style="text-align:'+(i===0?'left':'right')+';padding:9px 14px;font-size:12.5px;font-weight:500;color:var(--text-3);border-bottom:1px solid var(--w12);white-space:nowrap">'+esc(b.table.head[i])+'</th>';
+      }
+      var tr = "";
+      for (var r=0;r<b.table.rows.length;r++){
+        var row = b.table.rows[r], tds = "";
+        for (var c=0;c<row.length;c++){
+          tds += '<td style="text-align:'+(c===0?'left':'right')+';padding:9px 14px;font-size:13.5px;color:var(--text-2);border-bottom:1px solid var(--w08);font-family:'+(c===0?'inherit':'\'JetBrains Mono\',monospace')+';white-space:nowrap">'+inline(row[c])+'</td>';
+        }
+        tr += '<tr>'+tds+'</tr>';
+      }
+      return '<div style="overflow-x:auto"><table style="border-collapse:collapse;width:100%;min-width:360px"><thead><tr>'+th+'</tr></thead><tbody>'+tr+'</tbody></table></div>';
+    }
+    return "";
   }
 
   // ---- hover handler (mouseenter/leave, append-and-restore) ----
@@ -216,7 +242,7 @@
     }
     var body = "";
     for (var k=0;k<p.body.length;k++){
-      body += '<p style="font-size:16.5px;line-height:1.78;color:var(--text-2);letter-spacing:-.005em">'+esc(p.body[k])+'</p>';
+      body += renderBlock(p.body[k]);
     }
     host.innerHTML =
       '<div onclick="App.closePost()" style="position:fixed;inset:0;z-index:100;background:var(--scrim);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);overflow-y:auto;animation:overlayIn .25s ease both">'

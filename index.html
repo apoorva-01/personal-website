@@ -87,7 +87,7 @@
       <div class="nav-links" style="display:flex;align-items:center;gap:4px">
         <a class="nav-link" href="#projects" style="text-decoration:none;color:var(--text-3);font-size:13.5px;padding:7px 12px;border-radius:2px;transition:color .2s" data-hover="color:var(--text)">Projects</a>
         <a class="nav-link" href="#eval" style="text-decoration:none;color:var(--text-3);font-size:13.5px;padding:7px 12px;border-radius:2px;transition:color .2s" data-hover="color:var(--text)">Evaluation</a>
-        <a class="nav-link" href="/blog.html" style="text-decoration:none;color:var(--text-3);font-size:13.5px;padding:7px 12px;border-radius:2px;transition:color .2s" data-hover="color:var(--text)">Notes</a>
+        <a class="nav-link" href="/blog" style="text-decoration:none;color:var(--text-3);font-size:13.5px;padding:7px 12px;border-radius:2px;transition:color .2s" data-hover="color:var(--text)">Notes</a>
         <a class="nav-link" href="#about" style="text-decoration:none;color:var(--text-3);font-size:13.5px;padding:7px 12px;border-radius:2px;transition:color .2s" data-hover="color:var(--text)">About</a>
         <button id="theme-btn" onclick="App.toggleTheme()" aria-label="Toggle light or dark theme" title="Toggle theme"><svg class="tt-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg><svg class="tt-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><span class="tt-thumb"></span></button>
         <a href="#contact" style="text-decoration:none;color:var(--invert-fg);font-size:13.5px;font-weight:600;padding:8px 15px;border-radius:2px;background:var(--invert-bg);margin-left:6px;transition:transform .2s" data-hover="transform:translateY(-1px)">Contact</a>
@@ -381,7 +381,7 @@
       </div>
       <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:8px">
         <h2 style="font-size:clamp(28px,4vw,42px);font-weight:500;letter-spacing:-.02em">Notes on grounding &amp; eval</h2>
-        <a href="blog.html" style="text-decoration:none;font-size:13px;color:var(--accent);padding:6px 0;transition:color .2s" data-hover="color:var(--accent-ink)">View all writing →</a>
+        <a href="/blog" style="text-decoration:none;font-size:13px;color:var(--accent);padding:6px 0;transition:color .2s" data-hover="color:var(--accent-ink)">View all writing →</a>
       </div>
 
       <div id="av-bloggrid" class="bloggrid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:34px"></div>
@@ -478,7 +478,7 @@
     {
       id: "p1",
       slug: "rag-eval-lying-metrics",
-      href: "/posts/rag-eval-lying-metrics.html",
+      href: "/posts/rag-eval-lying-metrics",
       title: "I graded 50 RAG answers with a hand-built harness. Half the metrics were lying to me.",
       excerpt: "Faithfulness sat at 1.0 across every config I tried. That number told me nothing, and here's the one I actually trust instead.",
       date: "Jul 2026", read: "6 min read",

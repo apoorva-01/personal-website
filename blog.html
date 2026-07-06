@@ -65,6 +65,21 @@
   <div aria-hidden="true" style="position:fixed;inset:0;background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:64px 64px;pointer-events:none;z-index:0"></div>
 
   <!-- NAV -->
+  <div id="scroll-progress" aria-hidden="true" style="position:fixed;top:0;left:0;height:2px;width:0;background:var(--accent);z-index:60;box-shadow:0 0 8px rgba(255,75,38,.55);transition:width .05s linear;will-change:width"></div>
+  <script>
+  (function(){
+    var bar=document.getElementById("scroll-progress");
+    function upd(){
+      var h=document.documentElement, b=document.body;
+      var st=h.scrollTop||b.scrollTop;
+      var sh=(h.scrollHeight||b.scrollHeight)-h.clientHeight;
+      bar.style.width=(sh>0?(st/sh)*100:0)+"%";
+    }
+    addEventListener("scroll",upd,{passive:true});
+    addEventListener("resize",upd,{passive:true});
+    upd();
+  })();
+  </script>
   <nav style="position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:center;padding:16px 20px">
     <div style="display:flex;align-items:center;justify-content:space-between;width:100%;max-width:1180px;padding:9px 10px 9px 16px;background:var(--nav-bg);border:1px solid var(--w08);border-radius:2px">
       <a href="/" style="display:flex;align-items:center;gap:11px;text-decoration:none;color:var(--text)">

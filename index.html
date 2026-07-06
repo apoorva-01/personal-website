@@ -443,7 +443,8 @@
               e.preventDefault();
               var btn=f.querySelector('button[type="submit"]');
               var email=f.email.value.trim(), message=f.message.value.trim();
-              if(!email || !message){ status.style.color="var(--accent)"; status.textContent="Add an email and a message."; return; }
+              if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ status.style.color="var(--accent)"; status.textContent="Enter a valid email address."; return; }
+              if(message.length<2){ status.style.color="var(--accent)"; status.textContent="Write a message first (a few words is fine)."; return; }
               var label=btn.textContent; btn.disabled=true; btn.textContent="Sending…"; status.style.color="var(--faint)"; status.textContent="";
               fetch("/api/contact",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email:email,message:message,company:f.company.value})})
                 .then(function(r){ return r.json().then(function(j){ return {ok:r.ok,j:j}; }); })

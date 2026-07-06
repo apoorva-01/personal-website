@@ -23,9 +23,16 @@ export default async function handler(req, res) {
     return;
   }
 
-  const emailOk = /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email);
-  if (!emailOk || message.length < 2 || message.length > 4000) {
-    res.status(400).json({ error: "Enter a valid email and a message." });
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+    res.status(400).json({ error: "Enter a valid email address." });
+    return;
+  }
+  if (message.length < 2) {
+    res.status(400).json({ error: "Write a message first (a few words is fine)." });
+    return;
+  }
+  if (message.length > 4000) {
+    res.status(400).json({ error: "That message is too long (max 4000 characters)." });
     return;
   }
 

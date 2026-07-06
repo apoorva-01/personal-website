@@ -401,12 +401,48 @@
         <div style="padding:44px 32px 40px">
           <h2 style="font-size:clamp(26px,4vw,40px);font-weight:500;letter-spacing:-.02em;line-height:1.05;max-width:16ch">Let's build something measurable.</h2>
           <p style="margin-top:14px;font-size:15px;line-height:1.6;color:var(--text-4);max-width:44ch">Open to AI/ML engineering roles &amp; collaborations. Replies are grounded and cited.</p>
+          <form id="contact-form" style="margin-top:28px;max-width:460px;display:flex;flex-direction:column;gap:14px">
+            <label style="display:flex;flex-direction:column;gap:7px">
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint)">Email</span>
+              <input name="email" type="email" required autocomplete="email" placeholder="you@company.com" style="font-family:'IBM Plex Mono',monospace;font-size:13.5px;color:var(--text);background:var(--bubble);border:1px solid var(--w12);border-radius:0;padding:11px 13px;width:100%">
+            </label>
+            <label style="display:flex;flex-direction:column;gap:7px">
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint)">Message</span>
+              <textarea name="message" required rows="4" placeholder="What are you building?" style="font-family:'IBM Plex Sans',system-ui,sans-serif;font-size:14.5px;line-height:1.5;color:var(--text);background:var(--bubble);border:1px solid var(--w12);border-radius:0;padding:11px 13px;width:100%;resize:vertical"></textarea>
+            </label>
+            <input name="company" type="text" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0" placeholder="Company">
+            <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:2px">
+              <button type="submit" style="display:inline-flex;align-items:center;gap:9px;font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:.02em;color:#fff;padding:12px 22px;border:none;border-radius:0;background:var(--accent);cursor:pointer;transition:opacity .18s" data-hover="opacity:.85">Send →</button>
+              <span id="contact-status" role="status" aria-live="polite" style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.02em;color:var(--faint)"></span>
+            </div>
+          </form>
           <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:30px">
-            <a href="#" style="display:inline-flex;align-items:center;gap:9px;text-decoration:none;font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:.02em;color:#fff;padding:12px 20px;border-radius:0;background:var(--accent);transition:opacity .18s" data-hover="opacity:.85">→ Email</a>
-            <a href="#" style="display:inline-flex;align-items:center;gap:9px;text-decoration:none;font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:.02em;color:var(--text-2);padding:12px 20px;border-radius:0;border:1px solid var(--w12);background:transparent;transition:border-color .18s,color .18s" data-hover="border-color:var(--accent);color:var(--heading)">GitHub</a>
-            <a href="#" style="display:inline-flex;align-items:center;gap:9px;text-decoration:none;font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:.02em;color:var(--text-2);padding:12px 20px;border-radius:0;border:1px solid var(--w12);background:transparent;transition:border-color .18s,color .18s" data-hover="border-color:var(--accent);color:var(--heading)">LinkedIn</a>
-            <a href="#" style="display:inline-flex;align-items:center;gap:9px;text-decoration:none;font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:.02em;color:var(--text-2);padding:12px 20px;border-radius:0;border:1px solid var(--w12);background:transparent;transition:border-color .18s,color .18s" data-hover="border-color:var(--accent);color:var(--heading)">X</a>
+            <a href="https://github.com/apoorva-01" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:9px;text-decoration:none;font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:.02em;color:var(--text-2);padding:12px 20px;border-radius:0;border:1px solid var(--w12);background:transparent;transition:border-color .18s,color .18s" data-hover="border-color:var(--accent);color:var(--heading)">GitHub</a>
+            <a href="https://www.linkedin.com/in/apoorva0510/" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:9px;text-decoration:none;font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:.02em;color:var(--text-2);padding:12px 20px;border-radius:0;border:1px solid var(--w12);background:transparent;transition:border-color .18s,color .18s" data-hover="border-color:var(--accent);color:var(--heading)">LinkedIn</a>
+            <a href="https://x.com/apoorva_verma_" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:9px;text-decoration:none;font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:.02em;color:var(--text-2);padding:12px 20px;border-radius:0;border:1px solid var(--w12);background:transparent;transition:border-color .18s,color .18s" data-hover="border-color:var(--accent);color:var(--heading)">X</a>
           </div>
+          <script>
+          (function(){
+            var f=document.getElementById("contact-form");
+            if(!f) return;
+            var status=document.getElementById("contact-status");
+            f.addEventListener("submit", function(e){
+              e.preventDefault();
+              var btn=f.querySelector('button[type="submit"]');
+              var email=f.email.value.trim(), message=f.message.value.trim();
+              if(!email || !message){ status.style.color="var(--accent)"; status.textContent="Add an email and a message."; return; }
+              var label=btn.textContent; btn.disabled=true; btn.textContent="Sending…"; status.style.color="var(--faint)"; status.textContent="";
+              fetch("/api/contact",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email:email,message:message,company:f.company.value})})
+                .then(function(r){ return r.json().then(function(j){ return {ok:r.ok,j:j}; }); })
+                .then(function(res){
+                  if(res.ok){ f.reset(); status.style.color="var(--live)"; status.textContent="Sent. I'll reply, grounded and cited."; }
+                  else { status.style.color="var(--accent)"; status.textContent=(res.j&&res.j.error)||"Something went wrong. Try again."; }
+                })
+                .catch(function(){ status.style.color="var(--accent)"; status.textContent="Network error. Try again."; })
+                .then(function(){ btn.disabled=false; btn.textContent=label; });
+            });
+          })();
+          </script>
         </div>
         <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:11px 18px;border-top:1px solid var(--w08);font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.04em;color:var(--faint)">
           <span>© 2025 Apoorva Verma</span><span>Built &amp; evaluated end-to-end</span>

@@ -102,6 +102,8 @@
   var posts = [
     {
       id: "p1",
+      slug: "rag-eval-lying-metrics",
+      href: "/posts/rag-eval-lying-metrics.html",
       title: "I graded 50 RAG answers with a hand-built harness. Half the metrics were lying to me.",
       excerpt: "Faithfulness sat at 1.0 across every config I tried. That number told me nothing, and here's the one I actually trust instead.",
       date: "Jul 2026", read: "6 min read",
@@ -226,7 +228,7 @@
       for (var j=0;j<p.tags.length;j++){
         tags += '<span style="font-size:11px;color:var(--text-3);padding:3px 10px;border-radius:999px;background:rgba(124,108,255,.08);border:1px solid rgba(124,108,255,.2)">'+esc(p.tags[j])+'</span>';
       }
-      html += '<div data-reveal="1" onclick="App.openPost('+i+')" style="display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--w09);border-radius:16px;padding:26px;cursor:pointer;opacity:0;transform:translateY(24px);transition:transform .25s,border-color .25s,background .25s" data-hover="transform:translateY(-4px);border-color:rgba(124,108,255,.4);background:var(--surface-hover)">'
+      html += '<a data-reveal="1" href="'+p.href+'" style="display:flex;flex-direction:column;text-decoration:none;color:inherit;background:var(--surface);border:1px solid var(--w09);border-radius:16px;padding:26px;cursor:pointer;opacity:0;transform:translateY(24px);transition:transform .25s,border-color .25s,background .25s" data-hover="transform:translateY(-4px);border-color:rgba(124,108,255,.4);background:var(--surface-hover)">'
         + '<div style="display:flex;align-items:center;gap:10px;font-family:\'JetBrains Mono\',monospace;font-size:11.5px;color:var(--faint)"><span>'+esc(p.date)+'</span><span style="opacity:.5">·</span><span>'+esc(p.read)+'</span></div>'
         + '<h3 style="margin-top:14px;font-size:21px;font-weight:500;letter-spacing:-.025em;line-height:1.22;color:var(--text)">'+esc(p.title)+'</h3>'
         + '<p style="margin-top:10px;font-size:14.5px;line-height:1.6;color:var(--text-4);flex:1">'+esc(p.excerpt)+'</p>'
@@ -234,7 +236,7 @@
         +   '<div style="display:flex;flex-wrap:wrap;gap:6px">'+tags+'</div>'
         +   '<span style="font-size:13px;color:#7c6cff">→</span>'
         + '</div>'
-        + '</div>';
+        + '</a>';
     }
     grid.innerHTML = html;
     bindHovers(grid);

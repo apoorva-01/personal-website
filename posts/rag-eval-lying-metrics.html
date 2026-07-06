@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>I graded 50 RAG answers with a hand-built harness. Half the metrics were lying to me. — Apoorva Verma</title>
+<meta name="description" content="Faithfulness sat at 1.0 across every config I tried. That number told me nothing, and here's the one I actually trust instead.">
+
+<!-- TODO: replace https://REPLACE-ME.com with your live domain (one place: the 4 URLs below). Until then, social previews won't resolve the image. -->
+<link rel="canonical" href="https://REPLACE-ME.com/posts/rag-eval-lying-metrics.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="I graded 50 RAG answers with a hand-built harness. Half the metrics were lying to me.">
+<meta property="og:description" content="Faithfulness sat at 1.0 across every config. That number told me nothing, and here's the one I actually trust instead.">
+<meta property="og:image" content="https://REPLACE-ME.com/assets/og-rag-eval.png">
+<meta property="og:url" content="https://REPLACE-ME.com/posts/rag-eval-lying-metrics.html">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="I graded 50 RAG answers. Half the metrics were lying to me.">
+<meta name="twitter:description" content="Faithfulness sat at 1.0 across every config. That number told me nothing, and here's the one I actually trust instead.">
+<meta name="twitter:image" content="https://REPLACE-ME.com/assets/og-rag-eval.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/motion@11.11.13/dist/motion.js"></script>
+<style>
+  :root{
+    --bg:#07070a;--surface:rgba(16,16,22,.7);--surface-hover:rgba(20,20,28,.8);--bubble:rgba(20,20,27,.85);--nav-bg:rgba(14,14,18,.5);
+    --text:#ededf2;--text-2:#c7c7d1;--text-3:#a8a8b3;--text-4:#8b8b96;--faint:#6e6e7a;--heading:#fff;
+    --on-accent:#07070a;--invert-bg:#ededf2;--invert-fg:#07070a;--dot:#33333f;--scroll:#23232c;--scrim:rgba(5,5,8,.78);
+    --w025:rgba(255,255,255,.025);--w03:rgba(255,255,255,.03);--w04:rgba(255,255,255,.04);--w05:rgba(255,255,255,.05);--w06:rgba(255,255,255,.06);--w07:rgba(255,255,255,.07);--w08:rgba(255,255,255,.08);--w09:rgba(255,255,255,.09);--w10:rgba(255,255,255,.1);--w12:rgba(255,255,255,.12);--w14:rgba(255,255,255,.14);--w30:rgba(255,255,255,.3);
+  }
+  :root[data-av-theme="light"]{
+    --bg:#f4f4f7;--surface:rgba(255,255,255,.78);--surface-hover:rgba(255,255,255,.96);--bubble:rgba(255,255,255,.86);--nav-bg:rgba(255,255,255,.6);
+    --text:#1c1c22;--text-2:#44444f;--text-3:#5c5c68;--text-4:#6f6f7b;--faint:#9a9aa6;--heading:#0a0a12;
+    --on-accent:#07070a;--invert-bg:#18181b;--invert-fg:#fafafa;--dot:#c4c4cc;--scroll:#c8c8d0;--scrim:rgba(244,244,247,.72);
+    --w025:rgba(0,0,0,.04);--w03:rgba(0,0,0,.05);--w04:rgba(0,0,0,.05);--w05:rgba(0,0,0,.06);--w06:rgba(0,0,0,.07);--w07:rgba(0,0,0,.08);--w08:rgba(0,0,0,.09);--w09:rgba(0,0,0,.1);--w10:rgba(0,0,0,.11);--w12:rgba(0,0,0,.13);--w14:rgba(0,0,0,.16);--w30:rgba(0,0,0,.28);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth;background-color:var(--bg);transition:background-color .35s ease}
+  html body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased;transition:background-color .35s ease,color .35s ease}
+  ::selection{background:rgba(124,108,255,.32)}
+  ::-webkit-scrollbar{width:10px;height:10px}
+  ::-webkit-scrollbar-track{background:var(--bg)}
+  ::-webkit-scrollbar-thumb{background:var(--scroll);border-radius:8px;border:2px solid var(--bg)}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes floatGlow{0%,100%{transform:translate(0,0) scale(1);opacity:.55}50%{transform:translate(30px,-24px) scale(1.08);opacity:.8}}
+  @keyframes floatGlow2{0%,100%{transform:translate(0,0) scale(1);opacity:.4}50%{transform:translate(-28px,26px) scale(1.12);opacity:.65}}
+
+  @media (max-width:640px){
+    .nav-link{display:none !important}
+    #cur-ring,#cur-dot{display:none !important}
+  }
+</style>
+</head>
+<body>
+
+<div id="av-root" style="position:relative;min-height:100vh;overflow:hidden">
+
+  <!-- custom cursor -->
+  <div id="cur-ring" style="position:fixed;top:0;left:0;width:34px;height:34px;margin:-17px 0 0 -17px;border-radius:50%;border:1px solid rgba(124,108,255,.6);background:rgba(124,108,255,.05);box-shadow:0 0 22px rgba(124,108,255,.32);pointer-events:none;z-index:300;mix-blend-mode:screen;transform:translate(-200px,-200px);transition:width .2s ease,height .2s ease,background .2s ease,border-color .2s ease;opacity:0"></div>
+  <div id="cur-dot" style="position:fixed;top:0;left:0;width:6px;height:6px;margin:-3px 0 0 -3px;border-radius:50%;background:#d6cfff;box-shadow:0 0 8px rgba(124,108,255,.85);pointer-events:none;z-index:301;transform:translate(-200px,-200px);opacity:0"></div>
+
+  <!-- ambient glows -->
+  <div style="position:fixed;top:-180px;left:8%;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,rgba(124,108,255,.26),transparent 70%);filter:blur(40px);pointer-events:none;animation:floatGlow 16s ease-in-out infinite;z-index:0"></div>
+  <div style="position:fixed;bottom:-160px;right:4%;width:460px;height:460px;border-radius:50%;background:radial-gradient(circle,rgba(56,189,248,.18),transparent 70%);filter:blur(40px);pointer-events:none;animation:floatGlow2 19s ease-in-out infinite;z-index:0"></div>
+  <div style="position:fixed;inset:0;background-image:radial-gradient(var(--w025) 1px,transparent 1px);background-size:42px 42px;pointer-events:none;z-index:0"></div>
+
+  <!-- NAV -->
+  <nav style="position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:center;padding:16px 20px">
+    <div style="display:flex;align-items:center;justify-content:space-between;width:100%;max-width:1140px;padding:10px 14px 10px 18px;background:var(--nav-bg);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--w07);border-radius:14px;box-shadow:0 8px 32px rgba(0,0,0,.3)">
+      <a href="/index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--text)">
+        <span style="display:grid;place-items:center;width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,#7c6cff,#38bdf8);font-size:13px;font-weight:600;color:var(--on-accent)">AV</span>
+        <span style="font-weight:500;letter-spacing:-.02em;font-size:15px">Apoorva Verma</span>
+      </a>
+      <div style="display:flex;align-items:center;gap:4px">
+        <a class="nav-link" href="/index.html#projects" style="text-decoration:none;color:var(--text-3);font-size:13.5px;padding:7px 12px;border-radius:9px;transition:color .2s" data-hover="color:var(--text)">Projects</a>
+        <a class="nav-link" href="/index.html#eval" style="text-decoration:none;color:var(--text-3);font-size:13.5px;padding:7px 12px;border-radius:9px;transition:color .2s" data-hover="color:var(--text)">Evaluation</a>
+        <a class="nav-link" href="/blog.html" style="text-decoration:none;color:var(--text);font-size:13.5px;padding:7px 12px;border-radius:9px">Writing</a>
+        <button id="theme-btn" onclick="App.toggleTheme()" aria-label="Toggle theme" style="display:grid;place-items:center;width:34px;height:34px;border-radius:9px;border:1px solid var(--w10);background:var(--w03);color:var(--text-3);cursor:pointer;font-size:14px;transition:color .18s,border-color .18s,background .18s" data-hover="color:var(--text);border-color:var(--w30)">☀</button>
+        <a href="/index.html#contact" style="text-decoration:none;color:var(--invert-fg);font-size:13.5px;font-weight:600;padding:8px 15px;border-radius:9px;background:var(--invert-bg);margin-left:6px;transition:transform .2s" data-hover="transform:translateY(-1px)">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <main style="position:relative;z-index:1;max-width:720px;margin:0 auto;padding:120px 24px 120px">
+    <a href="/blog.html" style="display:inline-flex;align-items:center;gap:7px;text-decoration:none;font-size:13px;color:var(--text-3);padding:8px 14px;border-radius:10px;border:1px solid var(--w12);background:var(--bubble);transition:all .18s;animation:fadeUp .5s ease both" data-hover="color:var(--heading);border-color:var(--w30)">← Back to writing</a>
+
+    <article style="margin-top:0">
+    <div style="display:flex;align-items:center;gap:10px;margin-top:30px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--faint)"><span>Jul 2026</span><span style="opacity:.5">·</span><span>6 min read</span></div>
+    <h1 style="margin-top:14px;font-size:clamp(30px,5vw,46px);font-weight:200;letter-spacing:-.04em;line-height:1.08;color:var(--heading)">I graded 50 RAG answers with a hand-built harness. Half the metrics were lying to me.</h1>
+    <div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:18px"><span style="font-size:11.5px;color:var(--text-2);padding:4px 11px;border-radius:999px;background:rgba(124,108,255,.1);border:1px solid rgba(124,108,255,.25)">RAG</span><span style="font-size:11.5px;color:var(--text-2);padding:4px 11px;border-radius:999px;background:rgba(124,108,255,.1);border:1px solid rgba(124,108,255,.25)">LLM Evaluation</span></div>
+    <div style="margin-top:32px;height:1px;background:linear-gradient(90deg,rgba(124,108,255,.5),transparent)"></div>
+
+    <div style="margin-top:30px;display:flex;flex-direction:column;gap:22px"><p style="font-size:16.5px;line-height:1.78;color:var(--text-2);letter-spacing:-.005em">I built a RAG system over 15 arXiv papers, the usual chat-with-your-documents thing. Then I did the part most people skip: I wrote an evaluation harness, made a gold set of 50 questions, and graded every single answer across every config I could think of. Retrieval ladder, chunking strategies, two embedding models, the works.</p><p style="font-size:16.5px;line-height:1.78;color:var(--text-2);letter-spacing:-.005em">The point wasn't the chatbot. The chatbot is a weekend. The point was to find out which knobs actually matter, with numbers, instead of shipping on vibes.</p><p style="font-size:16.5px;line-height:1.78;color:var(--text-2);letter-spacing:-.005em">Most of the numbers lied to me. Here's how I figured out which ones.</p><h2 style="margin-top:14px;font-size:24px;font-weight:400;letter-spacing:-.03em;line-height:1.25;color:var(--heading)">The metrics that saturate tell you nothing</h2><p style="font-size:16.5px;line-height:1.78;color:var(--text-2);letter-spacing:-.005em">First thing I ran was the generation matrix: two chunking strategies crossed with two embedding models, scored with DeepEval on faithfulness, answer relevance, context precision, context recall. Four configs, four grounding-quality metrics each.</p><p style="font-size:16.5px;line-height:1.78;color:var(--text-2);letter-spacing:-.005em">Faithfulness came back at 1.0. On every config. Citation precision, same story, 1.0 across the board.</p><p style="font-size:16.5px;line-height:1.78;color:var(--text-2);letter-spacing:-.005em">For about ten minutes I felt great. Then it clicked that a metric which reads 1.0 no matter what you feed it isn't measuring your config. It's measuring the generator. Claude, handed a decent prompt and some numbered sources, basically doesn't make things up. That's a fact about the model, not about my fixed-vs-semantic chunking decision. If I'd picked a config based on faithfulness I would have been reading tea leaves.</p><p style="font-size:16.5px;line-height:1.78;color:var(--text-2);letter-spacing:-.005em">So the first lesson is boring and important: a metric that's already pinned at the ceiling has no opinion. It can't separate your options. Drop it from the comparison and go find one that moves.</p><h2 style="margin-top:14px;font-size:24px;font-weight:400;letter-spacing:-.03em;line-height:1.25;color:var(--heading)">The numbers that actually moved</h2><p style="font-size:16.5px;line-height:1.78;color:var(--text-2);letter-spacing:-.005em">Two things moved, and they're where all the real signal was.</p><p style="font-size:16.5px;line-height:1.78;color:var(--text-2);letter-spacing:-.005em">Retrieval was the big one. I ran a ladder from naive to senior:</p><div style="overflow-x:auto"><table style="border-collapse:collapse;width:100%;min-width:360px"><thead><tr><th style="text-align:left;padding:9px 14px;font-size:12.5px;font-weight:500;color:var(--text-3);border-bottom:1px solid var(--w12);white-space:nowrap">retriever</th><th style="text-align:right;padding:9px 14px;font-size:12.5px;font-weight:500;color:var(--text-3);border-bottom:1px solid var(--w12);white-space:nowrap">NDCG@5</th><th style="text-align:right;padding:9px 14px;font-size:12.5px;font-weight:500;color:var(--text-3);border-bottom:1px solid var(--w12);white-space:nowrap">Recall@5</th><th style="text-align:right;padding:9px 14px;font-size:12.5px;font-weight:500;color:var(--text-3);border-bottom:1px solid var(--w12);white-space:nowrap">MRR</th></tr></thead><tbody><tr><td style="text-align:left;padding:9px 14px;font-size:13.5px;color:var(--text-2);border-bottom:1px solid var(--w08);font-family:inherit;white-space:nowrap">dense (single-vector)</td><td style="text-align:right;padding:9px 14px;font-size:13.5px;color:var(--text-2);border-bottom:1px solid var(--w08);font-family:'JetBrains Mono',monospace;white-space:nowrap">0.333</td><td style="text-align:right;padding:9px 14px;font-size:13.5px;color:var(--text-2);border-bottom:1px solid var(--w08);font-family:'JetBrains Mono',monospace;white-space:nowrap">0.44</td><td style="text-align:right;padding:9px 14px;font-size:13.5px;color:var(--text-2);border-bottom:1px solid var(--w08);font-family:'JetBrains Mono',monospace;white-space:nowrap">0.299</td></tr><tr><td style="text-align:left;padding:9px 14px;font-size:13.5px;color:var(--text-2);border-bottom:1px solid var(--w08);font-family:inherit;white-space:nowrap">+ BM25 hybrid (RRF)</td><td style="text-align:right;padding:9px 14px;font-size:13.5px;color:var(--text-2);border-bottom:1px solid var(--w08);font-family:'JetBrains Mono',monospace;white-space:nowrap">0.433</td><td style="text-align:right;padding:9px 14px;font-size:13.5px;color:var(--text-2);border-bottom:1px solid var(--w08);font-family:'JetBrains Mono',monospace;white-space:nowrap">0.58</td><td style="text-align:right;padding:9px 14px;font-size:13.5px;color:var(--text-2);border-bottom:1px solid var(--w08);font-family:'JetBrains Mono',monospace;white-space:nowrap">0.384</td></tr><tr><td style="text-align:left;padding:9px 14px;font-size:13.5px;color:var(--text-2);border-bottom:1px solid var(--w08);font-family:inherit;white-space:nowrap">+ cross-encoder rerank</td><td style="text-align:right;padding:9px 14px;font-size:13.5px;color:var(--text-2);border-bottom:1px solid var(--w08);font-family:'JetBrains Mono',monospace;white-space:nowrap">0.618</td><td style="text-align:right;padding:9px 14px;font-size:13.5px;color:var(--text-2);border-bottom:1px solid var(--w08);font-family:'JetBrains Mono',monospace;white-space:nowrap">0.76</td><td style="text-align:right;padding:9px 14px;font-size:13.5px;color:var(--text-2);border-bottom:1px solid var(--w08);font-family:'JetBrains Mono',monospace;white-space:nowrap">0.570</td></tr></tbody></table></div><figure style="margin:0"><div style="overflow-x:auto"><svg viewBox="0 0 660 360" role="img" aria-label="Bar chart of NDCG at 5 across three retrievers: dense 0.33, plus BM25 hybrid 0.43, plus cross-encoder rerank 0.62" style="width:100%;height:auto;font-family:Inter,system-ui,sans-serif"><defs><linearGradient id="ndcgbar" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#7c6cff"></stop><stop offset="1" stop-color="#38bdf8"></stop></linearGradient></defs><text x="0" y="22" fill="var(--heading)" font-size="16" font-weight="500">Retrieval ladder: NDCG@5 across 50 questions</text><g stroke="var(--w09)" stroke-width="1"><line x1="60" y1="310" x2="636" y2="310"></line><line x1="60" y1="241" x2="636" y2="241"></line><line x1="60" y1="173" x2="636" y2="173"></line><line x1="60" y1="104" x2="636" y2="104"></line></g><g fill="var(--faint)" font-size="11" text-anchor="end"><text x="50" y="314">0.0</text><text x="50" y="245">0.2</text><text x="50" y="177">0.4</text><text x="50" y="108">0.6</text></g><rect x="96" y="196" width="120" height="114" rx="5" fill="url(#ndcgbar)" opacity="0.55"></rect><rect x="288" y="161" width="120" height="149" rx="5" fill="url(#ndcgbar)" opacity="0.78"></rect><rect x="480" y="98" width="120" height="212" rx="5" fill="url(#ndcgbar)"></rect><g fill="var(--heading)" font-size="15" font-weight="600" text-anchor="middle"><text x="156" y="184">0.33</text><text x="348" y="149">0.43</text><text x="540" y="86">0.62</text></g><g fill="var(--text-3)" font-size="12" text-anchor="middle"><text x="156" y="332">dense</text><text x="348" y="332">+ BM25 hybrid</text><text x="540" y="332">+ cross-encoder rerank</text></g><text x="540" y="68" fill="#38bdf8" font-size="13" font-weight="600" text-anchor="middle">+86% vs naive dense</text></svg></div><figcaption style="margin-top:10px;font-size:12.5px;color:var(--faint);text-align:center">The whole retrieval ladder. The cross-encoder is the single biggest rung (0.43 to 0.62).</figcaption></figure><p style="font-size:16.5px;line-height:1.78;color:var(--text-2);letter-spacing:-.005em">Naive dense to hybrid-plus-rerank is NDCG@5 0.33 to 0.62. That's an 86% lift, and it's monotonic, every rung helps. The single biggest jump is the cross-encoder (0.43 to 0.62). If you have one afternoon to spend on your RAG stack, spend it there, not on a bigger generation model.</p><p style="font-size:16.5px;line-height:1.78;color:var(--text-2);letter-spacing:-.005em">The other thing that moved was context precision, and it was the only generation metric that did. It went 0.754 to 0.846 across the matrix, and the winner was semantic chunking with e5-large. Worth knowing e5-large costs about 3x the embedding compute of bge-small, so that 0.09 is a real tradeoff, not a free lunch. There's also one config (semantic chunking with bge-small) that quietly trades recall down to 0.733 to buy precision, which is the kind of thing you only see when you grade the whole grid instead of one happy-path run.</p><p style="font-size:16.5px;line-height:1.78;color:var(--text-2);letter-spacing:-.005em">Everything else was flat. Four metrics, one of them told me anything.</p><h2 style="margin-top:14px;font-size:24px;font-weight:400;letter-spacing:-.03em;line-height:1.25;color:var(--heading)">The honest part: I don't fully trust my own gold set</h2><p style="font-size:16.5px;line-height:1.78;color:var(--text-2);letter-spacing:-.005em">Here's the bit I could have hidden and didn't.</p><p style="font-size:16.5px;line-height:1.78;color:var(--text-2);letter-spacing:-.005em">My gold set is synthetic. I had Claude generate each question and reference answer from a chunk, then lightly filtered. Which means for retrieval it's structurally circular: every question's only ground truth is the exact chunk it was born from, so that chunk tends to rank well under any retriever you throw at it. I de-lexicalized the questions so they don't just echo keywords from their source passage, and you can see that biting in the numbers (dense alone only hits 0.33 because paraphrase kills pure embedding match). But de-lexicalizing fixes keyword leakage, not the structural coupling. Single-positive ground truth also deflates Recall@k whenever some other chunk was also relevant and I never labeled it.</p><p style="font-size:16.5px;line-height:1.78;color:var(--text-2);letter-spacing:-.005em">So those retrieval absolutes are conservative lower bounds. The 86% lift is real because it's a relative comparison on the same flawed gold set, and the flaws cancel. The absolute 0.62 is a number I'd argue with.</p><p style="font-size:16.5px;line-height:1.78;color:var(--text-2);letter-spacing:-.005em">This is the trap with eval work. You build a measuring stick, and then you forget the stick itself has error bars. A benchmark you generated from the thing you're testing is going to flatter the thing you're testing.</p><h2 style="margin-top:14px;font-size:24px;font-weight:400;letter-spacing:-.03em;line-height:1.25;color:var(--heading)">So I built a metric that never touches the gold set</h2><p style="font-size:16.5px;line-height:1.78;color:var(--text-2);letter-spacing:-.005em">If I don't fully trust the gold set, I shouldn't lead with a metric that depends on it. So the number I actually put my name behind is a custom citation-faithfulness metric, framed the way the attribution-eval (ALCE) literature does it, and it's gold-independent by design. It audits the answer against its own cited sources and never looks at the gold set at all.</p><p style="font-size:16.5px;line-height:1.78;color:var(--text-2);letter-spacing:-.005em">Two parts. Citation precision: of the claims that carry a <code style="font-family:'JetBrains Mono',monospace;font-size:.88em;background:var(--bubble);border:1px solid var(--w09);padding:1px 6px;border-radius:6px">[n]</code>, what fraction are actually stated by the source they cite. When you cite, are you right? Citation recall: of all the factual claims in the answer, what fraction carry at least one citation. Do you cite everything you assert, or just some of it?</p><p style="font-size:16.5px;line-height:1.78;color:var(--text-2);letter-spacing:-.005em">The detail I care about most: honest refusals ("the sources don't cover this") have no claims to cite, so they're excluded, not scored zero. A model that correctly says "I don't know" shouldn't get punished by your eval for being honest. That's the difference between measuring grounding and measuring confidence.</p><p style="font-size:16.5px;line-height:1.78;color:var(--text-2);letter-spacing:-.005em">And because "the metric said 1.0" is exactly the kind of claim you shouldn't take on faith, the behavior is pinned down by tests. A correctly-cited answer scores 1.0 / 1.0. An answer that cites the wrong source and leaves one claim uncited scores precision 0.0 and recall 0.5, by construction. The metric is graded before I let it grade anything else.</p><h2 style="margin-top:14px;font-size:24px;font-weight:400;letter-spacing:-.03em;line-height:1.25;color:var(--heading)">What I'd tell you to take from this</h2><p style="font-size:16.5px;line-height:1.78;color:var(--text-2);letter-spacing:-.005em">Grade the whole grid, not the happy path. The interesting failures live in the cells you didn't bother to run.</p><p style="font-size:16.5px;line-height:1.78;color:var(--text-2);letter-spacing:-.005em">When a metric reads the same everywhere, that's not your system being perfect. That's the metric being blind to the difference you care about. Go find one that can see it.</p><p style="font-size:16.5px;line-height:1.78;color:var(--text-2);letter-spacing:-.005em">And be suspicious of any eval built on data you generated yourself. Ask what the metric depends on, and prefer the one that depends on the least. In my case the bottleneck turned out to be retrieval, not generation, and the only score I'd defend in a code review is the one that doesn't lean on a gold set I can't fully verify.</p><p style="font-size:16.5px;line-height:1.78;color:var(--text-2);letter-spacing:-.005em">The harness, the custom metric, the tests, and every number above are in the repo: <a href="https://github.com/apoorva-01/rag-eval-harness" target="_blank" rel="noopener" style="color:#7c6cff;text-decoration:none;border-bottom:1px solid rgba(124,108,255,.4)">github.com/apoorva-01/rag-eval-harness</a>. Run <code style="font-family:'JetBrains Mono',monospace;font-size:.88em;background:var(--bubble);border:1px solid var(--w09);padding:1px 6px;border-radius:6px">python eval/run_matrix.py</code> and it regenerates the tables. If your numbers come out different, I'd genuinely like to know why.</p></div>
+    </article>
+
+    <div style="margin-top:44px;padding-top:24px;border-top:1px solid var(--w08);display:flex;align-items:center;gap:12px"><span style="display:grid;place-items:center;width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,#7c6cff,#38bdf8);font-size:14px;font-weight:600;color:var(--on-accent)">AV</span><div><div style="font-size:14px;font-weight:500;color:var(--text)">Apoorva Verma</div><div style="font-size:12.5px;color:var(--faint)">AI Engineer — RAG &amp; LLM Evaluation</div></div></div>
+
+    <div style="margin-top:40px"><a href="/blog.html" style="display:inline-flex;align-items:center;gap:7px;text-decoration:none;font-size:13px;color:var(--text-3);padding:8px 14px;border-radius:10px;border:1px solid var(--w12);background:var(--bubble);transition:all .18s" data-hover="color:var(--heading);border-color:var(--w30)">← Back to writing</a></div>
+
+  </main>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  function bindHovers(scope){
+    var els = scope.querySelectorAll("[data-hover]");
+    for (var i=0;i<els.length;i++){
+      (function(el){
+        if (el.__hb) return; el.__hb = 1;
+        var hov = el.getAttribute("data-hover");
+        el.addEventListener("mouseenter", function(){
+          if (el.__hovering) return;
+          el.__hovering = 1;
+          el.__base = el.getAttribute("style") || "";
+          el.setAttribute("style", el.__base + ";" + hov);
+        });
+        el.addEventListener("mouseleave", function(){
+          el.__hovering = 0;
+          el.setAttribute("style", el.__base);
+        });
+      })(els[i]);
+    }
+  }
+
+  var curTheme = "dark";
+  function applyTheme(t){
+    var light = t === "light";
+    curTheme = light ? "light" : "dark";
+    try {
+      if (light) document.documentElement.setAttribute("data-av-theme", "light");
+      else document.documentElement.removeAttribute("data-av-theme");
+    } catch(e){}
+    try { localStorage.setItem("av-theme", curTheme); } catch(e){}
+    var btn = document.getElementById("theme-btn");
+    if (btn) btn.textContent = curTheme === "light" ? "☾" : "☀";
+  }
+  function toggleTheme(){
+    var cur = "dark";
+    try { cur = document.documentElement.getAttribute("data-av-theme") === "light" ? "light" : "dark"; } catch(e){}
+    applyTheme(cur === "light" ? "dark" : "light");
+  }
+
+  function initCursor(){
+    if (window.matchMedia && window.matchMedia("(pointer: coarse)").matches) return;
+    var ring = document.getElementById("cur-ring"), dot = document.getElementById("cur-dot");
+    if (!ring || !dot) return;
+    var mx=-200,my=-200,rx=-200,ry=-200,shown=false,big=false;
+    function move(e){
+      mx=e.clientX; my=e.clientY;
+      dot.style.transform = "translate("+mx+"px,"+my+"px)";
+      if (!shown){ shown=true; ring.style.opacity="1"; dot.style.opacity="1"; }
+    }
+    function setBig(on){
+      if (on===big) return; big=on;
+      ring.style.width = on?"52px":"34px";
+      ring.style.height = on?"52px":"34px";
+      ring.style.margin = on?"-26px 0 0 -26px":"-17px 0 0 -17px";
+      ring.style.background = on?"rgba(124,108,255,.12)":"rgba(124,108,255,.05)";
+      ring.style.borderColor = on?"rgba(168,156,255,.9)":"rgba(124,108,255,.6)";
+    }
+    function over(e){ setBig(!!(e.target.closest && e.target.closest('a,button,input,[role="button"]'))); }
+    function leave(){ ring.style.opacity="0"; dot.style.opacity="0"; shown=false; }
+    function loop(){
+      rx += (mx-rx)*0.18; ry += (my-ry)*0.18;
+      ring.style.transform = "translate("+rx.toFixed(2)+"px,"+ry.toFixed(2)+"px)";
+      requestAnimationFrame(loop);
+    }
+    window.addEventListener("mousemove", move, { passive:true });
+    window.addEventListener("mouseover", over, { passive:true });
+    document.addEventListener("mouseleave", leave);
+    requestAnimationFrame(loop);
+  }
+
+  function boot(){
+    var stored = "dark";
+    try { stored = localStorage.getItem("av-theme") || "dark"; } catch(e){}
+    applyTheme(stored);
+    bindHovers(document);
+    initCursor();
+  }
+
+  window.App = { toggleTheme: toggleTheme };
+
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
+  else boot();
+})();
+</script>
+</body>
+</html>

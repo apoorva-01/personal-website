@@ -368,55 +368,12 @@
   var posts = [
     {
       id: "p1",
-      title: "Why your RAG demo lies to you",
-      excerpt: "Fluent answers feel right and measure nothing. Here's how I separate confidence from correctness.",
-      date: "May 2026", read: "6 min read",
-      tags: ["RAG", "LLM Evaluation"],
-      body: [
-        "The most dangerous thing about a retrieval-augmented generation demo is that it sounds correct. Fluency is cheap; the model will happily produce a polished paragraph whether or not the retrieved context actually supports it. If you ship on vibes, you ship hallucinations with great grammar.",
-        "Faithfulness is the metric that catches this: it asks whether every claim in the answer is entailed by the retrieved context, independent of how nice the prose is. In my own pipelines I score it on every response and treat anything under 0.9 as a defect, not a stylistic choice.",
-        "The practical move is to decouple the two failure modes. Retrieval failures (the right chunk never made it into context) and generation failures (the chunk was there but the model embellished) need different fixes, and a single 'accuracy' number hides which one you have.",
-        "So before you celebrate a demo, ask it the same question ten times with the context withheld. If it still answers confidently, you don't have a RAG system — you have a language model with a search box bolted on for decoration."
-      ]
-    },
-    {
-      id: "p2",
-      title: "Semantic chunking won my ablation",
-      excerpt: "Four chunking strategies, two embedding models, one clear winner. The numbers and why they moved.",
-      date: "Apr 2026", read: "8 min read",
-      tags: ["RAG", "Engineering"],
-      body: [
-        "Chunking is the least glamorous and most consequential knob in a RAG stack. I ran a full ablation — fixed-size, recursive, semantic, and sentence-window splitting — each paired with two embedding models, and scored faithfulness, answer relevance, and retrieval precision with RAGAS.",
-        "Semantic chunking with text-embedding-3-large won decisively: 0.94 faithfulness against 0.81 for the naive fixed-512 baseline. The reason is intuitive in hindsight — splitting on meaning keeps a complete idea inside a single retrievable unit, so the model never has to stitch a claim across a boundary it can't see.",
-        "Fixed-size chunking's failure mode is subtle. It looks fine on short factual questions and falls apart on anything requiring two adjacent sentences, because the split lands mid-thought and only half the evidence gets retrieved.",
-        "The lesson I keep relearning: spend your optimization budget on retrieval quality before you reach for a bigger model. A sharper chunker beat a fancier LLM in every configuration I tested."
-      ]
-    },
-    {
-      id: "p3",
-      title: "Calibrating LLM-as-judge",
-      excerpt: "An automated judge is only as trustworthy as its agreement with humans. How I calibrate before I rely on it.",
-      date: "Mar 2026", read: "7 min read",
-      tags: ["LLM Evaluation"],
-      body: [
-        "Using an LLM to grade another LLM is enormously convenient and quietly perilous. Judges have biases — they favor longer answers, they anchor on the first option, and they're inconsistent across runs unless you pin them down.",
-        "Before I trust a judge in a pipeline, I calibrate it against a human-labeled gold set and measure agreement with Cohen's kappa. If kappa is below 0.7, the judge isn't measuring what I think it is, and any score it produces downstream is theater.",
-        "Two fixes carry most of the weight: force a rubric with explicit criteria instead of a vague 'rate 1–5', and randomize answer order to kill position bias. Pairwise comparison tends to be more stable than absolute scoring.",
-        "A calibrated judge is a force multiplier — it lets you evaluate thousands of cases overnight. An uncalibrated one is a confident random number generator that happens to speak English."
-      ]
-    },
-    {
-      id: "p4",
-      title: "Agents that recover instead of hallucinate",
-      excerpt: "When a tool call fails, most agents invent a plausible result. Here's how to make yours notice and re-plan.",
-      date: "Feb 2026", read: "5 min read",
-      tags: ["AI Agents", "Engineering"],
-      body: [
-        "The failure mode that scares me most in agentic systems isn't a crash — it's a confident fabrication. A tool returns an error, and instead of stopping, the agent quietly invents what the result probably would have been and marches on.",
-        "The fix is to make failure a first-class signal. Every tool response is validated against an expected schema; a malformed or empty result triggers a re-plan rather than a continuation. The agent is explicitly told it is allowed to say 'that didn't work.'",
-        "Self-critique loops help too: after each step, a lightweight check asks whether the action actually advanced the goal. In my agent this lifted the recovery rate to 91% — the difference between a tool that's useful and one that's dangerous.",
-        "Graceful degradation beats false confidence every time. An agent that admits uncertainty and asks for help is infinitely more shippable than one that hides its failures behind fluent prose."
-      ]
+      slug: "rag-eval-lying-metrics",
+      href: "/posts/rag-eval-lying-metrics.html",
+      title: "I graded 50 RAG answers with a hand-built harness. Half the metrics were lying to me.",
+      excerpt: "Faithfulness sat at 1.0 across every config I tried. That number told me nothing, and here's the one I actually trust instead.",
+      date: "Jul 2026", read: "6 min read",
+      tags: ["RAG", "LLM Evaluation"]
     }
   ];
 
@@ -505,12 +462,12 @@
       for (var j=0;j<p.tags.length;j++){
         tags += '<span style="font-size:11px;color:var(--text-3);padding:3px 10px;border-radius:999px;background:rgba(124,108,255,.08);border:1px solid rgba(124,108,255,.2)">'+esc(p.tags[j])+'</span>';
       }
-      html += '<div onclick="App.openPost('+i+')" style="display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--w09);border-radius:16px;padding:24px;cursor:pointer;transition:transform .25s,border-color .25s,background .25s" data-hover="transform:translateY(-4px);border-color:rgba(124,108,255,.4);background:var(--surface-hover)">'
+      html += '<a href="'+p.href+'" style="display:flex;flex-direction:column;text-decoration:none;color:inherit;background:var(--surface);border:1px solid var(--w09);border-radius:16px;padding:24px;cursor:pointer;transition:transform .25s,border-color .25s,background .25s" data-hover="transform:translateY(-4px);border-color:rgba(124,108,255,.4);background:var(--surface-hover)">'
         + '<div style="display:flex;align-items:center;gap:10px;font-family:\'JetBrains Mono\',monospace;font-size:11.5px;color:var(--faint)"><span>'+esc(p.date)+'</span><span style="opacity:.5">·</span><span>'+esc(p.read)+'</span></div>'
         + '<h3 style="margin-top:12px;font-size:19px;font-weight:500;letter-spacing:-.025em;line-height:1.25;color:var(--text)">'+esc(p.title)+'</h3>'
         + '<p style="margin-top:9px;font-size:14px;line-height:1.55;color:var(--text-4);flex:1">'+esc(p.excerpt)+'</p>'
         + '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:16px">'+tags+'</div>'
-        + '</div>';
+        + '</a>';
     }
     grid.innerHTML = html;
     bindHovers(grid);

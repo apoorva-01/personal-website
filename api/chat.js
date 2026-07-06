@@ -96,6 +96,12 @@ export default async function handler(req, res) {
   res.setHeader("Cache-Control", "no-cache, no-transform");
   res.setHeader("Connection", "keep-alive");
 
+  if (!process.env.ANTHROPIC_API_KEY) {
+    sse(res, { error: "Chat isn't configured yet — the API key is missing." });
+    res.end();
+    return;
+  }
+
   try {
     const stream = client.messages.stream({
       model: "claude-haiku-4-5",
@@ -111,7 +117,10 @@ export default async function handler(req, res) {
     }
     sse(res, { done: true });
   } catch (err) {
-    sse(res, { error: "Sorry — I hit an error answering that. Please try again." });
+    const msg = err && err.status === 401
+      ? "Chat isn't configured yet — the API key is invalid."
+      : "Sorry, I hit an error answering that. Please try again.";
+    sse(res, { error: msg });
   }
   res.end();
 }

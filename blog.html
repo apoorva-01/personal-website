@@ -6,6 +6,7 @@
 <title>Writing — Apoorva Verma · Notes on grounding &amp; evaluation</title>
 <link rel="icon" type="image/jpeg" href="/assets/apoorva.jpg">
 <link rel="apple-touch-icon" href="/assets/apoorva.jpg">
+<script>try{var _t=localStorage.getItem("av-theme");if(_t!=="dark")document.documentElement.setAttribute("data-av-theme","light");}catch(e){document.documentElement.setAttribute("data-av-theme","light");}</script>
 <meta name="description" content="Field notes on building RAG systems that don't hallucinate — and the evaluation harnesses that prove it.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -38,6 +39,15 @@
   @keyframes overlayIn{from{opacity:0}to{opacity:1}}
   @keyframes sheetIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
   @media (prefers-reduced-motion:reduce){*{animation:none !important;transition:none !important}}
+  #theme-btn{position:relative;box-sizing:border-box;width:56px;height:30px;padding:0 8px;border:1px solid var(--w12);background:var(--bubble);border-radius:3px;cursor:pointer;display:inline-flex;align-items:center;justify-content:space-between;transition:border-color .18s;flex:0 0 auto}
+  #theme-btn:hover{border-color:var(--w30)}
+  #theme-btn svg{width:13px;height:13px;position:relative;z-index:2;transition:color .2s}
+  #theme-btn .tt-sun{color:#fff}
+  #theme-btn .tt-moon{color:var(--faint)}
+  #theme-btn .tt-thumb{position:absolute;top:3px;left:3px;width:22px;height:22px;background:var(--accent);border-radius:2px;transition:transform .24s cubic-bezier(.4,0,.2,1);z-index:1}
+  :root:not([data-av-theme="light"]) #theme-btn .tt-sun{color:var(--faint)}
+  :root:not([data-av-theme="light"]) #theme-btn .tt-moon{color:#fff}
+  :root:not([data-av-theme="light"]) #theme-btn .tt-thumb{transform:translateX(26px)}
 
   /* Responsive — added for real-site deployment (source had no media queries) */
   @media (max-width:640px){
@@ -65,7 +75,7 @@
         <a class="nav-link" href="index.html#projects" style="text-decoration:none;color:var(--text-3);font-size:13.5px;padding:7px 12px;border-radius:2px;transition:color .2s" data-hover="color:var(--text)">Projects</a>
         <a class="nav-link" href="index.html#eval" style="text-decoration:none;color:var(--text-3);font-size:13.5px;padding:7px 12px;border-radius:2px;transition:color .2s" data-hover="color:var(--text)">Evaluation</a>
         <a class="nav-link" href="/blog.html" style="text-decoration:none;color:var(--text);font-size:13.5px;padding:7px 12px;border-radius:2px">Notes</a>
-        <button id="theme-btn" onclick="App.toggleTheme()" aria-label="Toggle theme" style="display:grid;place-items:center;width:34px;height:34px;border-radius:2px;border:1px solid var(--w10);background:var(--w03);color:var(--text-3);cursor:pointer;font-size:14px;transition:color .18s,border-color .18s,background .18s" data-hover="color:var(--text);border-color:var(--w30)">☀</button>
+        <button id="theme-btn" onclick="App.toggleTheme()" aria-label="Toggle light or dark theme" title="Toggle theme"><svg class="tt-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg><svg class="tt-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><span class="tt-thumb"></span></button>
         <a href="index.html#contact" style="text-decoration:none;color:var(--invert-fg);font-size:13.5px;font-weight:600;padding:8px 15px;border-radius:2px;background:var(--invert-bg);margin-left:6px;transition:transform .2s" data-hover="">Contact</a>
       </div>
     </div>
@@ -287,7 +297,7 @@
     try { localStorage.setItem("av-theme", curTheme); } catch(e){}
     state.theme = curTheme;
     var btn = document.getElementById("theme-btn");
-    if (btn) btn.textContent = curTheme === "light" ? "☾" : "☀";
+    if (btn) btn.setAttribute("aria-pressed", curTheme === "dark" ? "true" : "false");
   }
   function toggleTheme(){
     var cur = "dark";

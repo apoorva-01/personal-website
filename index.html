@@ -464,7 +464,7 @@
               fetch("/api/contact",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email:email,message:message,company:f.company.value})})
                 .then(function(r){ return r.json().then(function(j){ return {ok:r.ok,j:j}; }); })
                 .then(function(res){
-                  if(res.ok){ f.reset(); status.style.color="var(--live)"; status.textContent="Sent. I'll reply, grounded and cited."; }
+                  if(res.ok){ f.reset(); status.style.color="var(--live)"; status.textContent="Got it! I'll get back to you soon."; }
                   else { status.style.color="var(--accent)"; status.textContent=(res.j&&res.j.error)||"Something went wrong. Try again."; }
                 })
                 .catch(function(){ status.style.color="var(--accent)"; status.textContent="Network error. Try again."; })

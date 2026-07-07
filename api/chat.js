@@ -74,6 +74,58 @@ function sse(res, obj) {
   res.write(`data: ${JSON.stringify(obj)}\n\n`);
 }
 
+// --- Abuse guard --------------------------------------------------------------
+// Vercel functions are stateless, but a warm instance keeps module scope between
+// invocations, which is enough to blunt a single source hammering the endpoint.
+// This is best-effort; the real hard ceiling is an Anthropic spend limit.
+const PER_IP_WINDOW_MS = 60_000;   // 1 minute
+const PER_IP_PER_MIN = 6;          // questions per IP per minute
+const PER_IP_PER_DAY = 40;         // questions per IP per day
+const DAY_MS = 86_400_000;
+const INSTANCE_HOURLY_CAP = 400;   // total questions per warm instance per hour
+
+const ipHits = new Map();          // ip -> [timestamps]
+let instanceHits = [];             // timestamps across all IPs
+
+function clientIp(req) {
+  const fwd = String(req.headers["x-forwarded-for"] || "");
+  return fwd.split(",")[0].trim() || req.socket?.remoteAddress || "unknown";
+}
+
+// Returns null if allowed, or a human message if blocked.
+function abuseBlock(req) {
+  const now = Date.now();
+
+  instanceHits = instanceHits.filter((t) => now - t < 3_600_000);
+  if (instanceHits.length >= INSTANCE_HOURLY_CAP) {
+    return "This chat is busy right now. Please try again later.";
+  }
+
+  const ip = clientIp(req);
+  const recent = (ipHits.get(ip) || []).filter((t) => now - t < DAY_MS);
+  const lastMinute = recent.filter((t) => now - t < PER_IP_WINDOW_MS).length;
+
+  if (recent.length >= PER_IP_PER_DAY) {
+    ipHits.set(ip, recent);
+    return "You've reached today's question limit. Try again tomorrow.";
+  }
+  if (lastMinute >= PER_IP_PER_MIN) {
+    ipHits.set(ip, recent);
+    return "Slow down a moment — too many questions at once.";
+  }
+
+  recent.push(now);
+  ipHits.set(ip, recent);
+  instanceHits.push(now);
+
+  if (ipHits.size > 5000) {
+    for (const [k, v] of ipHits) {
+      if (!v.some((t) => now - t < DAY_MS)) ipHits.delete(k);
+    }
+  }
+  return null;
+}
+
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     res.status(405).json({ error: "Method not allowed" });
@@ -95,6 +147,13 @@ export default async function handler(req, res) {
   res.setHeader("Content-Type", "text/event-stream; charset=utf-8");
   res.setHeader("Cache-Control", "no-cache, no-transform");
   res.setHeader("Connection", "keep-alive");
+
+  const blocked = abuseBlock(req);
+  if (blocked) {
+    sse(res, { error: blocked });
+    res.end();
+    return;
+  }
 
   if (!process.env.ANTHROPIC_API_KEY) {
     sse(res, { error: "Chat isn't configured yet — the API key is missing." });

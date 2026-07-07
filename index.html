@@ -491,6 +491,19 @@
     return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
   }
 
+  // Render the assistant's plain text: **bold**, and blank lines -> paragraphs.
+  function mdToHtml(t){
+    var e = esc(t).replace(/\*\*([^*]+)\*\*/g, '<strong style="color:var(--text);font-weight:600">$1</strong>');
+    var paras = e.split(/\n{2,}/);
+    var out = "";
+    for (var i=0;i<paras.length;i++){
+      var p = paras[i].replace(/\n/g,"<br>");
+      if (p.length) out += '<p style="font-size:14.5px;line-height:1.62;color:var(--text-2);margin:0 0 11px">'+p+'</p>';
+    }
+    return out || '<p style="font-size:14.5px;line-height:1.62;color:var(--text-2);margin:0"></p>';
+  }
+  var STREAM_CARET = '<span style="display:inline-block;width:7px;height:15px;margin-left:2px;background:var(--accent);vertical-align:-2px;animation:blink 1s step-end infinite"></span>';
+
   // ---- hover handler (mouseenter/leave, append-and-restore) ----
   function bindHovers(scope){
     var els = scope.querySelectorAll("[data-hover]");
@@ -519,21 +532,16 @@
         + '<div style="align-self:flex-end;max-width:80%;background:linear-gradient(135deg,var(--accent),var(--accent));color:#fff;padding:11px 16px;border-radius:0;font-size:14.5px;line-height:1.5;box-shadow:0 6px 18px -6px rgba(255,75,38,.5)">'+esc(m.text)+'</div>'
         + '</div>';
     }
-    var badge = '';
-    var caret = m.streaming
-      ? '<span style="display:inline-block;width:7px;height:15px;margin-left:2px;background:var(--accent);vertical-align:-2px;animation:blink 1s step-end infinite"></span>'
-      : '';
-    var cites = '';
+    var bodyId = m.streaming ? ' id="av-stream-body"' : '';
+    var body = mdToHtml(m.text) + (m.streaming ? STREAM_CARET : '');
     return '<div style="display:flex;flex-direction:column;animation:bubbleIn .4s ease both">'
       + '<div style="align-self:flex-start;max-width:92%;width:100%">'
-      +   '<div style="position:relative;background:var(--bubble);border:1px solid var(--w09);border-radius:0;padding:16px 18px 15px;box-shadow:0 10px 30px -12px rgba(0,0,0,.6)">'
+      +   '<div style="position:relative;background:var(--bubble);border:1px solid var(--w09);border-radius:0;padding:16px 18px 5px;box-shadow:0 10px 30px -12px rgba(0,0,0,.6)">'
       +     '<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">'
       +       '<span style="display:grid;place-items:center;width:22px;height:22px;border-radius:0;background:linear-gradient(135deg,var(--accent),var(--accent));font-size:11px;font-weight:600;color:var(--on-accent)">AV</span>'
       +       '<span style="font-size:11.5px;color:var(--faint);letter-spacing:.02em">grounded response</span>'
-      +       badge
       +     '</div>'
-      +     '<p style="font-size:14.5px;line-height:1.62;color:var(--text-2)">'+esc(m.text)+caret+'</p>'
-      +     cites
+      +     '<div'+bodyId+'>'+body+'</div>'
       +   '</div>'
       + '</div>'
       + '</div>';
@@ -628,7 +636,10 @@
     var msgs = state.messages, k = msgs.length - 1;
     if (k < 0 || !msgs[k].isAI) return;
     msgs[k].text += t; msgs[k].streaming = true;
-    renderThread();
+    // Update only the streaming bubble's body — no full re-render (avoids flicker).
+    var body = document.getElementById("av-stream-body");
+    if (body) body.innerHTML = mdToHtml(msgs[k].text) + STREAM_CARET;
+    else renderThread();
   }
   function finishLast(){
     var msgs = state.messages, k = msgs.length - 1;

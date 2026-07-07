@@ -159,9 +159,8 @@
 
       <!-- QUERY CONSOLE -->
       <div style="margin-top:56px;animation:fadeUp .6s .2s ease both">
-        <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:12px">
+        <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:12px">
           <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;color:var(--faint);text-transform:uppercase">Grounded query console</span>
-          <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-4)">POST&nbsp;/api/chat</span>
         </div>
         <!-- CHAT THREAD (rendered by JS) -->
         <div id="av-thread" style="width:100%;max-width:720px;margin-bottom:22px;display:none;flex-direction:column;gap:16px;text-align:left"></div>
@@ -182,10 +181,42 @@
       </div>
     </section>
 
+    <!-- TIMELINE -->
+    <section id="timeline" data-reveal="1" style="padding:60px 0 0;scroll-margin-top:90px;opacity:0;transform:translateY(24px)">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;color:var(--accent)">§01</span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;color:var(--faint);text-transform:uppercase">Experience</span>
+        <span style="flex:1;height:1px;background:var(--w10)"></span>
+      </div>
+      <h2 style="margin-top:8px;font-size:clamp(28px,4vw,42px);font-weight:500;letter-spacing:-.02em">Experience</h2>
+      <div style="margin-top:34px;border-left:1px solid var(--w10);padding-left:24px;display:flex;flex-direction:column;gap:24px;max-width:680px">
+        <div style="position:relative">
+          <span style="position:absolute;left:-37px;top:-2px;width:26px;height:26px;border-radius:2px;overflow:hidden;background:#fff;border:2px solid var(--bg);box-shadow:0 0 0 1px var(--w10)"><img src="assets/logos/oracle.png" alt="Oracle" style="width:100%;height:100%;object-fit:cover;display:block"></span>
+          <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px"><h4 style="font-size:15.5px;font-weight:500">Software Engineer · Oracle</h4><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--faint);flex-shrink:0">2023 — now</span></div>
+          <p style="margin-top:5px;font-size:13.5px;line-height:1.55;color:var(--text-4)">Backend services and applied-AI work — RAG and LLM evaluation for enterprise search.</p>
+        </div>
+        <div style="position:relative">
+          <span style="position:absolute;left:-37px;top:-2px;width:26px;height:26px;border-radius:2px;overflow:hidden;background:#fff;border:2px solid var(--bg);box-shadow:0 0 0 1px var(--w10)"><img src="assets/logos/microsoft.png" alt="Microsoft" style="width:100%;height:100%;object-fit:cover;display:block"></span>
+          <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px"><h4 style="font-size:15.5px;font-weight:500">SWE Intern · Microsoft Engage</h4><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--faint);flex-shrink:0">2022</span></div>
+          <p style="margin-top:5px;font-size:13.5px;line-height:1.55;color:var(--text-4)">Built an ML-driven recommendation feature end-to-end.</p>
+        </div>
+        <div style="position:relative">
+          <span style="position:absolute;left:-37px;top:-2px;width:26px;height:26px;border-radius:2px;overflow:hidden;background:#fff;border:2px solid var(--bg);box-shadow:0 0 0 1px var(--w10)"><img src="assets/logos/jpmorgan.png" alt="J.P. Morgan" style="width:100%;height:100%;object-fit:cover;display:block"></span>
+          <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px"><h4 style="font-size:15.5px;font-weight:500">SWE Intern · J.P. Morgan</h4><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--faint);flex-shrink:0">2021</span></div>
+          <p style="margin-top:5px;font-size:13.5px;line-height:1.55;color:var(--text-4)">Data tooling for an internal risk-analytics platform.</p>
+        </div>
+        <div style="position:relative">
+          <span style="position:absolute;left:-37px;top:-2px;width:26px;height:26px;border-radius:2px;overflow:hidden;background:#fff;border:2px solid var(--bg);box-shadow:0 0 0 1px var(--w10)"><img src="assets/logos/mlh.jpg" alt="MLH" style="width:100%;height:100%;object-fit:cover;display:block"></span>
+          <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px"><h4 style="font-size:15.5px;font-weight:500">Fellow · MLH</h4><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--faint);flex-shrink:0">2021</span></div>
+          <p style="margin-top:5px;font-size:13.5px;line-height:1.55;color:var(--text-4)">Open-source fellowship — shipped to a production codebase.</p>
+        </div>
+      </div>
+    </section>
+
     <!-- EVAL DASHBOARD -->
     <section id="eval" data-reveal="1" style="padding:80px 0 60px;scroll-margin-top:90px;opacity:0;transform:translateY(24px)">
       <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px">
-        <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;color:var(--accent)">§01</span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;color:var(--accent)">§02</span>
         <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;color:var(--faint);text-transform:uppercase">Evaluation</span>
         <span style="flex:1;height:1px;background:var(--w10)"></span>
       </div>
@@ -263,38 +294,6 @@
               <span style="font-size:10.5px;color:var(--text-2);font-weight:500">+Rerank</span>
             </div>
           </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- TIMELINE -->
-    <section id="timeline" data-reveal="1" style="padding:60px 0 0;scroll-margin-top:90px;opacity:0;transform:translateY(24px)">
-      <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px">
-        <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;color:var(--accent)">§02</span>
-        <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;color:var(--faint);text-transform:uppercase">Experience</span>
-        <span style="flex:1;height:1px;background:var(--w10)"></span>
-      </div>
-      <h2 style="margin-top:8px;font-size:clamp(28px,4vw,42px);font-weight:500;letter-spacing:-.02em">Experience</h2>
-      <div style="margin-top:34px;border-left:1px solid var(--w10);padding-left:24px;display:flex;flex-direction:column;gap:24px;max-width:680px">
-        <div style="position:relative">
-          <span style="position:absolute;left:-37px;top:-2px;width:26px;height:26px;border-radius:2px;overflow:hidden;background:#fff;border:2px solid var(--bg);box-shadow:0 0 0 1px var(--w10)"><img src="assets/logos/oracle.png" alt="Oracle" style="width:100%;height:100%;object-fit:cover;display:block"></span>
-          <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px"><h4 style="font-size:15.5px;font-weight:500">Software Engineer · Oracle</h4><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--faint);flex-shrink:0">2023 — now</span></div>
-          <p style="margin-top:5px;font-size:13.5px;line-height:1.55;color:var(--text-4)">Backend services and applied-AI work — RAG and LLM evaluation for enterprise search.</p>
-        </div>
-        <div style="position:relative">
-          <span style="position:absolute;left:-37px;top:-2px;width:26px;height:26px;border-radius:2px;overflow:hidden;background:#fff;border:2px solid var(--bg);box-shadow:0 0 0 1px var(--w10)"><img src="assets/logos/microsoft.png" alt="Microsoft" style="width:100%;height:100%;object-fit:cover;display:block"></span>
-          <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px"><h4 style="font-size:15.5px;font-weight:500">SWE Intern · Microsoft Engage</h4><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--faint);flex-shrink:0">2022</span></div>
-          <p style="margin-top:5px;font-size:13.5px;line-height:1.55;color:var(--text-4)">Built an ML-driven recommendation feature end-to-end.</p>
-        </div>
-        <div style="position:relative">
-          <span style="position:absolute;left:-37px;top:-2px;width:26px;height:26px;border-radius:2px;overflow:hidden;background:#fff;border:2px solid var(--bg);box-shadow:0 0 0 1px var(--w10)"><img src="assets/logos/jpmorgan.png" alt="J.P. Morgan" style="width:100%;height:100%;object-fit:cover;display:block"></span>
-          <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px"><h4 style="font-size:15.5px;font-weight:500">SWE Intern · J.P. Morgan</h4><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--faint);flex-shrink:0">2021</span></div>
-          <p style="margin-top:5px;font-size:13.5px;line-height:1.55;color:var(--text-4)">Data tooling for an internal risk-analytics platform.</p>
-        </div>
-        <div style="position:relative">
-          <span style="position:absolute;left:-37px;top:-2px;width:26px;height:26px;border-radius:2px;overflow:hidden;background:#fff;border:2px solid var(--bg);box-shadow:0 0 0 1px var(--w10)"><img src="assets/logos/mlh.jpg" alt="MLH" style="width:100%;height:100%;object-fit:cover;display:block"></span>
-          <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px"><h4 style="font-size:15.5px;font-weight:500">Fellow · MLH</h4><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--faint);flex-shrink:0">2021</span></div>
-          <p style="margin-top:5px;font-size:13.5px;line-height:1.55;color:var(--text-4)">Open-source fellowship — shipped to a production codebase.</p>
         </div>
       </div>
     </section>
@@ -406,7 +405,7 @@
           <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;color:var(--accent)">§06</span>
           <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;color:var(--faint);text-transform:uppercase">Contact</span>
           <span style="flex:1;height:1px;background:var(--w08)"></span>
-          <span style="display:flex;align-items:center;gap:7px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;color:var(--faint);text-transform:uppercase"><span style="width:6px;height:6px;border-radius:50%;background:var(--live);box-shadow:0 0 8px var(--live)"></span>Status: open</span>
+          <span style="display:flex;align-items:center;gap:7px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;color:var(--accent);text-transform:uppercase"><span style="width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent)"></span>Status: open</span>
         </div>
         <div style="padding:44px 32px 40px">
           <h2 style="font-size:clamp(26px,4vw,40px);font-weight:500;letter-spacing:-.02em;line-height:1.05;max-width:16ch">Let's build something measurable.</h2>

@@ -163,22 +163,22 @@
           <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;color:var(--faint);text-transform:uppercase">Grounded query console</span>
           <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-4)">POST&nbsp;/api/chat</span>
         </div>
-        <div style="display:flex;align-items:center;gap:10px;padding:5px 5px 5px 14px;background:var(--bubble);border:1px solid var(--w12)">
-          <span style="font-family:'IBM Plex Mono',monospace;color:var(--accent);font-size:14px;flex-shrink:0">?&gt;</span>
-          <input id="av-input" onkeydown="App.onKey(event)" placeholder="ask anything about my work" style="flex:1;min-width:0;background:transparent;border:none;outline:none;color:var(--text);font-family:inherit;font-size:15px;padding:11px 0" />
-          <button onclick="App.onSend()" aria-label="Send" style="flex-shrink:0;display:grid;place-items:center;width:40px;height:40px;border:none;border-radius:0;background:var(--accent);color:#fff;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:16px;transition:opacity .18s" data-hover="opacity:.85">↵</button>
-        </div>
+        <!-- CHAT THREAD (rendered by JS) -->
+        <div id="av-thread" style="width:100%;max-width:720px;margin-bottom:22px;display:none;flex-direction:column;gap:16px;text-align:left"></div>
 
         <!-- CHIPS -->
-        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:14px">
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px">
           <button onclick="App.send('What are your skills?')" style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.01em;color:var(--text-3);padding:7px 12px;border-radius:0;border:1px solid var(--w10);background:transparent;cursor:pointer;transition:border-color .18s,color .18s" data-hover="border-color:var(--accent);color:var(--heading)">What are your skills?</button>
           <button onclick="App.send('Tell me about your projects')" style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.01em;color:var(--text-3);padding:7px 12px;border-radius:0;border:1px solid var(--w10);background:transparent;cursor:pointer;transition:border-color .18s,color .18s" data-hover="border-color:var(--accent);color:var(--heading)">Tell me about your projects</button>
           <button onclick="App.send('Your experience')" style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.01em;color:var(--text-3);padding:7px 12px;border-radius:0;border:1px solid var(--w10);background:transparent;cursor:pointer;transition:border-color .18s,color .18s" data-hover="border-color:var(--accent);color:var(--heading)">Your experience</button>
           <button onclick="App.send('Why should we hire you?')" style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.01em;color:var(--text-3);padding:7px 12px;border-radius:0;border:1px solid var(--w10);background:transparent;cursor:pointer;transition:border-color .18s,color .18s" data-hover="border-color:var(--accent);color:var(--heading)">Why should we hire you?</button>
         </div>
 
-        <!-- CHAT THREAD (rendered by JS) -->
-        <div id="av-thread" style="width:100%;max-width:720px;margin-top:26px;display:none;flex-direction:column;gap:16px;text-align:left"></div>
+        <div style="display:flex;align-items:center;gap:10px;padding:5px 5px 5px 14px;background:var(--bubble);border:1px solid var(--w12)">
+          <span style="font-family:'IBM Plex Mono',monospace;color:var(--accent);font-size:14px;flex-shrink:0">?&gt;</span>
+          <input id="av-input" onkeydown="App.onKey(event)" placeholder="ask anything about my work" style="flex:1;min-width:0;background:transparent;border:none;outline:none;color:var(--text);font-family:inherit;font-size:15px;padding:11px 0" />
+          <button onclick="App.onSend()" aria-label="Send" style="flex-shrink:0;display:grid;place-items:center;width:40px;height:40px;border:none;border-radius:0;background:var(--accent);color:#fff;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:16px;transition:opacity .18s" data-hover="opacity:.85">↵</button>
+        </div>
       </div>
     </section>
 

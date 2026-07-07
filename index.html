@@ -556,15 +556,29 @@
       + '</div>';
   }
 
+  // Append-only: each bubble is created once (animates once) and never rebuilt.
+  // The streaming bubble updates in place via appendLast/finishLast — no flicker.
   function renderThread(){
     var el = document.getElementById("av-thread");
     var has = state.messages.length > 0 || state.thinking;
     el.style.display = has ? "flex" : "none";
-    if (!has){ el.innerHTML = ""; return; }
-    var html = "";
-    for (var i=0;i<state.messages.length;i++) html += messageHTML(state.messages[i]);
-    if (state.thinking) html += thinkingHTML();
-    el.innerHTML = html;
+    var have = el.querySelectorAll("[data-msg]").length;
+    for (var i=have;i<state.messages.length;i++){
+      var holder = document.createElement("div");
+      holder.innerHTML = messageHTML(state.messages[i]);
+      var node = holder.firstChild;
+      node.setAttribute("data-msg", String(i));
+      el.appendChild(node);
+    }
+    var tnode = document.getElementById("av-thinking");
+    if (state.thinking && !tnode){
+      var th = document.createElement("div");
+      th.id = "av-thinking";
+      th.innerHTML = thinkingHTML();
+      el.appendChild(th);
+    } else if (!state.thinking && tnode){
+      tnode.remove();
+    }
     bindHovers(el);
   }
 
@@ -645,18 +659,24 @@
     var msgs = state.messages, k = msgs.length - 1;
     if (k < 0 || !msgs[k].isAI) return;
     msgs[k].streaming = false; msgs[k].done = true;
-    renderThread();
+    // Finalize in place: drop the caret and the streaming id, keep the same node.
+    var body = document.getElementById("av-stream-body");
+    if (body){ body.innerHTML = mdToHtml(msgs[k].text); body.removeAttribute("id"); }
+    else renderThread();
   }
   function failChat(){
     state.thinking = false;
     var msgs = state.messages, last = msgs[msgs.length - 1];
-    var fallback = "Sorry — I couldn't reach the assistant just now. Please try again in a moment.";
+    var fallback = "Sorry, I couldn't reach the assistant just now. Please try again in a moment.";
     if (last && last.isAI && !last.done){
       if (!last.text) last.text = fallback;
       last.streaming = false; last.done = true;
+      var body = document.getElementById("av-stream-body");
+      if (body){ body.innerHTML = mdToHtml(last.text); body.removeAttribute("id"); }
     } else {
       msgs.push({ isUser:false, isAI:true, text: fallback, streaming:false, done:true });
     }
+    var t = document.getElementById("av-thinking"); if (t) t.remove();
     renderThread();
   }
 

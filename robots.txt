@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# AI crawlers are welcome — being cited by AI search drives brand visibility.
+# (No llms.txt here on purpose: Google has stated it's not a ranking signal.)
+
+Sitemap: https://www.apoorvaverma.in/sitemap.xml

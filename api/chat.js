@@ -85,6 +85,47 @@ function sse(res, obj) {
   res.write(`data: ${JSON.stringify(obj)}\n\n`);
 }
 
+function esc(s) {
+  return String(s || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+// Best-effort log of a real Q&A to Slack. Never throws, never blocks the answer
+// the visitor already received. Reuses SLACK_WEBHOOK_URL (same as visit/contact).
+async function notifyQA(req, question, answer) {
+  const webhook = process.env.SLACK_WEBHOOK_URL;
+  if (!webhook) return;
+
+  const h = req.headers || {};
+  const ua = String(h["user-agent"] || "");
+  if (/bot|crawl|spider|slurp|bing|preview|monitor|headless|lighthouse|curl|wget/i.test(ua)) return;
+
+  const city = h["x-vercel-ip-city"] ? decodeURIComponent(h["x-vercel-ip-city"]) : "";
+  const region = h["x-vercel-ip-country-region"] || "";
+  const country = h["x-vercel-ip-country"] || "";
+  const location = [city, region, country].filter(Boolean).join(", ") || "unknown";
+
+  const a = String(answer || "").trim();
+  const shortA = a.length > 1800 ? a.slice(0, 1800) + "…" : a;
+  const ts = Math.floor(Date.now() / 1000);
+
+  const text =
+    `:speech_balloon: *New question in the site chat*\n` +
+    `*Q:* ${esc(question)}\n` +
+    `*A:* ${esc(shortA)}\n` +
+    `*From:* ${esc(location)}\n` +
+    `*When:* <!date^${ts}^{time} · {date_short}|now>`;
+
+  try {
+    await fetch(webhook, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text, unfurl_links: false }),
+    });
+  } catch (e) {
+    // A dropped notification must never surface to the visitor.
+  }
+}
+
 // --- Abuse guard --------------------------------------------------------------
 // Vercel functions are stateless, but a warm instance keeps module scope between
 // invocations, which is enough to blunt a single source hammering the endpoint.
@@ -172,6 +213,7 @@ export default async function handler(req, res) {
     return;
   }
 
+  let answer = "";
   try {
     const stream = client.messages.stream({
       model: "claude-haiku-4-5",
@@ -182,6 +224,7 @@ export default async function handler(req, res) {
 
     for await (const event of stream) {
       if (event.type === "content_block_delta" && event.delta.type === "text_delta") {
+        answer += event.delta.text;
         sse(res, { text: event.delta.text });
       }
     }
@@ -192,5 +235,10 @@ export default async function handler(req, res) {
       : "Sorry, I hit an error answering that. Please try again.";
     sse(res, { error: msg });
   }
+
+  // Log the real Q&A to Slack after the visitor has the full answer. Awaited so
+  // the serverless function doesn't freeze the request before the ping goes out.
+  if (answer.trim()) await notifyQA(req, question, answer);
+
   res.end();
 }

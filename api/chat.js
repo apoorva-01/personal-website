@@ -89,11 +89,37 @@ function esc(s) {
   return String(s || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
-// Best-effort log of a real Q&A to Slack. Never throws, never blocks the answer
-// the visitor already received. Reuses SLACK_WEBHOOK_URL (same as visit/contact).
+// Turn the assistant's Markdown into Slack mrkdwn: escape &<> first (Slack's three
+// reserved chars), then convert [text](url) links and **bold** (the model writes
+// **double asterisks**, but Slack bold is *single asterisks*, so raw ** shows literally).
+function slackText(s) {
+  let out = esc(s);
+  out = out.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, "<$2|$1>");
+  out = out.replace(/\*\*([^*]+)\*\*/g, "*$1*");
+  return out;
+}
+
+async function slackPost(token, payload) {
+  const r = await fetch("https://slack.com/api/chat.postMessage", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json; charset=utf-8",
+      Authorization: "Bearer " + token,
+    },
+    body: JSON.stringify(payload),
+  });
+  return r.json().catch(() => ({}));
+}
+
+// Log a real Q&A to Slack. With a bot token it posts the question to the channel
+// and the answer as a threaded reply (channel stays one line per question). Without
+// one it falls back to a single formatted webhook message (webhooks can't thread).
+// Never throws, never blocks the answer the visitor already received.
 async function notifyQA(req, question, answer) {
+  const token = process.env.SLACK_BOT_TOKEN;
+  const channel = process.env.SLACK_CHANNEL_ID;
   const webhook = process.env.SLACK_WEBHOOK_URL;
-  if (!webhook) return;
+  if (!(token && channel) && !webhook) return;
 
   const h = req.headers || {};
   const ua = String(h["user-agent"] || "");
@@ -103,19 +129,31 @@ async function notifyQA(req, question, answer) {
   const region = h["x-vercel-ip-country-region"] || "";
   const country = h["x-vercel-ip-country"] || "";
   const location = [city, region, country].filter(Boolean).join(", ") || "unknown";
-
-  const a = String(answer || "").trim();
-  const shortA = a.length > 1800 ? a.slice(0, 1800) + "…" : a;
   const ts = Math.floor(Date.now() / 1000);
 
-  const text =
-    `:speech_balloon: *New question in the site chat*\n` +
-    `*Q:* ${esc(question)}\n` +
-    `*A:* ${esc(shortA)}\n` +
-    `*From:* ${esc(location)}\n` +
-    `*When:* <!date^${ts}^{time} · {date_short}|now>`;
+  const q = slackText(question);
+  let a = slackText(answer).trim();
+  if (a.length > 3500) a = a.slice(0, 3500) + "…";
+  const meta = `:round_pushpin: ${esc(location)}   ·   <!date^${ts}^{time} · {date_short}|now>`;
 
   try {
+    if (token && channel) {
+      const head = await slackPost(token, {
+        channel,
+        text: `New question in the chat: ${q}`,
+        blocks: [
+          { type: "section", text: { type: "mrkdwn", text: `:speech_balloon: *New question in the chat*\n>${q}` } },
+          { type: "context", elements: [{ type: "mrkdwn", text: meta }] },
+        ],
+      });
+      if (head && head.ok && head.ts) {
+        await slackPost(token, { channel, thread_ts: head.ts, text: a || "_(no answer)_" });
+      }
+      return;
+    }
+
+    // Webhook fallback: one message, since incoming webhooks can't post to a thread.
+    const text = `:speech_balloon: *New question in the chat*\n>${q}\n\n${a}\n\n${meta}`;
     await fetch(webhook, {
       method: "POST",
       headers: { "Content-Type": "application/json" },

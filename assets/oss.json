@@ -1,18 +1,18 @@
 {
   "generated": "2026-07-12",
   "shipped": {
-    "prs": 39,
-    "repos": 22,
+    "prs": 29,
+    "repos": 21,
     "languages": 6,
-    "reach": 350555,
-    "privatePrs": 10,
-    "privateRepos": 1,
+    "reach": 350559,
+    "privatePrs": 0,
+    "privateRepos": 0,
     "rows": [
       {
         "date": "2026-07-07",
         "lang": "RS",
         "repo": "zed-industries/zed",
-        "stars": 86818,
+        "stars": 86821,
         "num": 60406,
         "title": "Fix hard-tab block autoindent skipping unindented lines",
         "docs": false
@@ -21,7 +21,7 @@
         "date": "2026-07-08",
         "lang": "TS",
         "repo": "directus/directus",
-        "stars": 36459,
+        "stars": 36460,
         "num": 27846,
         "title": "Fix an unhandled rejection in the sdk realtime client when the connection closed during a heartbeat ping",
         "docs": false

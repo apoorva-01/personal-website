@@ -81,10 +81,10 @@
     .oss-reach{grid-template-columns:1fr !important}
     .oss-reach>div:last-child{text-align:left !important}
     .oss-lhdr{display:none !important}
-    .oss-lrow{grid-template-columns:60px 26px 1fr auto !important;row-gap:2px !important}
-    .oss-lrow>:nth-child(3){grid-column:3 / span 2 !important}
-    .oss-lrow>:nth-child(4){grid-column:3 / 4 !important}
-    .oss-lrow>:nth-child(5){grid-column:4 / 5 !important;align-self:center}
+    .oss-lrow{grid-template-columns:26px 1fr auto !important;row-gap:2px !important}
+    .oss-lrow>:nth-child(2){grid-column:2 / 3 !important;grid-row:1 !important}
+    .oss-lrow>:nth-child(4){grid-column:3 / 4 !important;grid-row:1 !important;align-self:center}
+    .oss-lrow>:nth-child(3){grid-column:2 / 4 !important;grid-row:2 !important}
   }
 </style>
   <!-- RB2B person-level visitor identification (US traffic) -> Slack -->
@@ -729,16 +729,15 @@
 
   function ossLedger(){
     var d = ossData;
-    var cols = "grid-template-columns:74px 30px 172px 1fr auto;gap:16px";
+    var cols = "grid-template-columns:30px 180px 1fr auto;gap:16px";
     var rowStyle = "display:grid;" + cols + ";align-items:baseline;padding:9px 12px;border-bottom:1px solid var(--w05);border-left:2px solid transparent;text-decoration:none;color:inherit;font-size:12.5px;line-height:1.5;" + OSS_MONO;
     var hdr = '<div class="oss-lhdr" style="display:grid;' + cols + ';padding:8px 12px;border-bottom:1px solid var(--w10);' + OSS_MONO + ';font-size:10px;letter-spacing:.14em;color:var(--faint);text-transform:uppercase">';
     var out = "";
     if (ossCur === "shipped"){
-      out += hdr + '<span>merged</span><span>lang</span><span>repository</span><span>fix</span><span style="text-align:right">stars</span></div>';
+      out += hdr + '<span>lang</span><span>repository</span><span>fix</span><span style="text-align:right">stars</span></div>';
       for (var i=0;i<d.shipped.rows.length;i++){
         var r = d.shipped.rows[i];
         out += '<a class="oss-lrow" href="https://github.com/' + esc(r.repo) + '/pull/' + r.num + '" target="_blank" rel="noopener" style="' + rowStyle + '" data-hover="border-left-color:var(--accent);background:var(--w03)">'
-          + '<span style="color:var(--text-4)">' + esc(r.date) + '</span>'
           + '<span style="color:var(--faint);font-size:10.5px;text-align:center">' + esc(r.lang) + '</span>'
           + '<span style="color:var(--text-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + ossRepo(r.repo) + '</span>'
           + '<span style="color:var(--text-3)">' + esc(r.title) + '<span style="color:var(--faint);margin-left:6px">#' + r.num + '</span></span>'
@@ -747,11 +746,10 @@
       }
       out += '<div style="' + OSS_MONO + ';font-size:10.5px;color:var(--faint);padding:12px 12px 0;letter-spacing:.04em">one representative fix per repo · ' + d.shipped.prs + ' merged in total</div>';
     } else {
-      out += hdr + '<span>accepted</span><span>lang</span><span>repository</span><span>question</span><span style="text-align:right">✓</span></div>';
+      out += hdr + '<span>lang</span><span>repository</span><span>question</span><span style="text-align:right">✓</span></div>';
       for (var j=0;j<d.answered.rows.length;j++){
         var q = d.answered.rows[j];
         out += '<a class="oss-lrow" href="' + esc(q.url) + '" target="_blank" rel="noopener" style="' + rowStyle + '" data-hover="border-left-color:var(--accent);background:var(--w03)">'
-          + '<span style="color:var(--text-4)">' + esc(q.date) + '</span>'
           + '<span style="color:var(--faint);font-size:10.5px;text-align:center">' + esc(q.lang) + '</span>'
           + '<span style="color:var(--text-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + ossRepo(q.repo) + '</span>'
           + '<span style="color:var(--text-3)">' + esc(q.title) + '</span>'

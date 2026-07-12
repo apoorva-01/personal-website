@@ -1,0 +1,376 @@
+{
+  "generated": "2026-07-12",
+  "shipped": {
+    "prs": 39,
+    "repos": 22,
+    "languages": 6,
+    "reach": 350553,
+    "rows": [
+      {
+        "date": "2026-07-07",
+        "lang": "RS",
+        "repo": "zed-industries/zed",
+        "stars": 86818,
+        "num": 60406,
+        "title": "Fix hard-tab block autoindent skipping unindented lines",
+        "docs": false
+      },
+      {
+        "date": "2026-07-08",
+        "lang": "TS",
+        "repo": "directus/directus",
+        "stars": 36458,
+        "num": 27846,
+        "title": "Fix an unhandled rejection in the sdk realtime client when the connection closed during a heartbeat ping",
+        "docs": false
+      },
+      {
+        "date": "2026-07-02",
+        "lang": "PY",
+        "repo": "PostHog/posthog",
+        "stars": 35432,
+        "num": 66505,
+        "title": "fix: stop bigint filter values from crashing the feature flags page",
+        "docs": false
+      },
+      {
+        "date": "2026-07-08",
+        "lang": "GO",
+        "repo": "weaviate/weaviate",
+        "stars": 16573,
+        "num": 12049,
+        "title": "gh-12041 return 422 for batch delete with missing match fields",
+        "docs": false
+      },
+      {
+        "date": "2026-07-03",
+        "lang": "JS",
+        "repo": "mholt/PapaParse",
+        "stars": 13520,
+        "num": 1128,
+        "title": "fix: guess delimiter by row consistency before field count",
+        "docs": false
+      },
+      {
+        "date": "2026-07-09",
+        "lang": "PY",
+        "repo": "livekit/agents",
+        "stars": 11328,
+        "num": 6362,
+        "title": "fix(azure): recover from STT error cancellations instead of hanging",
+        "docs": false
+      },
+      {
+        "date": "2026-07-11",
+        "lang": "PY",
+        "repo": "sqlfluff/sqlfluff",
+        "stars": 9804,
+        "num": 8127,
+        "title": "Athena: accept ARRAY(type) as well as ARRAY<type>",
+        "docs": false
+      },
+      {
+        "date": "2026-07-01",
+        "lang": "PY",
+        "repo": "falconry/falcon",
+        "stars": 9793,
+        "num": 2672,
+        "title": "fix(uri): preserve literal plus when unquote_plus is disabled",
+        "docs": false
+      },
+      {
+        "date": "2026-07-10",
+        "lang": "JV",
+        "repo": "redis/lettuce",
+        "stars": 5764,
+        "num": 3832,
+        "title": "Count YIELD_SCORE_AS tokens in FT.HYBRID COMBINE clause #3811",
+        "docs": false
+      },
+      {
+        "date": "2026-06-30",
+        "lang": "PY",
+        "repo": "mne-tools/mne-python",
+        "stars": 3458,
+        "num": 13999,
+        "title": "Fix write_fine_calibration mangling Neuromag channel names",
+        "docs": false
+      },
+      {
+        "date": "2026-07-10",
+        "lang": "PY",
+        "repo": "tomerfiliba/plumbum",
+        "stars": 3051,
+        "num": 830,
+        "title": "fix(session): keep the return code off the last line of output",
+        "docs": false
+      },
+      {
+        "date": "2026-07-04",
+        "lang": "PY",
+        "repo": "pyparsing/pyparsing",
+        "stars": 2481,
+        "num": 644,
+        "title": "Escape control characters in set_debug() debug output",
+        "docs": false
+      },
+      {
+        "date": "2026-07-06",
+        "lang": "PY",
+        "repo": "pygments/pygments",
+        "stars": 2183,
+        "num": 3177,
+        "title": "Swift: keep `func` a keyword in `class func` methods",
+        "docs": false
+      },
+      {
+        "date": "2026-07-06",
+        "lang": "JS",
+        "repo": "twigjs/twig.js",
+        "stars": 1930,
+        "num": 968,
+        "title": "Report a syntax error for unclosed brackets in expressions",
+        "docs": false
+      },
+      {
+        "date": "2026-07-09",
+        "lang": "TS",
+        "repo": "eemeli/yaml",
+        "stars": 1679,
+        "num": 700,
+        "title": "fix: Parse a flow collection map key preceded by a blank line or comment",
+        "docs": false
+      },
+      {
+        "date": "2026-07-10",
+        "lang": "JS",
+        "repo": "js-joda/js-joda",
+        "stars": 1658,
+        "num": 807,
+        "title": "fix: parse zone ids that share a prefix with a fixed id",
+        "docs": false
+      },
+      {
+        "date": "2026-07-02",
+        "lang": "PY",
+        "repo": "jsonpickle/jsonpickle",
+        "stars": 1318,
+        "num": 609,
+        "title": "Encode __reduce__-only objects instead of null when unpicklable=False",
+        "docs": false
+      },
+      {
+        "date": "2026-07-08",
+        "lang": "PY",
+        "repo": "derek73/python-nameparser",
+        "stars": 710,
+        "num": 276,
+        "title": "Strip invisible bidi control characters during preprocessing",
+        "docs": false
+      },
+      {
+        "date": "2026-07-09",
+        "lang": "PY",
+        "repo": "livekit/python-sdks",
+        "stars": 366,
+        "num": 742,
+        "title": "Start AudioStream _run task after the FFI handle is assigned",
+        "docs": false
+      },
+      {
+        "date": "2026-07-11",
+        "lang": "GO",
+        "repo": "Kong/kongctl",
+        "stars": 15,
+        "num": 1575,
+        "title": "fix(konnect): report all missing token create flags at once",
+        "docs": false
+      },
+      {
+        "date": "2026-07-09",
+        "lang": "JS",
+        "repo": "mendygo-tech/Auditing_Evaluation_Platform",
+        "stars": 0,
+        "num": 11,
+        "title": "UX improvements, dense-enterprise redesign, and richer facilities",
+        "docs": false
+      },
+      {
+        "date": "2026-04-29",
+        "lang": "TS",
+        "repo": "supabase/supabase",
+        "stars": 106214,
+        "num": 45299,
+        "title": "docs: fix \"an\" → \"a\" grammar errors before consonant words",
+        "docs": true
+      }
+    ]
+  },
+  "answered": {
+    "total": 23,
+    "repos": 18,
+    "rows": [
+      {
+        "date": "2026-07-11",
+        "lang": "RS",
+        "repo": "helix-editor/helix",
+        "title": "Cursor sticks in the middle of the terminal and the text moves around it",
+        "url": "https://github.com/helix-editor/helix/discussions/16013#discussioncomment-17603933"
+      },
+      {
+        "date": "2026-07-08",
+        "lang": "RS",
+        "repo": "tursodatabase/turso",
+        "title": "Support for zeroize?",
+        "url": "https://github.com/tursodatabase/turso/discussions/4940#discussioncomment-17567357"
+      },
+      {
+        "date": "2026-07-07",
+        "lang": "PY",
+        "repo": "BerriAI/litellm",
+        "title": "Support for CLI and provider subscription",
+        "url": "https://github.com/BerriAI/litellm/discussions/32328#discussioncomment-17562334"
+      },
+      {
+        "date": "2026-07-06",
+        "lang": "RS",
+        "repo": "bevyengine/bevy",
+        "title": "Whether it is planned .the exe installer of the Bevy engine?",
+        "url": "https://github.com/bevyengine/bevy/discussions/24862#discussioncomment-17543149"
+      },
+      {
+        "date": "2026-07-06",
+        "lang": "RS",
+        "repo": "dbt-labs/dbt-core",
+        "title": "Selecting all nodes but only tests for modified relations",
+        "url": "https://github.com/dbt-labs/dbt-core/discussions/12147#discussioncomment-17545816"
+      },
+      {
+        "date": "2026-07-06",
+        "lang": "RS",
+        "repo": "clap-rs/clap",
+        "title": "select all possible values for `Vec<PossibleValues>`",
+        "url": "https://github.com/clap-rs/clap/discussions/6433#discussioncomment-17551599"
+      },
+      {
+        "date": "2026-07-05",
+        "lang": "PY",
+        "repo": "Textualize/textual",
+        "title": "Is it possible to react to both single and double clicks on DataTable rows while keeping header non-interactive?",
+        "url": "https://github.com/Textualize/textual/discussions/6511#discussioncomment-17535324"
+      },
+      {
+        "date": "2026-07-05",
+        "lang": "RS",
+        "repo": "tursodatabase/turso",
+        "title": "Does turso support r-tree indexing?",
+        "url": "https://github.com/tursodatabase/turso/discussions/7705#discussioncomment-17535373"
+      },
+      {
+        "date": "2026-07-05",
+        "lang": "RS",
+        "repo": "nushell/nushell",
+        "title": "Way to call built-in command with list of args",
+        "url": "https://github.com/nushell/nushell/discussions/18525#discussioncomment-17535374"
+      },
+      {
+        "date": "2026-07-05",
+        "lang": "RS",
+        "repo": "helix-editor/helix",
+        "title": "neoscroll equivalent for helix",
+        "url": "https://github.com/helix-editor/helix/discussions/15964#discussioncomment-17536307"
+      },
+      {
+        "date": "2026-07-05",
+        "lang": "MDX",
+        "repo": "deepset-ai/haystack",
+        "title": "Event Loop Handling for Pipeline Tools",
+        "url": "https://github.com/deepset-ai/haystack/discussions/11858#discussioncomment-17538026"
+      },
+      {
+        "date": "2026-07-05",
+        "lang": "TS",
+        "repo": "nitrojs/nitro",
+        "title": "Mark specific package as `noExternal` in development mode",
+        "url": "https://github.com/nitrojs/nitro/discussions/3823#discussioncomment-17540973"
+      },
+      {
+        "date": "2026-07-03",
+        "lang": "C++",
+        "repo": "duckdb/duckdb",
+        "title": "How does DuckDB access variables above its stack context?",
+        "url": "https://github.com/duckdb/duckdb/discussions/22773#discussioncomment-17519863"
+      },
+      {
+        "date": "2026-07-03",
+        "lang": "PY",
+        "repo": "explosion/spaCy",
+        "title": "[ENG] en_core_web_trf inaccurately identifying noun chunks",
+        "url": "https://github.com/explosion/spaCy/discussions/13986#discussioncomment-17520805"
+      },
+      {
+        "date": "2026-07-03",
+        "lang": "RS",
+        "repo": "BurntSushi/ripgrep",
+        "title": "Best practices for scanning large numbers of small binary+text files — Nginx cache use case",
+        "url": "https://github.com/BurntSushi/ripgrep/discussions/3411#discussioncomment-17521792"
+      },
+      {
+        "date": "2026-07-03",
+        "lang": "PY",
+        "repo": "apache/airflow",
+        "title": "How to define custom metrics",
+        "url": "https://github.com/apache/airflow/discussions/69096#discussioncomment-17523512"
+      },
+      {
+        "date": "2026-07-03",
+        "lang": "PY",
+        "repo": "fastapi/sqlmodel",
+        "title": "0.0.39 is dropping the class_registry variable from main without warnings",
+        "url": "https://github.com/fastapi/sqlmodel/discussions/2024#discussioncomment-17526883"
+      },
+      {
+        "date": "2026-07-02",
+        "lang": "PY",
+        "repo": "Textualize/rich",
+        "title": "Is there a way to handle a large progress display incrementally?",
+        "url": "https://github.com/Textualize/rich/discussions/4046#discussioncomment-17510525"
+      },
+      {
+        "date": "2026-07-02",
+        "lang": "C++",
+        "repo": "duckdb/duckdb",
+        "title": "Serve Quack in Docker Container",
+        "url": "https://github.com/duckdb/duckdb/discussions/23552#discussioncomment-17514748"
+      },
+      {
+        "date": "2026-07-02",
+        "lang": "RS",
+        "repo": "BurntSushi/ripgrep",
+        "title": "Include or exclude directories that contain a subpath",
+        "url": "https://github.com/BurntSushi/ripgrep/discussions/3301#discussioncomment-17514967"
+      },
+      {
+        "date": "2026-07-02",
+        "lang": "PY",
+        "repo": "Kludex/starlette",
+        "title": "Why is there no `TestAsyncClient`?",
+        "url": "https://github.com/Kludex/starlette/discussions/3356#discussioncomment-17517099"
+      },
+      {
+        "date": "2026-07-01",
+        "lang": "PY",
+        "repo": "fastapi/sqlmodel",
+        "title": "How to SELECT using JSON for WHERE-clause",
+        "url": "https://github.com/fastapi/sqlmodel/discussions/2023#discussioncomment-17502171"
+      },
+      {
+        "date": "2026-07-01",
+        "lang": "TS",
+        "repo": "resend/react-email",
+        "title": "Rendering emails in tests fails if sync in v5",
+        "url": "https://github.com/resend/react-email/discussions/2809#discussioncomment-17502293"
+      }
+    ]
+  }
+}

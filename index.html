@@ -78,6 +78,13 @@
     .nav-links{gap:0 !important}
     .nav-link{display:none !important}
     #cur-ring,#cur-dot{display:none !important}
+    .oss-reach{grid-template-columns:1fr !important}
+    .oss-reach>div:last-child{text-align:left !important}
+    .oss-lhdr{display:none !important}
+    .oss-lrow{grid-template-columns:60px 26px 1fr auto !important;row-gap:2px !important}
+    .oss-lrow>:nth-child(3){grid-column:3 / span 2 !important}
+    .oss-lrow>:nth-child(4){grid-column:3 / 4 !important}
+    .oss-lrow>:nth-child(5){grid-column:4 / 5 !important;align-self:center}
   }
 </style>
   <!-- RB2B person-level visitor identification (US traffic) -> Slack -->
@@ -154,6 +161,7 @@
         <a class="nav-link" href="#projects" style="text-decoration:none;color:var(--text-3);font-size:13.5px;padding:7px 12px;border-radius:2px;transition:color .2s" data-hover="color:var(--text)">Projects</a>
         <a class="nav-link" href="#eval" style="text-decoration:none;color:var(--text-3);font-size:13.5px;padding:7px 12px;border-radius:2px;transition:color .2s" data-hover="color:var(--text)">Evaluation</a>
         <a class="nav-link" href="/blog" style="text-decoration:none;color:var(--text-3);font-size:13.5px;padding:7px 12px;border-radius:2px;transition:color .2s" data-hover="color:var(--text)">Notes</a>
+        <a class="nav-link" href="#opensource" style="text-decoration:none;color:var(--text-3);font-size:13.5px;padding:7px 12px;border-radius:2px;transition:color .2s" data-hover="color:var(--text)">Open source</a>
         <a class="nav-link" href="#about" style="text-decoration:none;color:var(--text-3);font-size:13.5px;padding:7px 12px;border-radius:2px;transition:color .2s" data-hover="color:var(--text)">About</a>
         <button id="theme-btn" onclick="App.toggleTheme()" aria-label="Toggle light or dark theme" title="Toggle theme"><svg class="tt-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg><svg class="tt-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><span class="tt-thumb"></span></button>
         <a href="#contact" style="text-decoration:none;color:var(--invert-fg);font-size:13.5px;font-weight:600;padding:8px 15px;border-radius:2px;background:var(--invert-bg);margin-left:6px;transition:transform .2s" data-hover="transform:translateY(-1px)">Contact</a>
@@ -456,11 +464,21 @@
       <div id="av-bloggrid" class="bloggrid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:34px"></div>
     </section>
 
+    <!-- OPEN SOURCE -->
+    <section id="opensource" data-reveal="1" style="padding:60px 0;scroll-margin-top:90px;opacity:0;transform:translateY(24px)">
+      <div style="display:flex;align-items:center;gap:14px">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;color:var(--accent)">§05</span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;color:var(--faint);text-transform:uppercase">Open source</span>
+        <span style="flex:1;height:1px;background:var(--w10)"></span>
+      </div>
+      <div id="av-oss" style="margin-top:26px"></div>
+    </section>
+
     <!-- ABOUT -->
     <section id="about" data-reveal="1" style="padding:60px 0;scroll-margin-top:90px;opacity:0;transform:translateY(24px)">
       <div style="max-width:680px">
         <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px">
-          <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;color:var(--accent)">§05</span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;color:var(--accent)">§06</span>
           <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;color:var(--faint);text-transform:uppercase">About</span>
           <span style="flex:1;height:1px;background:var(--w10)"></span>
         </div>
@@ -474,7 +492,7 @@
     <section id="contact" data-reveal="1" style="padding:76px 0 92px;scroll-margin-top:90px;opacity:0;transform:translateY(24px)">
       <div style="border:1px solid var(--w10);background:var(--surface)">
         <div style="display:flex;align-items:center;gap:14px;padding:12px 18px;border-bottom:1px solid var(--w08)">
-          <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;color:var(--accent)">§06</span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;color:var(--accent)">§07</span>
           <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;color:var(--faint);text-transform:uppercase">Contact</span>
           <span style="flex:1;height:1px;background:var(--w08)"></span>
           <span style="display:flex;align-items:center;gap:7px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;color:var(--accent);text-transform:uppercase"><span style="width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent)"></span>Status: open</span>
@@ -672,6 +690,111 @@
     }
     grid.innerHTML = html;
     bindHovers(grid);
+  }
+
+  // ---- open source ledger ----
+  var ossData = null, ossCur = "shipped";
+  var OSS_MONO = "font-family:'IBM Plex Mono',monospace";
+  function ossCommas(n){ return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ","); }
+  function ossStars(n){ if (n >= 1000) return (n/1000).toFixed(n >= 10000 ? 0 : 1).replace(/\.0$/, "") + "k"; return n ? String(n) : "—"; }
+  function ossRepo(full){ var i = full.indexOf("/"); return esc(full.slice(0,i)) + '<span style="color:var(--faint)">/</span>' + esc(full.slice(i+1)); }
+
+  function renderOSS(){
+    if (!document.getElementById("av-oss")) return;
+    fetch("/assets/oss.json")
+      .then(function(r){ if (!r.ok) throw new Error("no data"); return r.json(); })
+      .then(function(d){ ossData = d; ossPaint(); })
+      .catch(function(){ /* leave the section empty if data is unavailable */ });
+  }
+
+  function ossTrack(rows){
+    var min = Math.log10(300), max = Math.log10(120000), lg = Math.log10;
+    var ticks = rows.filter(function(r){ return r.stars > 50; }).map(function(r){
+      var x = (lg(r.stars) - min) / (max - min) * 100;
+      var h = 18 + (lg(r.stars) - min) / (max - min) * 30;
+      var big = r.stars >= 30000;
+      return '<span title="' + esc(r.repo) + ' · ' + ossCommas(r.stars) + '★" style="position:absolute;bottom:0;transform:translateX(-50%);left:' + x.toFixed(1) + '%;width:2px;height:' + h.toFixed(0) + 'px;background:' + (big ? 'var(--accent)' : 'var(--text-4)') + '"></span>';
+    }).join("");
+    var grid = [1000,10000,100000].map(function(v){
+      var x = (lg(v) - min) / (max - min) * 100;
+      return '<span style="position:absolute;top:0;bottom:0;left:' + x.toFixed(1) + '%;width:1px;background:var(--w05)"></span>'
+        + '<span style="position:absolute;bottom:-18px;left:' + x.toFixed(1) + '%;transform:translateX(-50%);' + OSS_MONO + ';font-size:10px;letter-spacing:.1em;color:var(--faint)">' + (v/1000) + 'k</span>';
+    }).join("");
+    return '<div style="position:relative;height:52px;border-left:1px solid var(--w10);border-bottom:1px solid var(--w10)">' + grid + ticks + '</div>';
+  }
+
+  function ossTabBtn(id, label, on, last){
+    return '<button onclick="App.ossTab(\'' + id + '\')" style="' + OSS_MONO + ';font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;padding:9px 16px;border:none;' + (last ? '' : 'border-right:1px solid var(--w10);') + 'background:' + (on ? 'rgba(255,75,38,.08)' : 'transparent') + ';color:' + (on ? 'var(--heading)' : 'var(--text-4)') + ';cursor:pointer;' + (on ? 'box-shadow:inset 0 -2px 0 var(--accent);' : '') + '">' + label + '</button>';
+  }
+
+  function ossLedger(){
+    var d = ossData;
+    var cols = "grid-template-columns:74px 30px 172px 1fr auto;gap:16px";
+    var rowStyle = "display:grid;" + cols + ";align-items:baseline;padding:9px 12px;border-bottom:1px solid var(--w05);border-left:2px solid transparent;text-decoration:none;color:inherit;font-size:12.5px;line-height:1.5;" + OSS_MONO;
+    var hdr = '<div class="oss-lhdr" style="display:grid;' + cols + ';padding:8px 12px;border-bottom:1px solid var(--w10);' + OSS_MONO + ';font-size:10px;letter-spacing:.14em;color:var(--faint);text-transform:uppercase">';
+    var out = "";
+    if (ossCur === "shipped"){
+      out += hdr + '<span>merged</span><span>lang</span><span>repository</span><span>fix</span><span style="text-align:right">stars</span></div>';
+      for (var i=0;i<d.shipped.rows.length;i++){
+        var r = d.shipped.rows[i];
+        out += '<a class="oss-lrow" href="https://github.com/' + esc(r.repo) + '/pull/' + r.num + '" target="_blank" rel="noopener" style="' + rowStyle + '" data-hover="border-left-color:var(--accent);background:var(--w03)">'
+          + '<span style="color:var(--text-4)">' + esc(r.date) + '</span>'
+          + '<span style="color:var(--faint);font-size:10.5px;text-align:center">' + esc(r.lang) + '</span>'
+          + '<span style="color:var(--text-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + ossRepo(r.repo) + '</span>'
+          + '<span style="color:var(--text-3)">' + esc(r.title) + '<span style="color:var(--faint);margin-left:6px">#' + r.num + '</span></span>'
+          + '<span style="color:var(--text-4);text-align:right;white-space:nowrap">' + ossStars(r.stars) + '<span style="color:var(--accent)">★</span></span>'
+          + '</a>';
+      }
+      out += '<div style="' + OSS_MONO + ';font-size:10.5px;color:var(--faint);padding:12px 12px 0;letter-spacing:.04em">one representative fix per repo · ' + d.shipped.prs + ' merged in total</div>';
+    } else {
+      out += hdr + '<span>accepted</span><span>lang</span><span>repository</span><span>question</span><span style="text-align:right">✓</span></div>';
+      for (var j=0;j<d.answered.rows.length;j++){
+        var q = d.answered.rows[j];
+        out += '<a class="oss-lrow" href="' + esc(q.url) + '" target="_blank" rel="noopener" style="' + rowStyle + '" data-hover="border-left-color:var(--accent);background:var(--w03)">'
+          + '<span style="color:var(--text-4)">' + esc(q.date) + '</span>'
+          + '<span style="color:var(--faint);font-size:10.5px;text-align:center">' + esc(q.lang) + '</span>'
+          + '<span style="color:var(--text-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + ossRepo(q.repo) + '</span>'
+          + '<span style="color:var(--text-3)">' + esc(q.title) + '</span>'
+          + '<span style="color:var(--accent);text-align:right">✓</span>'
+          + '</a>';
+      }
+      out += '<div style="' + OSS_MONO + ';font-size:10.5px;color:var(--faint);padding:12px 12px 0;letter-spacing:.04em">' + d.answered.total + ' accepted answers across ' + d.answered.repos + ' repositories</div>';
+    }
+    return '<div style="margin-top:20px;border-top:1px solid var(--w10)">' + out + '</div>';
+  }
+
+  function ossPaint(){
+    var host = document.getElementById("av-oss"), d = ossData;
+    if (!host || !d) return;
+    var s = d.shipped, a = d.answered;
+    var reach = Math.floor(s.reach / 10000) * 10000;
+
+    var head = '<div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap">'
+      + '<h2 style="font-size:clamp(28px,4vw,42px);font-weight:500;letter-spacing:-.02em">Open source contributions</h2>'
+      + '<span style="' + OSS_MONO + ';font-size:12px;letter-spacing:.08em;color:var(--faint);text-transform:uppercase">' + s.prs + ' merged · ' + s.repos + ' repos · ' + s.languages + ' languages</span>'
+      + '</div>';
+
+    var reachBlock = '<div class="oss-reach" style="display:grid;grid-template-columns:1fr auto;align-items:end;gap:26px;margin-top:26px">'
+      + '<p style="font-size:14px;line-height:1.7;color:var(--text-4);max-width:46ch">Every fix I\'ve merged runs inside code other people already trust: databases, editors, parsers, agent runtimes. Not stars I collected. Stars I shipped into.</p>'
+      + '<div style="text-align:right;line-height:1">'
+      +   '<div style="' + OSS_MONO + ';font-size:clamp(34px,5vw,46px);font-weight:500;color:var(--heading);font-feature-settings:\'tnum\'">≈' + ossCommas(reach) + '<span style="color:var(--accent);font-size:.55em;vertical-align:.4em;margin-left:2px">★</span></div>'
+      +   '<div style="' + OSS_MONO + ';font-size:11px;letter-spacing:.14em;color:var(--faint);text-transform:uppercase;margin-top:8px">combined reach · ' + s.repos + ' codebases</div>'
+      + '</div></div>';
+
+    var track = '<div style="margin-top:30px">' + ossTrack(s.rows)
+      + '<div style="display:flex;justify-content:space-between;margin-top:26px;' + OSS_MONO + ';font-size:10px;letter-spacing:.12em;color:var(--faint);text-transform:uppercase"><span>each mark = one repository, by size</span><span>log scale · stars</span></div>'
+      + '</div>';
+
+    var toggle = '<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-top:34px">'
+      + '<div style="display:flex;border:1px solid var(--w10)">'
+      +   ossTabBtn("shipped", "Shipped · " + s.prs, ossCur === "shipped", false)
+      +   ossTabBtn("answered", "Answered · " + a.total, ossCur === "answered", true)
+      + '</div>'
+      + '<span style="' + OSS_MONO + ';font-size:10.5px;letter-spacing:.12em;color:var(--faint);text-transform:uppercase"><span style="color:var(--accent)">▍</span> ' + (ossCur === "shipped" ? "merged &amp; live upstream" : "marked accepted") + '</span>'
+      + '</div>';
+
+    host.innerHTML = head + reachBlock + track + toggle + ossLedger();
+    bindHovers(host);
   }
 
   // ---- article overlay ----
@@ -885,6 +1008,7 @@
     applyTheme(stored);
     bindHovers(document);
     renderPosts();
+    renderOSS();
     renderThread();
     window.addEventListener("scroll", handleScroll, { passive:true });
     handleScroll();
@@ -902,7 +1026,8 @@
     onKey: function(e){ if (e.key === "Enter") send(document.getElementById("av-input").value); },
     toggleTheme: toggleTheme,
     openPost: openPost,
-    closePost: closePost
+    closePost: closePost,
+    ossTab: function(t){ ossCur = t; ossPaint(); }
   };
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);

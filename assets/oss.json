@@ -1,10 +1,10 @@
 {
   "generated": "2026-07-12",
   "shipped": {
-    "prs": 39,
-    "repos": 22,
+    "prs": 29,
+    "repos": 21,
     "languages": 6,
-    "reach": 350553,
+    "reach": 350555,
     "rows": [
       {
         "date": "2026-07-07",
@@ -19,7 +19,7 @@
         "date": "2026-07-08",
         "lang": "TS",
         "repo": "directus/directus",
-        "stars": 36458,
+        "stars": 36459,
         "num": 27846,
         "title": "Fix an unhandled rejection in the sdk realtime client when the connection closed during a heartbeat ping",
         "docs": false
@@ -37,7 +37,7 @@
         "date": "2026-07-08",
         "lang": "GO",
         "repo": "weaviate/weaviate",
-        "stars": 16573,
+        "stars": 16574,
         "num": 12049,
         "title": "gh-12041 return 422 for batch delete with missing match fields",
         "docs": false
@@ -187,15 +187,6 @@
         "docs": false
       },
       {
-        "date": "2026-07-09",
-        "lang": "JS",
-        "repo": "mendygo-tech/Auditing_Evaluation_Platform",
-        "stars": 0,
-        "num": 11,
-        "title": "UX improvements, dense-enterprise redesign, and richer facilities",
-        "docs": false
-      },
-      {
         "date": "2026-04-29",
         "lang": "TS",
         "repo": "supabase/supabase",
@@ -207,9 +198,16 @@
     ]
   },
   "answered": {
-    "total": 23,
+    "total": 24,
     "repos": 18,
     "rows": [
+      {
+        "date": "2026-07-12",
+        "lang": "RS",
+        "repo": "helix-editor/helix",
+        "title": "Formatter (stylua) doesn't find configuration file outside the folder the file is in",
+        "url": "https://github.com/helix-editor/helix/discussions/16027#discussioncomment-17610490"
+      },
       {
         "date": "2026-07-11",
         "lang": "RS",

@@ -4,7 +4,7 @@
     "prs": 29,
     "repos": 21,
     "languages": 6,
-    "reach": 350559,
+    "reach": 350557,
     "privatePrs": 0,
     "privateRepos": 0,
     "rows": [
@@ -12,7 +12,7 @@
         "date": "2026-07-07",
         "lang": "RS",
         "repo": "zed-industries/zed",
-        "stars": 86821,
+        "stars": 86820,
         "num": 60406,
         "title": "Fix hard-tab block autoindent skipping unindented lines",
         "docs": false
@@ -21,7 +21,7 @@
         "date": "2026-07-08",
         "lang": "TS",
         "repo": "directus/directus",
-        "stars": 36460,
+        "stars": 36459,
         "num": 27846,
         "title": "Fix an unhandled rejection in the sdk realtime client when the connection closed during a heartbeat ping",
         "docs": false

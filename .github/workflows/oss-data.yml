@@ -22,18 +22,6 @@ jobs:
         with:
           node-version: 20
 
-      - name: Token diagnostics (temporary)
-        env:
-          TK: ${{ secrets.OSS_PAT }}
-        run: |
-          echo "OSS_PAT present: $([ -n "$TK" ] && echo yes || echo no)"
-          echo "-- classic token scopes (blank = fine-grained or no repo scope) --"
-          curl -sS -D - -o /dev/null -H "Authorization: Bearer $TK" https://api.github.com/user | grep -i "^x-oauth-scopes:" || echo "(no x-oauth-scopes header)"
-          echo "-- authenticated login --"
-          curl -sS -H "Authorization: Bearer $TK" https://api.github.com/user | grep -o '"login": *"[^"]*"' | head -1
-          echo "-- can it read the private repo? (200 = yes, 404 = no) --"
-          curl -sS -o /dev/null -w "%{http_code}\n" -H "Authorization: Bearer $TK" https://api.github.com/repos/mendygo-tech/Auditing_Evaluation_Platform
-
       - name: Rebuild assets/oss.json
         env:
           # GITHUB_TOKEN reads public PR/discussion data. If the discussions

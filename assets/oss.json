@@ -1,10 +1,12 @@
 {
   "generated": "2026-07-12",
   "shipped": {
-    "prs": 29,
-    "repos": 21,
+    "prs": 39,
+    "repos": 22,
     "languages": 6,
     "reach": 350555,
+    "privatePrs": 10,
+    "privateRepos": 1,
     "rows": [
       {
         "date": "2026-07-07",

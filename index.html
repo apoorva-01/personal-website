@@ -744,7 +744,8 @@
           + '<span style="color:var(--text-4);text-align:right;white-space:nowrap">' + ossStars(r.stars) + '<span style="color:var(--accent)">★</span></span>'
           + '</a>';
       }
-      out += '<div style="' + OSS_MONO + ';font-size:10.5px;color:var(--faint);padding:12px 12px 0;letter-spacing:.04em">one representative fix per repo · ' + d.shipped.prs + ' merged in total</div>';
+      var priv = d.shipped.privatePrs ? ' · ' + d.shipped.privatePrs + ' in private repos' : '';
+      out += '<div style="' + OSS_MONO + ';font-size:10.5px;color:var(--faint);padding:12px 12px 0;letter-spacing:.04em">one representative fix per repo · ' + d.shipped.prs + ' merged in total' + priv + '</div>';
     } else {
       out += hdr + '<span>lang</span><span>repository</span><span>question</span><span style="text-align:right">✓</span></div>';
       for (var j=0;j<d.answered.rows.length;j++){

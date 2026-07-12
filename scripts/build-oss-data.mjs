@@ -6,6 +6,10 @@ import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 
 const USER = "apoorva-01";
+// Private-repo PRs are counted in the totals but never named on the public page
+// (repo names and PR titles stay off the site). Flip to true only if a private
+// repo is not confidential and you want it listed by name in the ledger.
+const LIST_PRIVATE = false;
 const TOKEN = process.env.GITHUB_TOKEN || process.env.GH_TOKEN;
 if (!TOKEN) {
   console.error("Set GITHUB_TOKEN (locally: GITHUB_TOKEN=$(gh auth token)).");
@@ -65,13 +69,19 @@ async function shipped() {
   }
 
   const rows = [];
-  let reach = 0;
+  let reach = 0, privatePrs = 0, privateRepos = 0;
   const langs = new Set();
   for (const [repo, prs] of byRepo) {
     const meta = await rest(`/repos/${repo}`);
+    if (meta.private && !LIST_PRIVATE) {
+      // Counted in the totals below, but never named or detailed on the public page.
+      privateRepos += 1;
+      privatePrs += prs.length;
+      continue;
+    }
     const stars = meta.stargazers_count || 0;
     const lang = code(meta.language);
-    reach += stars;
+    if (!meta.private) reach += stars;
     langs.add(lang);
     // Representative PR: newest substantive fix; if the repo only had docs work,
     // keep the newest but flag it so the UI can sort it to the bottom.
@@ -82,7 +92,7 @@ async function shipped() {
   // Substantive fixes first (by stars), docs-only repos trailing.
   rows.sort((a, b) => (a.docs - b.docs) || (b.stars - a.stars));
 
-  return { prs: items.length, repos: byRepo.size, languages: langs.size, reach, rows };
+  return { prs: items.length, repos: byRepo.size, languages: langs.size, reach, privatePrs, privateRepos, rows };
 }
 
 async function answered() {

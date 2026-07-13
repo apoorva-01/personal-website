@@ -4,7 +4,7 @@
     "prs": 32,
     "repos": 22,
     "languages": 6,
-    "reach": 352325,
+    "reach": 352367,
     "privatePrs": 0,
     "privateRepos": 0,
     "rows": [
@@ -12,7 +12,7 @@
         "date": "2026-07-12",
         "lang": "RS",
         "repo": "zed-industries/zed",
-        "stars": 86876,
+        "stars": 86893,
         "num": 60841,
         "title": "language: Autoclose nested brackets in plain text",
         "docs": false
@@ -21,7 +21,7 @@
         "date": "2026-07-08",
         "lang": "TS",
         "repo": "directus/directus",
-        "stars": 36467,
+        "stars": 36468,
         "num": 27846,
         "title": "Fix an unhandled rejection in the sdk realtime client when the connection closed during a heartbeat ping",
         "docs": false
@@ -30,7 +30,7 @@
         "date": "2026-07-02",
         "lang": "PY",
         "repo": "PostHog/posthog",
-        "stars": 35448,
+        "stars": 35453,
         "num": 66505,
         "title": "fix: stop bigint filter values from crashing the feature flags page",
         "docs": false
@@ -39,7 +39,7 @@
         "date": "2026-07-08",
         "lang": "GO",
         "repo": "weaviate/weaviate",
-        "stars": 16586,
+        "stars": 16589,
         "num": 12049,
         "title": "gh-12041 return 422 for batch delete with missing match fields",
         "docs": false
@@ -48,7 +48,7 @@
         "date": "2026-07-03",
         "lang": "JS",
         "repo": "mholt/PapaParse",
-        "stars": 13524,
+        "stars": 13525,
         "num": 1128,
         "title": "fix: guess delimiter by row consistency before field count",
         "docs": false
@@ -57,7 +57,7 @@
         "date": "2026-07-09",
         "lang": "PY",
         "repo": "livekit/agents",
-        "stars": 11336,
+        "stars": 11339,
         "num": 6362,
         "title": "fix(azure): recover from STT error cancellations instead of hanging",
         "docs": false
@@ -147,7 +147,7 @@
         "date": "2026-07-10",
         "lang": "JS",
         "repo": "js-joda/js-joda",
-        "stars": 1659,
+        "stars": 1660,
         "num": 807,
         "title": "fix: parse zone ids that share a prefix with a fixed id",
         "docs": false
@@ -156,7 +156,7 @@
         "date": "2026-07-12",
         "lang": "PY",
         "repo": "MDAnalysis/mdanalysis",
-        "stars": 1609,
+        "stars": 1610,
         "num": 5415,
         "title": "BUG: combine cmaps when merging Universes (Issue #3672)",
         "docs": false
@@ -201,7 +201,7 @@
         "date": "2026-04-29",
         "lang": "TS",
         "repo": "supabase/supabase",
-        "stars": 106269,
+        "stars": 106279,
         "num": 45299,
         "title": "docs: fix \"an\" → \"a\" grammar errors before consonant words",
         "docs": true
@@ -209,8 +209,8 @@
     ]
   },
   "answered": {
-    "total": 24,
-    "repos": 18,
+    "total": 25,
+    "repos": 19,
     "rows": [
       {
         "date": "2026-07-12",
@@ -218,6 +218,13 @@
         "repo": "helix-editor/helix",
         "title": "Formatter (stylua) doesn't find configuration file outside the folder the file is in",
         "url": "https://github.com/helix-editor/helix/discussions/16027#discussioncomment-17610490"
+      },
+      {
+        "date": "2026-07-12",
+        "lang": "PY",
+        "repo": "dagster-io/dagster",
+        "title": "Retrieve data version of partition from downstream asset",
+        "url": "https://github.com/dagster-io/dagster/discussions/33985#discussioncomment-17614374"
       },
       {
         "date": "2026-07-11",

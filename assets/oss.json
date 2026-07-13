@@ -1,27 +1,27 @@
 {
-  "generated": "2026-07-12",
+  "generated": "2026-07-13",
   "shipped": {
-    "prs": 30,
+    "prs": 32,
     "repos": 22,
     "languages": 6,
-    "reach": 352262,
+    "reach": 352325,
     "privatePrs": 0,
     "privateRepos": 0,
     "rows": [
       {
-        "date": "2026-07-07",
+        "date": "2026-07-12",
         "lang": "RS",
         "repo": "zed-industries/zed",
-        "stars": 86851,
-        "num": 60406,
-        "title": "Fix hard-tab block autoindent skipping unindented lines",
+        "stars": 86876,
+        "num": 60841,
+        "title": "language: Autoclose nested brackets in plain text",
         "docs": false
       },
       {
         "date": "2026-07-08",
         "lang": "TS",
         "repo": "directus/directus",
-        "stars": 36464,
+        "stars": 36467,
         "num": 27846,
         "title": "Fix an unhandled rejection in the sdk realtime client when the connection closed during a heartbeat ping",
         "docs": false
@@ -30,7 +30,7 @@
         "date": "2026-07-02",
         "lang": "PY",
         "repo": "PostHog/posthog",
-        "stars": 35444,
+        "stars": 35448,
         "num": 66505,
         "title": "fix: stop bigint filter values from crashing the feature flags page",
         "docs": false
@@ -39,7 +39,7 @@
         "date": "2026-07-08",
         "lang": "GO",
         "repo": "weaviate/weaviate",
-        "stars": 16580,
+        "stars": 16586,
         "num": 12049,
         "title": "gh-12041 return 422 for batch delete with missing match fields",
         "docs": false
@@ -48,7 +48,7 @@
         "date": "2026-07-03",
         "lang": "JS",
         "repo": "mholt/PapaParse",
-        "stars": 13522,
+        "stars": 13524,
         "num": 1128,
         "title": "fix: guess delimiter by row consistency before field count",
         "docs": false
@@ -57,7 +57,7 @@
         "date": "2026-07-09",
         "lang": "PY",
         "repo": "livekit/agents",
-        "stars": 11335,
+        "stars": 11336,
         "num": 6362,
         "title": "fix(azure): recover from STT error cancellations instead of hanging",
         "docs": false
@@ -75,7 +75,7 @@
         "date": "2026-07-01",
         "lang": "PY",
         "repo": "falconry/falcon",
-        "stars": 9792,
+        "stars": 9791,
         "num": 2672,
         "title": "fix(uri): preserve literal plus when unquote_plus is disabled",
         "docs": false
@@ -147,7 +147,7 @@
         "date": "2026-07-10",
         "lang": "JS",
         "repo": "js-joda/js-joda",
-        "stars": 1658,
+        "stars": 1659,
         "num": 807,
         "title": "fix: parse zone ids that share a prefix with a fixed id",
         "docs": false
@@ -201,7 +201,7 @@
         "date": "2026-04-29",
         "lang": "TS",
         "repo": "supabase/supabase",
-        "stars": 106247,
+        "stars": 106269,
         "num": 45299,
         "title": "docs: fix \"an\" → \"a\" grammar errors before consonant words",
         "docs": true

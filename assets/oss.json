@@ -1,27 +1,27 @@
 {
   "generated": "2026-07-13",
   "shipped": {
-    "prs": 32,
+    "prs": 34,
     "repos": 22,
     "languages": 6,
-    "reach": 352367,
+    "reach": 352454,
     "privatePrs": 0,
     "privateRepos": 0,
     "rows": [
       {
-        "date": "2026-07-12",
+        "date": "2026-07-13",
         "lang": "RS",
         "repo": "zed-industries/zed",
-        "stars": 86893,
-        "num": 60841,
-        "title": "language: Autoclose nested brackets in plain text",
+        "stars": 86920,
+        "num": 60781,
+        "title": "Use buffer line numbers when copying file locations",
         "docs": false
       },
       {
         "date": "2026-07-08",
         "lang": "TS",
         "repo": "directus/directus",
-        "stars": 36468,
+        "stars": 36472,
         "num": 27846,
         "title": "Fix an unhandled rejection in the sdk realtime client when the connection closed during a heartbeat ping",
         "docs": false
@@ -30,7 +30,7 @@
         "date": "2026-07-02",
         "lang": "PY",
         "repo": "PostHog/posthog",
-        "stars": 35453,
+        "stars": 35474,
         "num": 66505,
         "title": "fix: stop bigint filter values from crashing the feature flags page",
         "docs": false
@@ -39,7 +39,7 @@
         "date": "2026-07-08",
         "lang": "GO",
         "repo": "weaviate/weaviate",
-        "stars": 16589,
+        "stars": 16590,
         "num": 12049,
         "title": "gh-12041 return 422 for batch delete with missing match fields",
         "docs": false
@@ -48,7 +48,7 @@
         "date": "2026-07-03",
         "lang": "JS",
         "repo": "mholt/PapaParse",
-        "stars": 13525,
+        "stars": 13527,
         "num": 1128,
         "title": "fix: guess delimiter by row consistency before field count",
         "docs": false
@@ -57,25 +57,25 @@
         "date": "2026-07-09",
         "lang": "PY",
         "repo": "livekit/agents",
-        "stars": 11339,
+        "stars": 11346,
         "num": 6362,
         "title": "fix(azure): recover from STT error cancellations instead of hanging",
         "docs": false
       },
       {
-        "date": "2026-07-11",
+        "date": "2026-07-13",
         "lang": "PY",
         "repo": "sqlfluff/sqlfluff",
         "stars": 9804,
-        "num": 8127,
-        "title": "Athena: accept ARRAY(type) as well as ARRAY<type>",
+        "num": 8123,
+        "title": "Teradata: make OVERLAPS an infix comparison operator",
         "docs": false
       },
       {
         "date": "2026-07-01",
         "lang": "PY",
         "repo": "falconry/falcon",
-        "stars": 9791,
+        "stars": 9788,
         "num": 2672,
         "title": "fix(uri): preserve literal plus when unquote_plus is disabled",
         "docs": false
@@ -93,7 +93,7 @@
         "date": "2026-06-30",
         "lang": "PY",
         "repo": "mne-tools/mne-python",
-        "stars": 3458,
+        "stars": 3459,
         "num": 13999,
         "title": "Fix write_fine_calibration mangling Neuromag channel names",
         "docs": false
@@ -102,7 +102,7 @@
         "date": "2026-07-10",
         "lang": "PY",
         "repo": "tomerfiliba/plumbum",
-        "stars": 3051,
+        "stars": 3052,
         "num": 830,
         "title": "fix(session): keep the return code off the last line of output",
         "docs": false
@@ -111,7 +111,7 @@
         "date": "2026-07-04",
         "lang": "PY",
         "repo": "pyparsing/pyparsing",
-        "stars": 2481,
+        "stars": 2478,
         "num": 644,
         "title": "Escape control characters in set_debug() debug output",
         "docs": false
@@ -120,7 +120,7 @@
         "date": "2026-07-06",
         "lang": "PY",
         "repo": "pygments/pygments",
-        "stars": 2184,
+        "stars": 2185,
         "num": 3177,
         "title": "Swift: keep `func` a keyword in `class func` methods",
         "docs": false
@@ -156,7 +156,7 @@
         "date": "2026-07-12",
         "lang": "PY",
         "repo": "MDAnalysis/mdanalysis",
-        "stars": 1610,
+        "stars": 1609,
         "num": 5415,
         "title": "BUG: combine cmaps when merging Universes (Issue #3672)",
         "docs": false
@@ -174,7 +174,7 @@
         "date": "2026-07-08",
         "lang": "PY",
         "repo": "derek73/python-nameparser",
-        "stars": 710,
+        "stars": 711,
         "num": 276,
         "title": "Strip invisible bidi control characters during preprocessing",
         "docs": false
@@ -201,7 +201,7 @@
         "date": "2026-04-29",
         "lang": "TS",
         "repo": "supabase/supabase",
-        "stars": 106279,
+        "stars": 106307,
         "num": 45299,
         "title": "docs: fix \"an\" → \"a\" grammar errors before consonant words",
         "docs": true

@@ -1,10 +1,10 @@
 {
-  "generated": "2026-07-13",
+  "generated": "2026-07-14",
   "shipped": {
-    "prs": 34,
-    "repos": 22,
+    "prs": 37,
+    "repos": 24,
     "languages": 6,
-    "reach": 352454,
+    "reach": 395391,
     "privatePrs": 0,
     "privateRepos": 0,
     "rows": [
@@ -12,25 +12,34 @@
         "date": "2026-07-13",
         "lang": "RS",
         "repo": "zed-industries/zed",
-        "stars": 86920,
-        "num": 60781,
-        "title": "Use buffer line numbers when copying file locations",
+        "stars": 86940,
+        "num": 60839,
+        "title": "project: Report formatter failures in the status bar again",
         "docs": false
       },
       {
         "date": "2026-07-08",
         "lang": "TS",
         "repo": "directus/directus",
-        "stars": 36472,
+        "stars": 36475,
         "num": 27846,
         "title": "Fix an unhandled rejection in the sdk realtime client when the connection closed during a heartbeat ping",
+        "docs": false
+      },
+      {
+        "date": "2026-07-14",
+        "lang": "JV",
+        "repo": "keycloak/keycloak",
+        "stars": 35644,
+        "num": 50641,
+        "title": "Fix ConcurrentModificationException updating organization attributes",
         "docs": false
       },
       {
         "date": "2026-07-02",
         "lang": "PY",
         "repo": "PostHog/posthog",
-        "stars": 35474,
+        "stars": 35486,
         "num": 66505,
         "title": "fix: stop bigint filter values from crashing the feature flags page",
         "docs": false
@@ -39,7 +48,7 @@
         "date": "2026-07-08",
         "lang": "GO",
         "repo": "weaviate/weaviate",
-        "stars": 16590,
+        "stars": 16593,
         "num": 12049,
         "title": "gh-12041 return 422 for batch delete with missing match fields",
         "docs": false
@@ -57,7 +66,7 @@
         "date": "2026-07-09",
         "lang": "PY",
         "repo": "livekit/agents",
-        "stars": 11346,
+        "stars": 11354,
         "num": 6362,
         "title": "fix(azure): recover from STT error cancellations instead of hanging",
         "docs": false
@@ -66,7 +75,7 @@
         "date": "2026-07-13",
         "lang": "PY",
         "repo": "sqlfluff/sqlfluff",
-        "stars": 9804,
+        "stars": 9805,
         "num": 8123,
         "title": "Teradata: make OVERLAPS an infix comparison operator",
         "docs": false
@@ -81,10 +90,19 @@
         "docs": false
       },
       {
+        "date": "2026-07-13",
+        "lang": "JS",
+        "repo": "MikeMcl/decimal.js",
+        "stars": 7217,
+        "num": 260,
+        "title": "Fix asin losing precision near x = 1",
+        "docs": false
+      },
+      {
         "date": "2026-07-10",
         "lang": "JV",
         "repo": "redis/lettuce",
-        "stars": 5764,
+        "stars": 5765,
         "num": 3832,
         "title": "Count YIELD_SCORE_AS tokens in FT.HYBRID COMBINE clause #3811",
         "docs": false
@@ -93,7 +111,7 @@
         "date": "2026-06-30",
         "lang": "PY",
         "repo": "mne-tools/mne-python",
-        "stars": 3459,
+        "stars": 3460,
         "num": 13999,
         "title": "Fix write_fine_calibration mangling Neuromag channel names",
         "docs": false
@@ -201,7 +219,7 @@
         "date": "2026-04-29",
         "lang": "TS",
         "repo": "supabase/supabase",
-        "stars": 106307,
+        "stars": 106334,
         "num": 45299,
         "title": "docs: fix \"an\" → \"a\" grammar errors before consonant words",
         "docs": true

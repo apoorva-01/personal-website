@@ -1,27 +1,27 @@
 {
-  "generated": "2026-07-15",
+  "generated": "2026-07-16",
   "shipped": {
-    "prs": 41,
-    "repos": 25,
+    "prs": 45,
+    "repos": 27,
     "languages": 7,
-    "reach": 435084,
+    "reach": 438006,
     "privatePrs": 0,
     "privateRepos": 0,
     "rows": [
       {
-        "date": "2026-07-13",
+        "date": "2026-07-15",
         "lang": "RS",
         "repo": "zed-industries/zed",
-        "stars": 87006,
-        "num": 60839,
-        "title": "project: Report formatter failures in the status bar again",
+        "stars": 87061,
+        "num": 60708,
+        "title": "Fix auto-indent for braceless if/for/while in TypeScript",
         "docs": false
       },
       {
         "date": "2026-07-14",
         "lang": "C++",
         "repo": "duckdb/duckdb",
-        "stars": 39420,
+        "stars": 39453,
         "num": 23781,
         "title": "Fix INTERNAL error casting pre-epoch TIMESTAMP_NS to TIME_NS",
         "docs": false
@@ -30,7 +30,7 @@
         "date": "2026-07-08",
         "lang": "TS",
         "repo": "directus/directus",
-        "stars": 36484,
+        "stars": 36494,
         "num": 27846,
         "title": "Fix an unhandled rejection in the sdk realtime client when the connection closed during a heartbeat ping",
         "docs": false
@@ -39,7 +39,7 @@
         "date": "2026-07-14",
         "lang": "JV",
         "repo": "keycloak/keycloak",
-        "stars": 35671,
+        "stars": 35683,
         "num": 50641,
         "title": "Fix ConcurrentModificationException updating organization attributes",
         "docs": false
@@ -48,7 +48,7 @@
         "date": "2026-07-02",
         "lang": "PY",
         "repo": "PostHog/posthog",
-        "stars": 35539,
+        "stars": 35575,
         "num": 66505,
         "title": "fix: stop bigint filter values from crashing the feature flags page",
         "docs": false
@@ -57,7 +57,7 @@
         "date": "2026-07-08",
         "lang": "GO",
         "repo": "weaviate/weaviate",
-        "stars": 16598,
+        "stars": 16600,
         "num": 12049,
         "title": "gh-12041 return 422 for batch delete with missing match fields",
         "docs": false
@@ -75,7 +75,7 @@
         "date": "2026-07-09",
         "lang": "PY",
         "repo": "livekit/agents",
-        "stars": 11366,
+        "stars": 11375,
         "num": 6362,
         "title": "fix(azure): recover from STT error cancellations instead of hanging",
         "docs": false
@@ -111,7 +111,7 @@
         "date": "2026-07-10",
         "lang": "JV",
         "repo": "redis/lettuce",
-        "stars": 5765,
+        "stars": 5766,
         "num": 3832,
         "title": "Count YIELD_SCORE_AS tokens in FT.HYBRID COMBINE clause #3811",
         "docs": false
@@ -120,7 +120,7 @@
         "date": "2026-06-30",
         "lang": "PY",
         "repo": "mne-tools/mne-python",
-        "stars": 3463,
+        "stars": 3464,
         "num": 13999,
         "title": "Fix write_fine_calibration mangling Neuromag channel names",
         "docs": false
@@ -135,10 +135,19 @@
         "docs": false
       },
       {
+        "date": "2026-07-15",
+        "lang": "JS",
+        "repo": "jsonata-js/jsonata",
+        "stars": 2660,
+        "num": 809,
+        "title": "Fix $contains crash when the token is undefined",
+        "docs": false
+      },
+      {
         "date": "2026-07-04",
         "lang": "PY",
         "repo": "pyparsing/pyparsing",
-        "stars": 2478,
+        "stars": 2477,
         "num": 644,
         "title": "Escape control characters in set_debug() debug output",
         "docs": false
@@ -165,7 +174,7 @@
         "date": "2026-07-09",
         "lang": "TS",
         "repo": "eemeli/yaml",
-        "stars": 1679,
+        "stars": 1680,
         "num": 700,
         "title": "fix: Parse a flow collection map key preceded by a blank line or comment",
         "docs": false
@@ -216,19 +225,28 @@
         "docs": false
       },
       {
-        "date": "2026-07-11",
+        "date": "2026-07-15",
+        "lang": "GO",
+        "repo": "sourcegraph/go-jsonschema",
+        "stars": 20,
+        "num": 36,
+        "title": "Emit a map for object schemas with no properties",
+        "docs": false
+      },
+      {
+        "date": "2026-07-15",
         "lang": "GO",
         "repo": "Kong/kongctl",
         "stars": 15,
-        "num": 1575,
-        "title": "fix(konnect): report all missing token create flags at once",
+        "num": 1591,
+        "title": "fix(extensions): download release assets via the asset API URL",
         "docs": false
       },
       {
         "date": "2026-04-29",
         "lang": "TS",
         "repo": "supabase/supabase",
-        "stars": 106426,
+        "stars": 106509,
         "num": 45299,
         "title": "docs: fix \"an\" → \"a\" grammar errors before consonant words",
         "docs": true
@@ -236,9 +254,16 @@
     ]
   },
   "answered": {
-    "total": 25,
+    "total": 26,
     "repos": 19,
     "rows": [
+      {
+        "date": "2026-07-15",
+        "lang": "RS",
+        "repo": "tursodatabase/turso",
+        "title": "No error on querry missing parameter. Is it by design?",
+        "url": "https://github.com/tursodatabase/turso/discussions/7852#discussioncomment-17652710"
+      },
       {
         "date": "2026-07-12",
         "lang": "RS",

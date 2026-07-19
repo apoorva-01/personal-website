@@ -1,0 +1,28 @@
+name: Monthly presence check
+
+# Posts the monthly "own your name" check reminder to Slack via the same incoming
+# webhook the contact form uses (SLACK_WEBHOOK_URL). Fires on the 1st of each month.
+# Add SLACK_WEBHOOK_URL as a GitHub Actions repo secret to enable it — it currently
+# lives only as a Vercel env var. Until then this skips cleanly (no failure).
+on:
+  schedule:
+    - cron: "33 3 1 * *"   # 03:33 UTC on the 1st (~09:03 IST)
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  remind:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Post reminder to Slack
+        env:
+          WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          if [ -z "$WEBHOOK" ]; then
+            echo "SLACK_WEBHOOK_URL not set — add it as a repo secret to enable. Skipping."
+            exit 0
+          fi
+          MSG=$':mag: *Monthly presence check: "Apoorva Verma"*\n\n1. Google-search "Apoorva Verma" in incognito. Note page-one coverage + the image pack: https://www.google.com/search?q=%22Apoorva+Verma%22\n2. Ask ChatGPT / Perplexity "who is Apoorva Verma". Is it you, citing your site, using she/her?\n3. Log a dated line in PROFILES.md, then fill the biggest gap next.\n\nEntity: https://www.apoorvaverma.in/about  ·  https://www.wikidata.org/wiki/Q140624146'
+          jq -n --arg t "$MSG" '{text:$t}' | curl -sS -X POST -H 'Content-type: application/json' -d @- "$WEBHOOK"

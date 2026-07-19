@@ -1,0 +1,62 @@
+name: Nudge Google indexing
+
+# Submits every sitemap URL to the Google Indexing API after content lands on main.
+# Requires the GSC_SERVICE_ACCOUNT secret (a Google Cloud service-account JSON key,
+# added as an OWNER of the Search Console property). See docs at the bottom of
+# scripts/gsc-index.mjs. Runs after content changes; also runnable on demand.
+on:
+  push:
+    branches: [main]
+    paths:
+      - "sitemap.xml"
+      - "posts/**"
+      - "index.html"
+      - "blog.html"
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+concurrency:
+  group: gsc-index
+  cancel-in-progress: false
+
+jobs:
+  index:
+    runs-on: ubuntu-latest
+    # Skip cleanly if the secret isn't configured yet (before you finish Google setup).
+    if: ${{ github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/main' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Guard — secret present
+        id: guard
+        env:
+          KEY: ${{ secrets.GSC_SERVICE_ACCOUNT }}
+        run: |
+          if [ -z "$KEY" ]; then
+            echo "GSC_SERVICE_ACCOUNT not set — skipping (finish the Google Cloud setup first)."
+            echo "run=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Write service account key
+        if: steps.guard.outputs.run == 'true'
+        env:
+          KEY: ${{ secrets.GSC_SERVICE_ACCOUNT }}
+        run: printf '%s' "$KEY" > service_account.json
+
+      - name: Submit sitemap URLs to the Indexing API
+        if: steps.guard.outputs.run == 'true'
+        run: |
+          npm install --no-audit --no-fund googleapis
+          node scripts/gsc-index.mjs
+
+      - name: Clean up key
+        if: always()
+        run: rm -f service_account.json

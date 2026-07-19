@@ -1,10 +1,10 @@
 {
-  "generated": "2026-07-18",
+  "generated": "2026-07-19",
   "shipped": {
     "prs": 46,
     "repos": 27,
     "languages": 7,
-    "reach": 438988,
+    "reach": 439680,
     "privatePrs": 0,
     "privateRepos": 0,
     "rows": [
@@ -12,7 +12,7 @@
         "date": "2026-07-15",
         "lang": "RS",
         "repo": "zed-industries/zed",
-        "stars": 87159,
+        "stars": 87213,
         "num": 60708,
         "title": "Fix auto-indent for braceless if/for/while in TypeScript",
         "docs": false
@@ -21,34 +21,34 @@
         "date": "2026-07-14",
         "lang": "C++",
         "repo": "duckdb/duckdb",
-        "stars": 39507,
+        "stars": 39522,
         "num": 23781,
         "title": "Fix INTERNAL error casting pre-epoch TIMESTAMP_NS to TIME_NS",
-        "docs": false
-      },
-      {
-        "date": "2026-07-08",
-        "lang": "TS",
-        "repo": "directus/directus",
-        "stars": 36522,
-        "num": 27846,
-        "title": "Fix an unhandled rejection in the sdk realtime client when the connection closed during a heartbeat ping",
         "docs": false
       },
       {
         "date": "2026-07-02",
         "lang": "PY",
         "repo": "PostHog/posthog",
-        "stars": 36300,
+        "stars": 36716,
         "num": 66505,
         "title": "fix: stop bigint filter values from crashing the feature flags page",
+        "docs": false
+      },
+      {
+        "date": "2026-07-08",
+        "lang": "TS",
+        "repo": "directus/directus",
+        "stars": 36621,
+        "num": 27846,
+        "title": "Fix an unhandled rejection in the sdk realtime client when the connection closed during a heartbeat ping",
         "docs": false
       },
       {
         "date": "2026-07-14",
         "lang": "JV",
         "repo": "keycloak/keycloak",
-        "stars": 35713,
+        "stars": 35726,
         "num": 50641,
         "title": "Fix ConcurrentModificationException updating organization attributes",
         "docs": false
@@ -57,7 +57,7 @@
         "date": "2026-07-08",
         "lang": "GO",
         "repo": "weaviate/weaviate",
-        "stars": 16607,
+        "stars": 16614,
         "num": 12049,
         "title": "gh-12041 return 422 for batch delete with missing match fields",
         "docs": false
@@ -66,7 +66,7 @@
         "date": "2026-07-03",
         "lang": "JS",
         "repo": "mholt/PapaParse",
-        "stars": 13528,
+        "stars": 13529,
         "num": 1128,
         "title": "fix: guess delimiter by row consistency before field count",
         "docs": false
@@ -75,7 +75,7 @@
         "date": "2026-07-09",
         "lang": "PY",
         "repo": "livekit/agents",
-        "stars": 11412,
+        "stars": 11426,
         "num": 6362,
         "title": "fix(azure): recover from STT error cancellations instead of hanging",
         "docs": false
@@ -84,7 +84,7 @@
         "date": "2026-07-14",
         "lang": "PY",
         "repo": "sqlfluff/sqlfluff",
-        "stars": 9813,
+        "stars": 9814,
         "num": 8149,
         "title": "Rename Rust skip-backward-to-code helpers to match Python",
         "docs": false
@@ -93,7 +93,7 @@
         "date": "2026-07-01",
         "lang": "PY",
         "repo": "falconry/falcon",
-        "stars": 9790,
+        "stars": 9791,
         "num": 2672,
         "title": "fix(uri): preserve literal plus when unquote_plus is disabled",
         "docs": false
@@ -111,7 +111,7 @@
         "date": "2026-07-10",
         "lang": "JV",
         "repo": "redis/lettuce",
-        "stars": 5766,
+        "stars": 5767,
         "num": 3832,
         "title": "Count YIELD_SCORE_AS tokens in FT.HYBRID COMBINE clause #3811",
         "docs": false
@@ -120,7 +120,7 @@
         "date": "2026-06-30",
         "lang": "PY",
         "repo": "mne-tools/mne-python",
-        "stars": 3466,
+        "stars": 3469,
         "num": 13999,
         "title": "Fix write_fine_calibration mangling Neuromag channel names",
         "docs": false
@@ -129,7 +129,7 @@
         "date": "2026-07-10",
         "lang": "PY",
         "repo": "tomerfiliba/plumbum",
-        "stars": 3052,
+        "stars": 3053,
         "num": 830,
         "title": "fix(session): keep the return code off the last line of output",
         "docs": false
@@ -138,7 +138,7 @@
         "date": "2026-07-15",
         "lang": "JS",
         "repo": "jsonata-js/jsonata",
-        "stars": 2660,
+        "stars": 2661,
         "num": 809,
         "title": "Fix $contains crash when the token is undefined",
         "docs": false
@@ -192,7 +192,7 @@
         "date": "2026-07-12",
         "lang": "PY",
         "repo": "MDAnalysis/mdanalysis",
-        "stars": 1609,
+        "stars": 1608,
         "num": 5415,
         "title": "BUG: combine cmaps when merging Universes (Issue #3672)",
         "docs": false
@@ -246,7 +246,7 @@
         "date": "2026-04-29",
         "lang": "TS",
         "repo": "supabase/supabase",
-        "stars": 106498,
+        "stars": 106564,
         "num": 45299,
         "title": "docs: fix \"an\" → \"a\" grammar errors before consonant words",
         "docs": true

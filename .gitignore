@@ -4,3 +4,9 @@ node_modules/
 .env
 .env.local
 .vercel
+
+# Google service-account keys — NEVER commit these (they go in GitHub Actions secrets)
+service_account.json
+portfolio-*.json
+*service-account*.json
+*.iam.gserviceaccount.com.json

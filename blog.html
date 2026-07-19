@@ -47,8 +47,6 @@
   ::-webkit-scrollbar-thumb{background:var(--scroll);border-radius:0;border:3px solid var(--bg)}
   a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
   @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-  @keyframes overlayIn{from{opacity:0}to{opacity:1}}
-  @keyframes sheetIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
   @media (prefers-reduced-motion:reduce){*{animation:none !important;transition:none !important}}
   #theme-btn{position:relative;box-sizing:border-box;width:56px;height:30px;padding:0 8px;border:1px solid var(--w12);background:var(--bubble);border-radius:3px;cursor:pointer;display:inline-flex;align-items:center;justify-content:space-between;transition:border-color .18s;flex:0 0 auto}
   #theme-btn:hover{border-color:var(--w30)}
@@ -143,163 +141,18 @@
     <section style="padding:24px 0 120px">
       <div style="display:flex;align-items:baseline;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);padding:0 8px 15px;border-bottom:1px solid var(--w10)">
         <span>The log</span>
-        <span id="av-count"></span>
+        <span id="av-count"><!--BUILD:COUNT-->2 entries<!--/BUILD:COUNT--></span>
       </div>
-      <div id="av-bloggrid" style="border-bottom:1px solid var(--w09)"></div>
+      <div id="av-bloggrid" style="border-bottom:1px solid var(--w09)"><!--BUILD:CARDS--><a data-reveal="1" href="/posts/mysql-vector-store-langchain" class="logrow" style="display:grid;grid-template-columns:190px 1fr;gap:36px;align-items:start;text-decoration:none;color:inherit;padding:38px 8px;border-top:1px solid var(--w09);cursor:pointer;opacity:0;transform:translateY(24px);transition:background .2s" data-hover="background:var(--surface-hover)"><div style="display:flex;flex-direction:column;gap:16px"><div style="font-family:'IBM Plex Mono',monospace;font-size:12px;display:flex;flex-direction:column;gap:4px"><span style="color:var(--text-3)">Jul 2026</span><span style="color:var(--faint)">8 min read</span></div><div style="display:flex;flex-wrap:wrap;gap:6px"><span style="font-size:11px;color:var(--text-3);padding:3px 10px;border-radius:2px;background:rgba(255,75,38,.08);border:1px solid rgba(255,75,38,.2)">Vector Search</span><span style="font-size:11px;color:var(--text-3);padding:3px 10px;border-radius:2px;background:rgba(255,75,38,.08);border:1px solid rgba(255,75,38,.2)">LangChain</span><span style="font-size:11px;color:var(--text-3);padding:3px 10px;border-radius:2px;background:rgba(255,75,38,.08);border:1px solid rgba(255,75,38,.2)">Open Source</span></div></div><div><h3 style="font-size:clamp(23px,2.7vw,31px);font-weight:500;letter-spacing:-.03em;line-height:1.16;color:var(--heading)">Building a vector store on MySQL 9, and everything I refused to fake</h3><p style="margin-top:15px;font-size:16px;line-height:1.65;color:var(--text-4);max-width:60ch">MySQL 9 gives you a VECTOR column and a distance function. No index, no relevance scores, nothing else. Here's what I learned building a real LangChain and LlamaIndex vector store on top of that, without pretending it had features it doesn't.</p><span style="display:inline-flex;align-items:center;gap:8px;margin-top:22px;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.02em;color:var(--accent)">Read the note →</span></div></a><a data-reveal="1" href="/posts/rag-eval-lying-metrics" class="logrow" style="display:grid;grid-template-columns:190px 1fr;gap:36px;align-items:start;text-decoration:none;color:inherit;padding:38px 8px;border-top:1px solid var(--w09);cursor:pointer;opacity:0;transform:translateY(24px);transition:background .2s" data-hover="background:var(--surface-hover)"><div style="display:flex;flex-direction:column;gap:16px"><div style="font-family:'IBM Plex Mono',monospace;font-size:12px;display:flex;flex-direction:column;gap:4px"><span style="color:var(--text-3)">Jul 2026</span><span style="color:var(--faint)">6 min read</span></div><div style="display:flex;flex-wrap:wrap;gap:6px"><span style="font-size:11px;color:var(--text-3);padding:3px 10px;border-radius:2px;background:rgba(255,75,38,.08);border:1px solid rgba(255,75,38,.2)">RAG</span><span style="font-size:11px;color:var(--text-3);padding:3px 10px;border-radius:2px;background:rgba(255,75,38,.08);border:1px solid rgba(255,75,38,.2)">LLM Evaluation</span></div></div><div><h3 style="font-size:clamp(23px,2.7vw,31px);font-weight:500;letter-spacing:-.03em;line-height:1.16;color:var(--heading)">I graded 50 RAG answers with a hand-built harness. Half the metrics were lying to me.</h3><p style="margin-top:15px;font-size:16px;line-height:1.65;color:var(--text-4);max-width:60ch">Faithfulness sat at 1.0 across every config I tried. That number told me nothing, and here's the one I actually trust instead.</p><span style="display:inline-flex;align-items:center;gap:8px;margin-top:22px;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.02em;color:var(--accent)">Read the note →</span></div></a><!--/BUILD:CARDS--></div>
     </section>
 
   </main>
-
-  <!-- ARTICLE OVERLAY (rendered by JS) -->
-  <div id="av-overlay"></div>
 
 </div>
 
 <script>
 (function(){
   "use strict";
-
-  var posts = [
-    {
-      id: "p0",
-      slug: "mysql-vector-store-langchain",
-      href: "/posts/mysql-vector-store-langchain",
-      title: "Building a vector store on MySQL 9, and everything I refused to fake",
-      excerpt: "MySQL 9 gives you a VECTOR column and a distance function. No index, no relevance scores, nothing else. Here's what I learned building a real LangChain and LlamaIndex vector store on top of that, without pretending it had features it doesn't.",
-      date: "Jul 2026", read: "8 min read",
-      tags: ["Vector Search", "LangChain", "Open Source"],
-      body: [
-        "MySQL 9 shipped a native VECTOR type. You store embeddings in a column, and a `DISTANCE()` function gives you cosine, dot, or euclidean. That is the entire toolbox. No approximate index, no relevance scoring, no filter helpers, none of the machinery a real vector database hands you on day one.",
-        "I wanted a LangChain vector store on top of it. If your data already lives in MySQL, spinning up a separate vector database just to do retrieval is a pile of moving parts you don't need. So I built one, `langchain-shannonbase` (it runs on ShannonBase, plain self-hosted MySQL 9, and HeatWave, which all expose the same VECTOR surface), and later a LlamaIndex sibling.",
-        "The building part was easy. The interesting part was every spot where the database couldn't do the thing, and deciding what to do about it. The easy move in those spots is to paper over the gap with code that looks like a feature and isn't. I tried hard not to. This post is mostly about the times I was tempted.",
-        { h: "The database has no index. Don't pretend it does." },
-        "Exact search on MySQL 9 is a full `DISTANCE` scan: every query compares your vector against every row. That is 100% recall and it is genuinely fine up to a few million vectors. It is also O(n), and past some size it tips over.",
-        "The thing a vector database gives you here is an approximate index, the HNSW and IVF family. MySQL 9 doesn't have one. Neither does ShannonBase (I read the source to be sure, more on that below).",
-        "So the temptation: emit some `CREATE INDEX ... USING HNSW`, wrap it in a `build_index()` method, and let it fail quietly on backends that don't support it. The library would look like it had ANN. It would demo great. It would be a lie.",
-        "I built the index in application code instead. IVF: run k-means over the stored vectors, keep the centroids, tag each row with its nearest one, and at query time only scan the handful of clusters closest to the query. Same idea as pgvector's IVFFlat, just done in Python because the database won't do it for me. Recall is approximate and you trade it against how many clusters you probe. The point is it actually runs, on a MySQL you can start in a container, and I can measure the recall and show you the curve. A fake `CREATE INDEX` can't be measured, because it was never real.",
-        "HeatWave is the exception, and I only learned this by reading the docs properly: since 9.5 it builds an HNSW index automatically and uses it on ordinary `ORDER BY DISTANCE` queries. So on HeatWave you get native ANN for free and you should not call my IVF thing at all. Writing 'here is when NOT to use my feature' into the README felt more honest than pretending my feature was always the answer.",
-        { h: "When the docs are silent, read the source" },
-        "MySQL's `DISTANCE` supports a `DOT` metric. I needed to know one specific thing: does dot-product distance come back as the raw inner product, or negated?",
-        "This matters more than it sounds. Vector stores sort ascending, smallest distance first. Cosine and euclidean are naturally smaller-is-closer. A dot product is the opposite, bigger-is-closer, so to make it act like a distance you negate it. If MySQL negates and I assume it doesn't, my dot-metric search returns results in exactly the wrong order. And no test against my in-memory fake would catch it, because I'd have written the fake with the same wrong assumption.",
-        "The MySQL and HeatWave docs list `DOT` as supported and say nothing about the sign. The web has plenty of confident secondhand answers. I didn't want secondhand for something that decides whether search works.",
-        "ShannonBase is open source and it's a MySQL fork, so its `DISTANCE` lives where MySQL's would. I found the function. It's four lines:",
-        { code: "double calculate_dot_distance(const float* a, const float* b, uint32 dim) {\n  double dot = 0.0;\n  for (uint32 i = 0; i < dim; i++) dot += a[i] * b[i];\n  return -dot;  // negated, so smaller = closer\n}" },
-        "`return -dot`. Negated. My ascending sort is right, and now I can write a relevance score for the dot metric that isn't a guess. Ten minutes of reading source beat a day of arguing with search results, and I get to say 'I checked' instead of 'I think.'",
-        "There is a version of me that ships a dot relevance score based on the top Stack Overflow answer and moves on. The version that read the source ships the same feature and actually knows it's correct. And before I confirmed the sign, I shipped relevance scoring for cosine and euclidean and deliberately left dot out, with a one-line note saying the sign wasn't nailed down yet. Shipping the gap honestly beats shipping a guess and hoping.",
-        { h: "Testing a database integration without the database" },
-        "Here's a constraint: I don't want a running MySQL just to run the tests, and I certainly can't require a HeatWave instance, since that's a paid managed cloud. But not testing the thing isn't an option either.",
-        "The answer is an in-memory backend that mirrors the real one. Same distance math (I copied the three functions straight from the source I'd just been reading), same filtering, same behavior, in pure Python over a dict. The vector store talks to a small `Store` interface. In production that's MySQL; in tests it's the in-memory one. All the logic that matters, filtering, MMR, IVF, hybrid fusion, relevance scoring, is backend-agnostic, so exercising it against the fake exercises the real code path.",
-        "The payoff I like: LangChain ships a standard integration test suite that every vector store is supposed to pass. I run it against the in-memory backend in CI, offline, on every push. So 'behaves like a real LangChain vector store' isn't a claim I'm making, it's a test that's passing.",
-        "The honest limit, and it's in the README: the actual SQL and the async driver can't be verified without a real database, same as any DB client. I test them against the query builders and say plainly what a live run covers and what it doesn't. 'Every claim measured' only holds if you're loud about the ones you've deferred.",
-        { h: "Hybrid search, and why I fuse ranks instead of scores" },
-        "Vector search is good at meaning and bad at exact tokens. Ask it for an error code like `E4021` or a name like `O'Brien` and semantic similarity just shrugs. Keyword search is the reverse. Hybrid search runs both and merges the results, and MySQL already has `FULLTEXT` keyword search built in, so the parts were sitting right there.",
-        "The trick is merging a cosine distance with a FULLTEXT relevance score. Different scales, different meanings, and squashing them into a shared range is fiddly and a little arbitrary. So I don't. I use reciprocal rank fusion: drop the scores, keep the ranks, and give each document `1/(k + rank)` summed across both lists. A doc that's 2nd on vectors and 1st on keywords beats one that's 1st in a single list and absent from the other. It's simple, it never has to reconcile the two scales, and it's what a lot of real search stacks use. The best fix for 'these numbers aren't comparable' turned out to be to stop comparing the numbers.",
-        { h: "Two packages, one backend, and not abstracting too early" },
-        "Then I built the LlamaIndex version, because the same MySQL engine should be usable outside LangChain. LlamaIndex has its own vector-store interface, different enough that you can't just reuse the LangChain class. But the storage layer under it, the SQL, the filters, the IVF, the in-memory fake, is identical.",
-        "My rule is three duplications before you extract a shared thing. Two consumers isn't three. So I didn't spin up a shared 'core' package and re-plumb the already-published LangChain one to depend on it. That's a lot of coordination for two callers, and LlamaIndex users would rather not pull `langchain-core` into their dependency tree anyway. I copied the four backend files into the LlamaIndex package, unchanged.",
-        "Copying is a smell, I know. The way you keep it honest is a CI check that byte-compares the copies against the originals and fails the build if they drift. One source of truth, enforced by a test, without the premature abstraction. If a third consumer ever shows up, that's when a shared core earns its rent.",
-        { h: "The through-line" },
-        "None of this is fancy. A VECTOR column, a distance function, and a careful amount of Python around them. What stuck with me is how often the honest move and the impressive-looking move point in opposite directions. Faking the ANN index would have demoed better. Guessing the dot sign would have shipped faster. Skipping the offline tests would have looked tidier in the diff.",
-        "The library is better because I did none of those, and I can point at every claim it makes and tell you exactly how I know it holds, or say plainly where I haven't checked. For something people are going to `pip install` and trust with their retrieval, that second half is the actual job.",
-        "Both are on PyPI: `langchain-shannonbase` and `llama-index-vector-stores-shannonbase`. If you're on MySQL and tired of running a second database just to search vectors, they might save you a service."
-      ]
-    },
-    {
-      id: "p1",
-      slug: "rag-eval-lying-metrics",
-      href: "/posts/rag-eval-lying-metrics",
-      title: "I graded 50 RAG answers with a hand-built harness. Half the metrics were lying to me.",
-      excerpt: "Faithfulness sat at 1.0 across every config I tried. That number told me nothing, and here's the one I actually trust instead.",
-      date: "Jul 2026", read: "6 min read",
-      tags: ["RAG", "LLM Evaluation"],
-      body: [
-        "I built a RAG system over 15 arXiv papers, the usual chat-with-your-documents thing. Then I did the part most people skip: I wrote an evaluation harness, made a gold set of 50 questions, and graded every single answer across every config I could think of. Retrieval ladder, chunking strategies, two embedding models, the works.",
-        "The point wasn't the chatbot. The chatbot is a weekend. The point was to find out which knobs actually matter, with numbers, instead of shipping on vibes.",
-        "Most of the numbers lied to me. Here's how I figured out which ones.",
-        { h: "The metrics that saturate tell you nothing" },
-        "First thing I ran was the generation matrix: two chunking strategies crossed with two embedding models, scored with DeepEval on faithfulness, answer relevance, context precision, context recall. Four configs, four grounding-quality metrics each.",
-        "Faithfulness came back at 1.0. On every config. Citation precision, same story, 1.0 across the board.",
-        "For about ten minutes I felt great. Then it clicked that a metric which reads 1.0 no matter what you feed it isn't measuring your config. It's measuring the generator. Claude, handed a decent prompt and some numbered sources, basically doesn't make things up. That's a fact about the model, not about my fixed-vs-semantic chunking decision. If I'd picked a config based on faithfulness I would have been reading tea leaves.",
-        "So the first lesson is boring and important: a metric that's already pinned at the ceiling has no opinion. It can't separate your options. Drop it from the comparison and go find one that moves.",
-        { h: "The numbers that actually moved" },
-        "Two things moved, and they're where all the real signal was.",
-        "Retrieval was the big one. I ran a ladder from naive to senior:",
-        { table: { head: ["retriever", "NDCG@5", "Recall@5", "MRR"], rows: [
-          ["dense (single-vector)", "0.333", "0.44", "0.299"],
-          ["+ BM25 hybrid (RRF)", "0.433", "0.58", "0.384"],
-          ["+ cross-encoder rerank", "0.618", "0.76", "0.570"]
-        ] } },
-        { svg: "<svg viewBox='0 0 660 360' role='img' aria-label='Bar chart of NDCG at 5 across three retrievers: dense 0.33, plus BM25 hybrid 0.43, plus cross-encoder rerank 0.62' style='width:100%;height:auto;font-family:Inter,system-ui,sans-serif'><defs><linearGradient id='ndcgbar' x1='0' y1='1' x2='0' y2='0'><stop offset='0' stop-color='#7c6cff'/><stop offset='1' stop-color='#38bdf8'/></linearGradient></defs><text x='0' y='22' fill='var(--heading)' font-size='16' font-weight='500'>Retrieval ladder: NDCG@5 across 50 questions</text><g stroke='var(--w09)' stroke-width='1'><line x1='60' y1='310' x2='636' y2='310'/><line x1='60' y1='241' x2='636' y2='241'/><line x1='60' y1='173' x2='636' y2='173'/><line x1='60' y1='104' x2='636' y2='104'/></g><g fill='var(--faint)' font-size='11' text-anchor='end'><text x='50' y='314'>0.0</text><text x='50' y='245'>0.2</text><text x='50' y='177'>0.4</text><text x='50' y='108'>0.6</text></g><rect x='96' y='196' width='120' height='114' rx='5' fill='url(#ndcgbar)' opacity='0.55'/><rect x='288' y='161' width='120' height='149' rx='5' fill='url(#ndcgbar)' opacity='0.78'/><rect x='480' y='98' width='120' height='212' rx='5' fill='url(#ndcgbar)'/><g fill='var(--heading)' font-size='15' font-weight='600' text-anchor='middle'><text x='156' y='184'>0.33</text><text x='348' y='149'>0.43</text><text x='540' y='86'>0.62</text></g><g fill='var(--text-3)' font-size='12' text-anchor='middle'><text x='156' y='332'>dense</text><text x='348' y='332'>+ BM25 hybrid</text><text x='540' y='332'>+ cross-encoder rerank</text></g><text x='540' y='68' fill='#38bdf8' font-size='13' font-weight='600' text-anchor='middle'>+86% vs naive dense</text></svg>", caption: "The whole retrieval ladder. The cross-encoder is the single biggest rung (0.43 to 0.62)." },
-        "Naive dense to hybrid-plus-rerank is NDCG@5 0.33 to 0.62. That's an 86% lift, and it's monotonic, every rung helps. The single biggest jump is the cross-encoder (0.43 to 0.62). If you have one afternoon to spend on your RAG stack, spend it there, not on a bigger generation model.",
-        "The other thing that moved was context precision, and it was the only generation metric that did. It went 0.754 to 0.846 across the matrix, and the winner was semantic chunking with e5-large. Worth knowing e5-large costs about 3x the embedding compute of bge-small, so that 0.09 is a real tradeoff, not a free lunch. There's also one config (semantic chunking with bge-small) that quietly trades recall down to 0.733 to buy precision, which is the kind of thing you only see when you grade the whole grid instead of one happy-path run.",
-        "Everything else was flat. Four metrics, one of them told me anything.",
-        { h: "The honest part: I don't fully trust my own gold set" },
-        "Here's the bit I could have hidden and didn't.",
-        "My gold set is synthetic. I had Claude generate each question and reference answer from a chunk, then lightly filtered. Which means for retrieval it's structurally circular: every question's only ground truth is the exact chunk it was born from, so that chunk tends to rank well under any retriever you throw at it. I de-lexicalized the questions so they don't just echo keywords from their source passage, and you can see that biting in the numbers (dense alone only hits 0.33 because paraphrase kills pure embedding match). But de-lexicalizing fixes keyword leakage, not the structural coupling. Single-positive ground truth also deflates Recall@k whenever some other chunk was also relevant and I never labeled it.",
-        "So those retrieval absolutes are conservative lower bounds. The 86% lift is real because it's a relative comparison on the same flawed gold set, and the flaws cancel. The absolute 0.62 is a number I'd argue with.",
-        "This is the trap with eval work. You build a measuring stick, and then you forget the stick itself has error bars. A benchmark you generated from the thing you're testing is going to flatter the thing you're testing.",
-        { h: "So I built a metric that never touches the gold set" },
-        "If I don't fully trust the gold set, I shouldn't lead with a metric that depends on it. So the number I actually put my name behind is a custom citation-faithfulness metric, framed the way the attribution-eval (ALCE) literature does it, and it's gold-independent by design. It audits the answer against its own cited sources and never looks at the gold set at all.",
-        "Two parts. Citation precision: of the claims that carry a `[n]`, what fraction are actually stated by the source they cite. When you cite, are you right? Citation recall: of all the factual claims in the answer, what fraction carry at least one citation. Do you cite everything you assert, or just some of it?",
-        "The detail I care about most: honest refusals (\"the sources don't cover this\") have no claims to cite, so they're excluded, not scored zero. A model that correctly says \"I don't know\" shouldn't get punished by your eval for being honest. That's the difference between measuring grounding and measuring confidence.",
-        "And because \"the metric said 1.0\" is exactly the kind of claim you shouldn't take on faith, the behavior is pinned down by tests. A correctly-cited answer scores 1.0 / 1.0. An answer that cites the wrong source and leaves one claim uncited scores precision 0.0 and recall 0.5, by construction. The metric is graded before I let it grade anything else.",
-        { h: "What I'd tell you to take from this" },
-        "Grade the whole grid, not the happy path. The interesting failures live in the cells you didn't bother to run.",
-        "When a metric reads the same everywhere, that's not your system being perfect. That's the metric being blind to the difference you care about. Go find one that can see it.",
-        "And be suspicious of any eval built on data you generated yourself. Ask what the metric depends on, and prefer the one that depends on the least. In my case the bottleneck turned out to be retrieval, not generation, and the only score I'd defend in a code review is the one that doesn't lean on a gold set I can't fully verify.",
-        "The harness, the custom metric, the tests, and every number above are in the repo: [github.com/apoorva-01/rag-eval-harness](https://github.com/apoorva-01/rag-eval-harness). Run `python eval/run_matrix.py` and it regenerates the tables. If your numbers come out different, I'd genuinely like to know why."
-      ]
-    }
-  ];
-
-  var state = { activePost: null, theme: "dark" };
-
-  function esc(s){
-    return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
-  }
-  // inline markdown: `code` and [text](url), applied after esc()
-  function inline(s){
-    var out = esc(s);
-    out = out.replace(/`([^`]+)`/g, '<code style="font-family:\'JetBrains Mono\',monospace;font-size:.88em;background:var(--bubble);border:1px solid var(--w09);padding:1px 6px;border-radius:6px">$1</code>');
-    out = out.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noopener" style="color:#7c6cff;text-decoration:none;border-bottom:1px solid rgba(124,108,255,.4)">$1</a>');
-    return out;
-  }
-  // one body block -> html. string = paragraph; {h} = heading; {table:{head,rows}} = table; {code} = code block
-  function renderBlock(b){
-    if (typeof b === "string"){
-      return '<p style="font-size:16.5px;line-height:1.78;color:var(--text-2);letter-spacing:-.005em">'+inline(b)+'</p>';
-    }
-    if (b.h){
-      return '<h2 style="margin-top:14px;font-size:24px;font-weight:400;letter-spacing:-.03em;line-height:1.25;color:var(--heading)">'+esc(b.h)+'</h2>';
-    }
-    if (b.code){
-      return '<pre style="margin:0;overflow-x:auto;background:var(--bubble);border:1px solid var(--w09);border-radius:12px;padding:16px 18px"><code style="font-family:\'JetBrains Mono\',monospace;font-size:13.5px;line-height:1.6;color:var(--text-2)">'+esc(b.code)+'</code></pre>';
-    }
-    if (b.svg){
-      var scap = b.caption ? '<figcaption style="margin-top:10px;font-size:12.5px;color:var(--faint);text-align:center">'+esc(b.caption)+'</figcaption>' : '';
-      return '<figure style="margin:0"><div style="overflow-x:auto">'+b.svg+'</div>'+scap+'</figure>';
-    }
-    if (b.img){
-      var icap = b.img.caption ? '<figcaption style="margin-top:10px;font-size:12.5px;color:var(--faint);text-align:center">'+esc(b.img.caption)+'</figcaption>' : '';
-      return '<figure style="margin:0"><img src="'+esc(b.img.src)+'" alt="'+esc(b.img.alt||"")+'" loading="lazy" style="width:100%;height:auto;border-radius:12px;border:1px solid var(--w09);display:block"/>'+icap+'</figure>';
-    }
-    if (b.table){
-      var th = "";
-      for (var i=0;i<b.table.head.length;i++){
-        th += '<th style="text-align:'+(i===0?'left':'right')+';padding:9px 14px;font-size:12.5px;font-weight:500;color:var(--text-3);border-bottom:1px solid var(--w12);white-space:nowrap">'+esc(b.table.head[i])+'</th>';
-      }
-      var tr = "";
-      for (var r=0;r<b.table.rows.length;r++){
-        var row = b.table.rows[r], tds = "";
-        for (var c=0;c<row.length;c++){
-          tds += '<td style="text-align:'+(c===0?'left':'right')+';padding:9px 14px;font-size:13.5px;color:var(--text-2);border-bottom:1px solid var(--w08);font-family:'+(c===0?'inherit':'\'JetBrains Mono\',monospace')+';white-space:nowrap">'+inline(row[c])+'</td>';
-        }
-        tr += '<tr>'+tds+'</tr>';
-      }
-      return '<div style="overflow-x:auto"><table style="border-collapse:collapse;width:100%;min-width:360px"><thead><tr>'+th+'</tr></thead><tbody>'+tr+'</tbody></table></div>';
-    }
-    return "";
-  }
 
   // ---- hover handler (mouseenter/leave, append-and-restore) ----
   function bindHovers(scope){
@@ -322,65 +175,6 @@
     }
   }
 
-  // ---- post list ----
-  function renderPosts(){
-    var grid = document.getElementById("av-bloggrid");
-    var html = "";
-    for (var i=0;i<posts.length;i++){
-      var p = posts[i];
-      var tags = "";
-      for (var j=0;j<p.tags.length;j++){
-        tags += '<span style="font-size:11px;color:var(--text-3);padding:3px 10px;border-radius:2px;background:rgba(255,75,38,.08);border:1px solid rgba(255,75,38,.2)">'+esc(p.tags[j])+'</span>';
-      }
-      html += '<a data-reveal="1" href="'+p.href+'" class="logrow" style="display:grid;grid-template-columns:190px 1fr;gap:36px;align-items:start;text-decoration:none;color:inherit;padding:38px 8px;border-top:1px solid var(--w09);cursor:pointer;opacity:0;transform:translateY(24px);transition:background .2s" data-hover="background:var(--surface-hover)">'
-        + '<div style="display:flex;flex-direction:column;gap:16px">'
-        +   '<div style="font-family:\'IBM Plex Mono\',monospace;font-size:12px;display:flex;flex-direction:column;gap:4px"><span style="color:var(--text-3)">'+esc(p.date)+'</span><span style="color:var(--faint)">'+esc(p.read)+'</span></div>'
-        +   '<div style="display:flex;flex-wrap:wrap;gap:6px">'+tags+'</div>'
-        + '</div>'
-        + '<div>'
-        +   '<h3 style="font-size:clamp(23px,2.7vw,31px);font-weight:500;letter-spacing:-.03em;line-height:1.16;color:var(--heading)">'+esc(p.title)+'</h3>'
-        +   '<p style="margin-top:15px;font-size:16px;line-height:1.65;color:var(--text-4);max-width:60ch">'+esc(p.excerpt)+'</p>'
-        +   '<span style="display:inline-flex;align-items:center;gap:8px;margin-top:22px;font-family:\'IBM Plex Mono\',monospace;font-size:12px;letter-spacing:.02em;color:var(--accent)">Read the note →</span>'
-        + '</div>'
-        + '</a>';
-    }
-    grid.innerHTML = html;
-    var c = document.getElementById("av-count");
-    if (c) c.textContent = posts.length + (posts.length === 1 ? " entry" : " entries");
-    bindHovers(grid);
-  }
-
-  // ---- article overlay ----
-  function renderOverlay(){
-    var host = document.getElementById("av-overlay");
-    var p = state.activePost;
-    if (p == null){ host.innerHTML = ""; return; }
-    var tags = "";
-    for (var i=0;i<p.tags.length;i++){
-      tags += '<span style="font-size:11.5px;color:var(--text-2);padding:4px 11px;border-radius:999px;background:rgba(124,108,255,.1);border:1px solid rgba(124,108,255,.25)">'+esc(p.tags[i])+'</span>';
-    }
-    var body = "";
-    for (var k=0;k<p.body.length;k++){
-      body += renderBlock(p.body[k]);
-    }
-    host.innerHTML =
-      '<div onclick="App.closePost()" style="position:fixed;inset:0;z-index:100;background:var(--scrim);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);overflow-y:auto;animation:overlayIn .25s ease both">'
-      + '<div onclick="event.stopPropagation()" style="max-width:720px;margin:0 auto;padding:90px 24px 120px;animation:sheetIn .4s cubic-bezier(.22,1,.36,1) both">'
-      +   '<button onclick="App.closePost()" style="display:inline-flex;align-items:center;gap:7px;font-family:inherit;font-size:13px;color:var(--text-3);padding:8px 14px;border-radius:10px;border:1px solid var(--w12);background:var(--bubble);cursor:pointer;transition:all .18s" data-hover="color:var(--heading);border-color:var(--w30)">← Back to writing</button>'
-      +   '<div style="display:flex;align-items:center;gap:10px;margin-top:30px;font-family:\'JetBrains Mono\',monospace;font-size:12px;color:var(--faint)"><span>'+esc(p.date)+'</span><span style="opacity:.5">·</span><span>'+esc(p.read)+'</span></div>'
-      +   '<h1 style="margin-top:14px;font-size:clamp(30px,5vw,46px);font-weight:200;letter-spacing:-.04em;line-height:1.08;color:var(--heading)">'+esc(p.title)+'</h1>'
-      +   '<div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:18px">'+tags+'</div>'
-      +   '<div style="margin-top:32px;height:1px;background:linear-gradient(90deg,rgba(124,108,255,.5),transparent)"></div>'
-      +   '<article style="margin-top:30px;display:flex;flex-direction:column;gap:22px">'+body+'</article>'
-      +   '<div style="margin-top:44px;padding-top:24px;border-top:1px solid var(--w08);display:flex;align-items:center;gap:12px">'
-      +     '<span style="display:grid;place-items:center;width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,#7c6cff,#38bdf8);font-size:14px;font-weight:600;color:var(--on-accent)">AV</span>'
-      +     '<div><div style="font-size:14px;font-weight:500;color:var(--text)">Apoorva Verma</div><div style="font-size:12.5px;color:var(--faint)">Software Engineer · Applied AI</div></div>'
-      +   '</div>'
-      + '</div>'
-      + '</div>';
-    bindHovers(host);
-  }
-
   // ---- theme ----
   var curTheme = "dark";
   function applyTheme(t){
@@ -391,7 +185,6 @@
       else document.documentElement.removeAttribute("data-av-theme");
     } catch(e){}
     try { localStorage.setItem("av-theme", curTheme); } catch(e){}
-    state.theme = curTheme;
     var btn = document.getElementById("theme-btn");
     if (btn) btn.setAttribute("aria-pressed", curTheme === "dark" ? "true" : "false");
   }
@@ -433,7 +226,7 @@
     raf = requestAnimationFrame(loop);
   }
 
-  // ---- entrance animations ----
+  // ---- entrance animations (cards are server-rendered; this only reveals them) ----
   function revealAll(){
     var els = document.querySelectorAll("[data-reveal]");
     for (var i=0;i<els.length;i++){ els[i].style.opacity="1"; els[i].style.transform="none"; }
@@ -460,24 +253,20 @@
   }
 
   // ---- boot ----
-  function openPost(i){ state.activePost = posts[i]; renderOverlay(); }
-  function closePost(){ state.activePost = null; renderOverlay(); }
-
   function boot(){
     var stored = "light";
     try { stored = localStorage.getItem("av-theme") || "light"; } catch(e){}
     applyTheme(stored);
     bindHovers(document);
-    renderPosts();
     initCursor();
-    document.addEventListener("keydown", function(e){ if (e.key === "Escape") closePost(); });
     startMotion();
   }
 
-  window.App = { toggleTheme: toggleTheme, openPost: openPost, closePost: closePost };
+  window.App = { toggleTheme: toggleTheme };
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
   else boot();
+
 })();
 </script>
   <script src="/visit.js" defer></script>

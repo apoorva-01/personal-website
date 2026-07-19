@@ -1,0 +1,48 @@
+name: Build blog pages
+
+# Byline publishes a post by committing content/posts/{slug}.md to this repo.
+# This turns that markdown into a static page + refreshes the index and sitemap,
+# then commits the generated files. It writes only to posts/**, blog.html, and
+# sitemap.xml — never to content/posts/** — so its own commit can't retrigger it.
+on:
+  push:
+    branches: [main]
+    paths:
+      - "content/posts/**"
+      - "scripts/build-blog.mjs"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-blog
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install build deps
+        run: npm ci --no-audit --no-fund
+
+      - name: Generate post pages, index, sitemap
+        run: npm run build:blog
+
+      - name: Commit if changed
+        run: |
+          if git diff --quiet -- posts blog.html sitemap.xml; then
+            echo "No change."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add posts blog.html sitemap.xml
+          git commit -m "chore: rebuild blog pages from content/posts"
+          git push

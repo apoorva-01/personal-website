@@ -4,7 +4,14 @@
   "private": true,
   "type": "module",
   "description": "Apoorva Verma — AI engineer portfolio with a live, grounded chat backend.",
+  "scripts": {
+    "build:blog": "node scripts/build-blog.mjs"
+  },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.40.0"
+  },
+  "devDependencies": {
+    "gray-matter": "^4.0.3",
+    "marked": "^12.0.2"
   }
 }

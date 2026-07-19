@@ -3,21 +3,21 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>I graded 50 RAG answers with a hand-built harness. Half the metrics were lying to me. — Apoorva Verma</title>
+<title>Building a vector store on MySQL 9, and everything I refused to fake — Apoorva Verma</title>
 <link rel="icon" type="image/jpeg" href="/assets/apoorva.jpg">
 <link rel="apple-touch-icon" href="/assets/apoorva.jpg">
 <script>try{var _t=localStorage.getItem("av-theme");if(_t!=="dark")document.documentElement.setAttribute("data-av-theme","light");}catch(e){document.documentElement.setAttribute("data-av-theme","light");}</script>
-<meta name="description" content="Faithfulness sat at 1.0 across every config I tried. That number told me nothing, and here's the one I actually trust instead.">
-<link rel="canonical" href="https://www.apoorvaverma.in/posts/rag-eval-lying-metrics">
+<meta name="description" content="MySQL 9 gives you a VECTOR column and a distance function. No index, no relevance scores, nothing else. Here's what I learned building a real LangChain and LlamaIndex vector store on top of that, without pretending it had features it doesn't.">
+<link rel="canonical" href="https://www.apoorvaverma.in/posts/mysql-vector-store-langchain">
 <meta property="og:type" content="article">
-<meta property="og:title" content="I graded 50 RAG answers with a hand-built harness. Half the metrics were lying to me.">
-<meta property="og:description" content="Faithfulness sat at 1.0 across every config I tried. That number told me nothing, and here's the one I actually trust instead.">
-<meta property="og:image" content="https://www.apoorvaverma.in/assets/og-rag-eval.png">
-<meta property="og:url" content="https://www.apoorvaverma.in/posts/rag-eval-lying-metrics">
+<meta property="og:title" content="Building a vector store on MySQL 9, and everything I refused to fake">
+<meta property="og:description" content="MySQL 9 gives you a VECTOR column and a distance function. No index, no relevance scores, nothing else. Here's what I learned building a real LangChain and LlamaIndex vector store on top of that, without pretending it had features it doesn't.">
+<meta property="og:image" content="https://www.apoorvaverma.in/assets/apoorva.jpg">
+<meta property="og:url" content="https://www.apoorvaverma.in/posts/mysql-vector-store-langchain">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="I graded 50 RAG answers. Half the metrics were lying to me.">
-<meta name="twitter:description" content="Faithfulness sat at 1.0 across every config. That number told me nothing, and here's the one I actually trust instead.">
-<meta name="twitter:image" content="https://www.apoorvaverma.in/assets/og-rag-eval.png">
+<meta name="twitter:title" content="Building a vector store on MySQL 9, and everything I refused to fake">
+<meta name="twitter:description" content="MySQL 9 gives you a VECTOR column and a distance function. No index, no relevance scores, nothing else. Here's what I learned building a real LangChain and LlamaIndex vector store on top of that, without pretending it had features it doesn't.">
+<meta name="twitter:image" content="https://www.apoorvaverma.in/assets/apoorva.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -91,23 +91,25 @@
 {
   "@context": "https://schema.org",
   "@type": "BlogPosting",
-  "@id": "https://www.apoorvaverma.in/posts/rag-eval-lying-metrics#post",
-  "mainEntityOfPage": "https://www.apoorvaverma.in/posts/rag-eval-lying-metrics",
-  "headline": "I graded 50 RAG answers with a hand-built harness. Half the metrics were lying to me.",
-  "description": "Faithfulness sat at 1.0 across every config I tried. That number told me nothing, and here's the one I actually trust instead.",
-  "image": "https://www.apoorvaverma.in/assets/og-rag-eval.png",
-  "datePublished": "2026-07-01",
-  "dateModified": "2026-07-08",
+  "@id": "https://www.apoorvaverma.in/posts/mysql-vector-store-langchain#post",
+  "mainEntityOfPage": "https://www.apoorvaverma.in/posts/mysql-vector-store-langchain",
+  "headline": "Building a vector store on MySQL 9, and everything I refused to fake",
+  "description": "MySQL 9 gives you a VECTOR column and a distance function. No index, no relevance scores, nothing else. Here's what I learned building a real LangChain and LlamaIndex vector store on top of that, without pretending it had features it doesn't.",
+  "image": "https://www.apoorvaverma.in/assets/apoorva.jpg",
+  "datePublished": "2026-07-15",
+  "dateModified": "2026-07-15",
   "inLanguage": "en",
-  "articleSection": "LLM Evaluation",
-  "wordCount": 1113,
-  "timeRequired": "PT6M",
+  "articleSection": "Vector Search",
+  "wordCount": 1564,
+  "timeRequired": "PT8M",
   "keywords": [
+    "MySQL",
+    "vector search",
+    "LangChain",
+    "LlamaIndex",
+    "IVF",
     "RAG",
-    "LLM evaluation",
-    "retrieval",
-    "NDCG",
-    "citation faithfulness"
+    "HeatWave"
   ],
   "isPartOf": {
     "@type": "Blog",
@@ -146,7 +148,7 @@
     {
       "@type": "ListItem",
       "position": 3,
-      "name": "I graded 50 RAG answers with a hand-built harness"
+      "name": "Building a vector store on MySQL 9"
     }
   ]
 }
@@ -195,70 +197,49 @@
     <a href="/blog" style="display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.02em;color:var(--text-3);padding:7px 12px;border-radius:0;border:1px solid var(--w10);background:transparent;transition:border-color .18s,color .18s;animation:fadeUp .5s ease both" data-hover="color:var(--heading);border-color:var(--accent)">← Back to writing</a>
 
     <article style="margin-top:0">
-    <div style="display:flex;align-items:center;gap:10px;margin-top:30px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--faint)"><span>Jul 2026</span><span style="opacity:.5">·</span><span>6 min read</span></div>
-    <h1 style="margin-top:14px;font-size:clamp(30px,5vw,46px);font-weight:500;letter-spacing:-.04em;line-height:1.08;color:var(--heading)">I graded 50 RAG answers with a hand-built harness. Half the metrics were lying to me.</h1>
-    <div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:18px"><span style="font-size:11.5px;color:var(--text-2);padding:4px 11px;border-radius:2px;background:rgba(255,75,38,.1);border:1px solid rgba(255,75,38,.25)">RAG</span><span style="font-size:11.5px;color:var(--text-2);padding:4px 11px;border-radius:2px;background:rgba(255,75,38,.1);border:1px solid rgba(255,75,38,.25)">LLM Evaluation</span></div>
+    <div style="display:flex;align-items:center;gap:10px;margin-top:30px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--faint)"><span>Jul 2026</span><span style="opacity:.5">·</span><span>8 min read</span></div>
+    <h1 style="margin-top:14px;font-size:clamp(30px,5vw,46px);font-weight:500;letter-spacing:-.04em;line-height:1.08;color:var(--heading)">Building a vector store on MySQL 9, and everything I refused to fake</h1>
+    <div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:18px"><span style="font-size:11.5px;color:var(--text-2);padding:4px 11px;border-radius:2px;background:rgba(255,75,38,.1);border:1px solid rgba(255,75,38,.25)">Vector Search</span><span style="font-size:11.5px;color:var(--text-2);padding:4px 11px;border-radius:2px;background:rgba(255,75,38,.1);border:1px solid rgba(255,75,38,.25)">LangChain</span><span style="font-size:11.5px;color:var(--text-2);padding:4px 11px;border-radius:2px;background:rgba(255,75,38,.1);border:1px solid rgba(255,75,38,.25)">Open Source</span></div>
     <div style="margin-top:32px;height:1px;background:linear-gradient(90deg,rgba(255,75,38,.5),transparent)"></div>
 
-    <div class="article" style="margin-top:30px"><p>I built a RAG system over 15 arXiv papers, the usual chat-with-your-documents thing. Then I did the part most people skip: I wrote an evaluation harness, made a gold set of 50 questions, and graded every single answer across every config I could think of. Retrieval ladder, chunking strategies, two embedding models, the works.</p>
-<p>The point wasn&#39;t the chatbot. The chatbot is a weekend. The point was to find out which knobs actually matter, with numbers, instead of shipping on vibes.</p>
-<p>Most of the numbers lied to me. Here&#39;s how I figured out which ones.</p>
-<h2>The metrics that saturate tell you nothing</h2>
-<p>First thing I ran was the generation matrix: two chunking strategies crossed with two embedding models, scored with DeepEval on faithfulness, answer relevance, context precision, context recall. Four configs, four grounding-quality metrics each.</p>
-<p>Faithfulness came back at 1.0. On every config. Citation precision, same story, 1.0 across the board.</p>
-<p>For about ten minutes I felt great. Then it clicked that a metric which reads 1.0 no matter what you feed it isn&#39;t measuring your config. It&#39;s measuring the generator. Claude, handed a decent prompt and some numbered sources, basically doesn&#39;t make things up. That&#39;s a fact about the model, not about my fixed-vs-semantic chunking decision. If I&#39;d picked a config based on faithfulness I would have been reading tea leaves.</p>
-<p>So the first lesson is boring and important: a metric that&#39;s already pinned at the ceiling has no opinion. It can&#39;t separate your options. Drop it from the comparison and go find one that moves.</p>
-<h2>The numbers that actually moved</h2>
-<p>Two things moved, and they&#39;re where all the real signal was.</p>
-<p>Retrieval was the big one. I ran a ladder from naive to senior:</p>
-<div class="tablewrap"><table>
-<thead>
-<tr>
-<th>retriever</th>
-<th align="right">NDCG@5</th>
-<th align="right">Recall@5</th>
-<th align="right">MRR</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>dense (single-vector)</td>
-<td align="right">0.333</td>
-<td align="right">0.44</td>
-<td align="right">0.299</td>
-</tr>
-<tr>
-<td>+ BM25 hybrid (RRF)</td>
-<td align="right">0.433</td>
-<td align="right">0.58</td>
-<td align="right">0.384</td>
-</tr>
-<tr>
-<td>+ cross-encoder rerank</td>
-<td align="right">0.618</td>
-<td align="right">0.76</td>
-<td align="right">0.570</td>
-</tr>
-</tbody></table></div>
-<figure class="chart"><div style="overflow-x:auto"><svg viewBox="0 0 660 360" role="img" aria-label="Bar chart of NDCG at 5 across three retrievers: dense 0.33, plus BM25 hybrid 0.43, plus cross-encoder rerank 0.62" style="width:100%;height:auto;font-family:'IBM Plex Sans',system-ui,sans-serif"><defs><linearGradient id="ndcgbar" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="var(--accent)"></stop><stop offset="1" stop-color="var(--accent)"></stop></linearGradient></defs><text x="0" y="22" fill="var(--heading)" font-size="16" font-weight="500">Retrieval ladder: NDCG@5 across 50 questions</text><g stroke="var(--w09)" stroke-width="1"><line x1="60" y1="310" x2="636" y2="310"></line><line x1="60" y1="241" x2="636" y2="241"></line><line x1="60" y1="173" x2="636" y2="173"></line><line x1="60" y1="104" x2="636" y2="104"></line></g><g fill="var(--faint)" font-size="11" text-anchor="end"><text x="50" y="314">0.0</text><text x="50" y="245">0.2</text><text x="50" y="177">0.4</text><text x="50" y="108">0.6</text></g><rect x="96" y="196" width="120" height="114" rx="5" fill="url(#ndcgbar)" opacity="0.55"></rect><rect x="288" y="161" width="120" height="149" rx="5" fill="url(#ndcgbar)" opacity="0.78"></rect><rect x="480" y="98" width="120" height="212" rx="5" fill="url(#ndcgbar)"></rect><g fill="var(--heading)" font-size="15" font-weight="600" text-anchor="middle"><text x="156" y="184">0.33</text><text x="348" y="149">0.43</text><text x="540" y="86">0.62</text></g><g fill="var(--text-3)" font-size="12" text-anchor="middle"><text x="156" y="332">dense</text><text x="348" y="332">+ BM25 hybrid</text><text x="540" y="332">+ cross-encoder rerank</text></g><text x="540" y="68" fill="var(--accent)" font-size="13" font-weight="600" text-anchor="middle">+86% vs naive dense</text></svg></div><figcaption>The whole retrieval ladder. The cross-encoder is the single biggest rung (0.43 to 0.62).</figcaption></figure>
-
-<p>Naive dense to hybrid-plus-rerank is NDCG@5 0.33 to 0.62. That&#39;s an 86% lift, and it&#39;s monotonic, every rung helps. The single biggest jump is the cross-encoder (0.43 to 0.62). If you have one afternoon to spend on your RAG stack, spend it there, not on a bigger generation model.</p>
-<p>The other thing that moved was context precision, and it was the only generation metric that did. It went 0.754 to 0.846 across the matrix, and the winner was semantic chunking with e5-large. Worth knowing e5-large costs about 3x the embedding compute of bge-small, so that 0.09 is a real tradeoff, not a free lunch. There&#39;s also one config (semantic chunking with bge-small) that quietly trades recall down to 0.733 to buy precision, which is the kind of thing you only see when you grade the whole grid instead of one happy-path run.</p>
-<p>Everything else was flat. Four metrics, one of them told me anything.</p>
-<h2>The honest part: I don&#39;t fully trust my own gold set</h2>
-<p>Here&#39;s the bit I could have hidden and didn&#39;t.</p>
-<p>My gold set is synthetic. I had Claude generate each question and reference answer from a chunk, then lightly filtered. Which means for retrieval it&#39;s structurally circular: every question&#39;s only ground truth is the exact chunk it was born from, so that chunk tends to rank well under any retriever you throw at it. I de-lexicalized the questions so they don&#39;t just echo keywords from their source passage, and you can see that biting in the numbers (dense alone only hits 0.33 because paraphrase kills pure embedding match). But de-lexicalizing fixes keyword leakage, not the structural coupling. Single-positive ground truth also deflates Recall@k whenever some other chunk was also relevant and I never labeled it.</p>
-<p>So those retrieval absolutes are conservative lower bounds. The 86% lift is real because it&#39;s a relative comparison on the same flawed gold set, and the flaws cancel. The absolute 0.62 is a number I&#39;d argue with.</p>
-<p>This is the trap with eval work. You build a measuring stick, and then you forget the stick itself has error bars. A benchmark you generated from the thing you&#39;re testing is going to flatter the thing you&#39;re testing.</p>
-<h2>So I built a metric that never touches the gold set</h2>
-<p>If I don&#39;t fully trust the gold set, I shouldn&#39;t lead with a metric that depends on it. So the number I actually put my name behind is a custom citation-faithfulness metric, framed the way the attribution-eval (ALCE) literature does it, and it&#39;s gold-independent by design. It audits the answer against its own cited sources and never looks at the gold set at all.</p>
-<p>Two parts. Citation precision: of the claims that carry a <code>[n]</code>, what fraction are actually stated by the source they cite. When you cite, are you right? Citation recall: of all the factual claims in the answer, what fraction carry at least one citation. Do you cite everything you assert, or just some of it?</p>
-<p>The detail I care about most: honest refusals (&quot;the sources don&#39;t cover this&quot;) have no claims to cite, so they&#39;re excluded, not scored zero. A model that correctly says &quot;I don&#39;t know&quot; shouldn&#39;t get punished by your eval for being honest. That&#39;s the difference between measuring grounding and measuring confidence.</p>
-<p>And because &quot;the metric said 1.0&quot; is exactly the kind of claim you shouldn&#39;t take on faith, the behavior is pinned down by tests. A correctly-cited answer scores 1.0 / 1.0. An answer that cites the wrong source and leaves one claim uncited scores precision 0.0 and recall 0.5, by construction. The metric is graded before I let it grade anything else.</p>
-<h2>What I&#39;d tell you to take from this</h2>
-<p>Grade the whole grid, not the happy path. The interesting failures live in the cells you didn&#39;t bother to run.</p>
-<p>When a metric reads the same everywhere, that&#39;s not your system being perfect. That&#39;s the metric being blind to the difference you care about. Go find one that can see it.</p>
-<p>And be suspicious of any eval built on data you generated yourself. Ask what the metric depends on, and prefer the one that depends on the least. In my case the bottleneck turned out to be retrieval, not generation, and the only score I&#39;d defend in a code review is the one that doesn&#39;t lean on a gold set I can&#39;t fully verify.</p>
-<p>The harness, the custom metric, the tests, and every number above are in the repo: <a href="https://github.com/apoorva-01/rag-eval-harness">github.com/apoorva-01/rag-eval-harness</a>. Run <code>python eval/run_matrix.py</code> and it regenerates the tables. If your numbers come out different, I&#39;d genuinely like to know why.</p>
+    <div class="article" style="margin-top:30px"><p>MySQL 9 shipped a native VECTOR type. You store embeddings in a column, and a <code>DISTANCE()</code> function gives you cosine, dot, or euclidean. That is the entire toolbox. No approximate index, no relevance scoring, no filter helpers, none of the machinery a real vector database hands you on day one.</p>
+<p>I wanted a LangChain vector store on top of it. If your data already lives in MySQL, spinning up a separate vector database just to do retrieval is a pile of moving parts you don&#39;t need. So I built one, <code>langchain-shannonbase</code> (it runs on ShannonBase, plain self-hosted MySQL 9, and HeatWave, which all expose the same VECTOR surface), and later a LlamaIndex sibling.</p>
+<p>The building part was easy. The interesting part was every spot where the database couldn&#39;t do the thing, and deciding what to do about it. The easy move in those spots is to paper over the gap with code that looks like a feature and isn&#39;t. I tried hard not to. This post is mostly about the times I was tempted.</p>
+<h2>The database has no index. Don&#39;t pretend it does.</h2>
+<p>Exact search on MySQL 9 is a full <code>DISTANCE</code> scan: every query compares your vector against every row. That is 100% recall and it is genuinely fine up to a few million vectors. It is also O(n), and past some size it tips over.</p>
+<p>The thing a vector database gives you here is an approximate index, the HNSW and IVF family. MySQL 9 doesn&#39;t have one. Neither does ShannonBase (I read the source to be sure, more on that below).</p>
+<p>So the temptation: emit some <code>CREATE INDEX ... USING HNSW</code>, wrap it in a <code>build_index()</code> method, and let it fail quietly on backends that don&#39;t support it. The library would look like it had ANN. It would demo great. It would be a lie.</p>
+<p>I built the index in application code instead. IVF: run k-means over the stored vectors, keep the centroids, tag each row with its nearest one, and at query time only scan the handful of clusters closest to the query. Same idea as pgvector&#39;s IVFFlat, just done in Python because the database won&#39;t do it for me. Recall is approximate and you trade it against how many clusters you probe. The point is it actually runs, on a MySQL you can start in a container, and I can measure the recall and show you the curve. A fake <code>CREATE INDEX</code> can&#39;t be measured, because it was never real.</p>
+<p>HeatWave is the exception, and I only learned this by reading the docs properly: since 9.5 it builds an HNSW index automatically and uses it on ordinary <code>ORDER BY DISTANCE</code> queries. So on HeatWave you get native ANN for free and you should not call my IVF thing at all. Writing &quot;here is when NOT to use my feature&quot; into the README felt more honest than pretending my feature was always the answer.</p>
+<h2>When the docs are silent, read the source</h2>
+<p>MySQL&#39;s <code>DISTANCE</code> supports a <code>DOT</code> metric. I needed to know one specific thing: does dot-product distance come back as the raw inner product, or negated?</p>
+<p>This matters more than it sounds. Vector stores sort ascending, smallest distance first. Cosine and euclidean are naturally smaller-is-closer. A dot product is the opposite, bigger-is-closer, so to make it act like a distance you negate it. If MySQL negates and I assume it doesn&#39;t, my dot-metric search returns results in exactly the wrong order. And no test against my in-memory fake would catch it, because I&#39;d have written the fake with the same wrong assumption.</p>
+<p>The MySQL and HeatWave docs list <code>DOT</code> as supported and say nothing about the sign. The web has plenty of confident secondhand answers. I didn&#39;t want secondhand for something that decides whether search works.</p>
+<p>ShannonBase is open source and it&#39;s a MySQL fork, so its <code>DISTANCE</code> lives where MySQL&#39;s would. I found the function. It&#39;s four lines:</p>
+<pre><code class="language-cpp">double calculate_dot_distance(const float* a, const float* b, uint32 dim) {
+  double dot = 0.0;
+  for (uint32 i = 0; i &lt; dim; i++) dot += a[i] * b[i];
+  return -dot;  // negated, so smaller = closer
+}
+</code></pre>
+<p><code>return -dot</code>. Negated. My ascending sort is right, and now I can write a relevance score for the dot metric that isn&#39;t a guess. Ten minutes of reading source beat a day of arguing with search results, and I get to say &quot;I checked&quot; instead of &quot;I think.&quot;</p>
+<p>There is a version of me that ships a dot relevance score based on the top Stack Overflow answer and moves on. The version that read the source ships the same feature and actually knows it&#39;s correct. And before I confirmed the sign, I shipped relevance scoring for cosine and euclidean and deliberately left dot out, with a one-line note saying the sign wasn&#39;t nailed down yet. Shipping the gap honestly beats shipping a guess and hoping.</p>
+<h2>Testing a database integration without the database</h2>
+<p>Here&#39;s a constraint: I don&#39;t want a running MySQL just to run the tests, and I certainly can&#39;t require a HeatWave instance, since that&#39;s a paid managed cloud. But not testing the thing isn&#39;t an option either.</p>
+<p>The answer is an in-memory backend that mirrors the real one. Same distance math (I copied the three functions straight from the source I&#39;d just been reading), same filtering, same behavior, in pure Python over a dict. The vector store talks to a small <code>Store</code> interface. In production that&#39;s MySQL; in tests it&#39;s the in-memory one. All the logic that matters, filtering, MMR, IVF, hybrid fusion, relevance scoring, is backend-agnostic, so exercising it against the fake exercises the real code path.</p>
+<p>The payoff I like: LangChain ships a standard integration test suite that every vector store is supposed to pass. I run it against the in-memory backend in CI, offline, on every push. So &quot;behaves like a real LangChain vector store&quot; isn&#39;t a claim I&#39;m making, it&#39;s a test that&#39;s passing.</p>
+<p>The honest limit, and it&#39;s in the README: the actual SQL and the async driver can&#39;t be verified without a real database, same as any DB client. I test them against the query builders and say plainly what a live run covers and what it doesn&#39;t. &quot;Every claim measured&quot; only holds if you&#39;re loud about the ones you&#39;ve deferred.</p>
+<h2>Hybrid search, and why I fuse ranks instead of scores</h2>
+<p>Vector search is good at meaning and bad at exact tokens. Ask it for an error code like <code>E4021</code> or a name like <code>O&#39;Brien</code> and semantic similarity just shrugs. Keyword search is the reverse. Hybrid search runs both and merges the results, and MySQL already has <code>FULLTEXT</code> keyword search built in, so the parts were sitting right there.</p>
+<p>The trick is merging a cosine distance with a FULLTEXT relevance score. Different scales, different meanings, and squashing them into a shared range is fiddly and a little arbitrary. So I don&#39;t. I use reciprocal rank fusion: drop the scores, keep the ranks, and give each document <code>1/(k + rank)</code> summed across both lists. A doc that&#39;s 2nd on vectors and 1st on keywords beats one that&#39;s 1st in a single list and absent from the other. It&#39;s simple, it never has to reconcile the two scales, and it&#39;s what a lot of real search stacks use. The best fix for &quot;these numbers aren&#39;t comparable&quot; turned out to be to stop comparing the numbers.</p>
+<h2>Two packages, one backend, and not abstracting too early</h2>
+<p>Then I built the LlamaIndex version, because the same MySQL engine should be usable outside LangChain. LlamaIndex has its own vector-store interface, different enough that you can&#39;t just reuse the LangChain class. But the storage layer under it, the SQL, the filters, the IVF, the in-memory fake, is identical.</p>
+<p>My rule is three duplications before you extract a shared thing. Two consumers isn&#39;t three. So I didn&#39;t spin up a shared &quot;core&quot; package and re-plumb the already-published LangChain one to depend on it. That&#39;s a lot of coordination for two callers, and LlamaIndex users would rather not pull <code>langchain-core</code> into their dependency tree anyway. I copied the four backend files into the LlamaIndex package, unchanged.</p>
+<p>Copying is a smell, I know. The way you keep it honest is a CI check that byte-compares the copies against the originals and fails the build if they drift. One source of truth, enforced by a test, without the premature abstraction. If a third consumer ever shows up, that&#39;s when a shared core earns its rent.</p>
+<h2>The through-line</h2>
+<p>None of this is fancy. A VECTOR column, a distance function, and a careful amount of Python around them. What stuck with me is how often the honest move and the impressive-looking move point in opposite directions. Faking the ANN index would have demoed better. Guessing the dot sign would have shipped faster. Skipping the offline tests would have looked tidier in the diff.</p>
+<p>The library is better because I did none of those, and I can point at every claim it makes and tell you exactly how I know it holds, or say plainly where I haven&#39;t checked. For something people are going to <code>pip install</code> and trust with their retrieval, that second half is the actual job.</p>
+<p>Both are on PyPI: <code>langchain-shannonbase</code> and <code>llama-index-vector-stores-shannonbase</code>. If you&#39;re on MySQL and tired of running a second database just to search vectors, they might save you a service.</p>
 </div>
     </article>
 

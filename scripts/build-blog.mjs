@@ -394,6 +394,7 @@ function writeSitemap(posts) {
   const newest = dates.sort().at(-1) || "2026-07-08";
   const urls = [
     { loc: `${SITE}/`, lastmod: newest },
+    { loc: `${SITE}/about`, lastmod: "2026-07-20" },
     { loc: `${SITE}/blog`, lastmod: newest },
     ...posts.map((p) => ({
       loc: `${SITE}/posts/${p.data.slug}`,

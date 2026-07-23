@@ -1,27 +1,27 @@
 {
-  "generated": "2026-07-22",
+  "generated": "2026-07-23",
   "shipped": {
-    "prs": 52,
+    "prs": 53,
     "repos": 27,
     "languages": 7,
-    "reach": 440905,
+    "reach": 441029,
     "privatePrs": 0,
     "privateRepos": 0,
     "rows": [
       {
-        "date": "2026-07-21",
+        "date": "2026-07-22",
         "lang": "RS",
         "repo": "zed-industries/zed",
-        "stars": 87369,
-        "num": 61153,
-        "title": "editor: Place added cursors by tab-expanded column",
+        "stars": 87406,
+        "num": 61365,
+        "title": "project: Restart context servers when their working directory changes",
         "docs": false
       },
       {
         "date": "2026-07-14",
         "lang": "C++",
         "repo": "duckdb/duckdb",
-        "stars": 39607,
+        "stars": 39637,
         "num": 23781,
         "title": "Fix INTERNAL error casting pre-epoch TIMESTAMP_NS to TIME_NS",
         "docs": false
@@ -30,7 +30,7 @@
         "date": "2026-07-02",
         "lang": "PY",
         "repo": "PostHog/posthog",
-        "stars": 37218,
+        "stars": 37248,
         "num": 66505,
         "title": "fix: stop bigint filter values from crashing the feature flags page",
         "docs": false
@@ -39,7 +39,7 @@
         "date": "2026-07-21",
         "lang": "TS",
         "repo": "directus/directus",
-        "stars": 36755,
+        "stars": 36690,
         "num": 27864,
         "title": "Fix aliased relational fields returning null in GraphQL when nested inside a M2A field",
         "docs": false
@@ -48,7 +48,7 @@
         "date": "2026-07-14",
         "lang": "JV",
         "repo": "keycloak/keycloak",
-        "stars": 35784,
+        "stars": 35803,
         "num": 50641,
         "title": "Fix ConcurrentModificationException updating organization attributes",
         "docs": false
@@ -57,7 +57,7 @@
         "date": "2026-07-08",
         "lang": "GO",
         "repo": "weaviate/weaviate",
-        "stars": 16632,
+        "stars": 16638,
         "num": 12049,
         "title": "gh-12041 return 422 for batch delete with missing match fields",
         "docs": false
@@ -66,7 +66,7 @@
         "date": "2026-07-03",
         "lang": "JS",
         "repo": "mholt/PapaParse",
-        "stars": 13530,
+        "stars": 13531,
         "num": 1128,
         "title": "fix: guess delimiter by row consistency before field count",
         "docs": false
@@ -75,7 +75,7 @@
         "date": "2026-07-09",
         "lang": "PY",
         "repo": "livekit/agents",
-        "stars": 11464,
+        "stars": 11476,
         "num": 6362,
         "title": "fix(azure): recover from STT error cancellations instead of hanging",
         "docs": false
@@ -84,7 +84,7 @@
         "date": "2026-07-14",
         "lang": "PY",
         "repo": "sqlfluff/sqlfluff",
-        "stars": 9819,
+        "stars": 9820,
         "num": 8149,
         "title": "Rename Rust skip-backward-to-code helpers to match Python",
         "docs": false
@@ -93,7 +93,7 @@
         "date": "2026-07-01",
         "lang": "PY",
         "repo": "falconry/falcon",
-        "stars": 9792,
+        "stars": 9788,
         "num": 2672,
         "title": "fix(uri): preserve literal plus when unquote_plus is disabled",
         "docs": false
@@ -102,7 +102,7 @@
         "date": "2026-07-13",
         "lang": "JS",
         "repo": "MikeMcl/decimal.js",
-        "stars": 7229,
+        "stars": 7232,
         "num": 260,
         "title": "Fix asin losing precision near x = 1",
         "docs": false
@@ -111,7 +111,7 @@
         "date": "2026-07-10",
         "lang": "JV",
         "repo": "redis/lettuce",
-        "stars": 5768,
+        "stars": 5769,
         "num": 3832,
         "title": "Count YIELD_SCORE_AS tokens in FT.HYBRID COMBINE clause #3811",
         "docs": false
@@ -138,7 +138,7 @@
         "date": "2026-07-15",
         "lang": "JS",
         "repo": "jsonata-js/jsonata",
-        "stars": 2662,
+        "stars": 2663,
         "num": 809,
         "title": "Fix $contains crash when the token is undefined",
         "docs": false
@@ -156,7 +156,7 @@
         "date": "2026-07-06",
         "lang": "PY",
         "repo": "pygments/pygments",
-        "stars": 2191,
+        "stars": 2192,
         "num": 3177,
         "title": "Swift: keep `func` a keyword in `class func` methods",
         "docs": false
@@ -192,7 +192,7 @@
         "date": "2026-07-12",
         "lang": "PY",
         "repo": "MDAnalysis/mdanalysis",
-        "stars": 1611,
+        "stars": 1612,
         "num": 5415,
         "title": "BUG: combine cmaps when merging Universes (Issue #3672)",
         "docs": false
@@ -246,7 +246,7 @@
         "date": "2026-04-29",
         "lang": "TS",
         "repo": "supabase/supabase",
-        "stars": 106767,
+        "stars": 106817,
         "num": 45299,
         "title": "docs: fix \"an\" → \"a\" grammar errors before consonant words",
         "docs": true
@@ -254,8 +254,8 @@
     ]
   },
   "answered": {
-    "total": 29,
-    "repos": 21,
+    "total": 30,
+    "repos": 22,
     "rows": [
       {
         "date": "2026-07-16",
@@ -417,6 +417,13 @@
         "repo": "Textualize/rich",
         "title": "Is there a way to handle a large progress display incrementally?",
         "url": "https://github.com/Textualize/rich/discussions/4046#discussioncomment-17510525"
+      },
+      {
+        "date": "2026-07-02",
+        "lang": "TS",
+        "repo": "TanStack/router",
+        "title": "Blank Page on throw notFound() in beforeLoad",
+        "url": "https://github.com/TanStack/router/discussions/7470#discussioncomment-17510529"
       },
       {
         "date": "2026-07-02",

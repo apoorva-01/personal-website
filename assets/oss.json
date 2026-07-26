@@ -1,10 +1,10 @@
 {
-  "generated": "2026-07-25",
+  "generated": "2026-07-26",
   "shipped": {
     "prs": 53,
     "repos": 27,
     "languages": 7,
-    "reach": 441603,
+    "reach": 441798,
     "privatePrs": 0,
     "privateRepos": 0,
     "rows": [
@@ -12,7 +12,7 @@
         "date": "2026-07-22",
         "lang": "RS",
         "repo": "zed-industries/zed",
-        "stars": 87494,
+        "stars": 87541,
         "num": 61365,
         "title": "project: Restart context servers when their working directory changes",
         "docs": false
@@ -21,7 +21,7 @@
         "date": "2026-07-14",
         "lang": "C++",
         "repo": "duckdb/duckdb",
-        "stars": 39695,
+        "stars": 39717,
         "num": 23781,
         "title": "Fix INTERNAL error casting pre-epoch TIMESTAMP_NS to TIME_NS",
         "docs": false
@@ -30,7 +30,7 @@
         "date": "2026-07-02",
         "lang": "PY",
         "repo": "PostHog/posthog",
-        "stars": 37298,
+        "stars": 37317,
         "num": 66505,
         "title": "fix: stop bigint filter values from crashing the feature flags page",
         "docs": false
@@ -39,7 +39,7 @@
         "date": "2026-07-21",
         "lang": "TS",
         "repo": "directus/directus",
-        "stars": 36881,
+        "stars": 36893,
         "num": 27864,
         "title": "Fix aliased relational fields returning null in GraphQL when nested inside a M2A field",
         "docs": false
@@ -48,7 +48,7 @@
         "date": "2026-07-14",
         "lang": "JV",
         "repo": "keycloak/keycloak",
-        "stars": 35829,
+        "stars": 35838,
         "num": 50641,
         "title": "Fix ConcurrentModificationException updating organization attributes",
         "docs": false
@@ -57,7 +57,7 @@
         "date": "2026-07-08",
         "lang": "GO",
         "repo": "weaviate/weaviate",
-        "stars": 16648,
+        "stars": 16649,
         "num": 12049,
         "title": "gh-12041 return 422 for batch delete with missing match fields",
         "docs": false
@@ -75,7 +75,7 @@
         "date": "2026-07-09",
         "lang": "PY",
         "repo": "livekit/agents",
-        "stars": 11495,
+        "stars": 11506,
         "num": 6362,
         "title": "fix(azure): recover from STT error cancellations instead of hanging",
         "docs": false
@@ -84,7 +84,7 @@
         "date": "2026-07-14",
         "lang": "PY",
         "repo": "sqlfluff/sqlfluff",
-        "stars": 9823,
+        "stars": 9827,
         "num": 8149,
         "title": "Rename Rust skip-backward-to-code helpers to match Python",
         "docs": false
@@ -93,7 +93,7 @@
         "date": "2026-07-01",
         "lang": "PY",
         "repo": "falconry/falcon",
-        "stars": 9789,
+        "stars": 9792,
         "num": 2672,
         "title": "fix(uri): preserve literal plus when unquote_plus is disabled",
         "docs": false
@@ -111,7 +111,7 @@
         "date": "2026-07-10",
         "lang": "JV",
         "repo": "redis/lettuce",
-        "stars": 5770,
+        "stars": 5771,
         "num": 3832,
         "title": "Count YIELD_SCORE_AS tokens in FT.HYBRID COMBINE clause #3811",
         "docs": false
@@ -120,7 +120,7 @@
         "date": "2026-06-30",
         "lang": "PY",
         "repo": "mne-tools/mne-python",
-        "stars": 3470,
+        "stars": 3473,
         "num": 13999,
         "title": "Fix write_fine_calibration mangling Neuromag channel names",
         "docs": false
@@ -138,7 +138,7 @@
         "date": "2026-07-15",
         "lang": "JS",
         "repo": "jsonata-js/jsonata",
-        "stars": 2663,
+        "stars": 2664,
         "num": 809,
         "title": "Fix $contains crash when the token is undefined",
         "docs": false
@@ -210,7 +210,7 @@
         "date": "2026-07-08",
         "lang": "PY",
         "repo": "derek73/python-nameparser",
-        "stars": 712,
+        "stars": 713,
         "num": 276,
         "title": "Strip invisible bidi control characters during preprocessing",
         "docs": false
@@ -246,7 +246,7 @@
         "date": "2026-04-29",
         "lang": "TS",
         "repo": "supabase/supabase",
-        "stars": 106940,
+        "stars": 107001,
         "num": 45299,
         "title": "docs: fix \"an\" → \"a\" grammar errors before consonant words",
         "docs": true

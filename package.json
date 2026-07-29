@@ -8,7 +8,8 @@
     "build:blog": "node scripts/build-blog.mjs"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.40.0"
+    "@anthropic-ai/sdk": "^0.40.0",
+    "resend": "^6.18.1"
   },
   "devDependencies": {
     "gray-matter": "^4.0.3",

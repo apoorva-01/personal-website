@@ -15,9 +15,10 @@
 <meta name="twitter:title" content="Apoorva Verma — Software Engineer · Applied AI">
 <meta name="twitter:description" content="Software engineer at Oracle. I ship full-stack products and applied-AI systems: RAG and LLM evaluation. Ask the grounded assistant anything about my work.">
 <meta name="twitter:image" content="https://www.apoorvaverma.in/assets/apoorva.jpg">
-<link rel="icon" type="image/jpeg" href="/assets/apoorva.jpg">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='5' fill='%230d0e11'/%3E%3Ctext x='16' y='22' font-family='ui-monospace,monospace' font-size='15' font-weight='700' fill='%23ff4b26' text-anchor='middle'%3EAV%3C/text%3E%3C/svg%3E">
 <link rel="apple-touch-icon" href="/assets/apoorva.jpg">
-<script>try{var _t=localStorage.getItem("av-theme");if(_t!=="dark")document.documentElement.setAttribute("data-av-theme","light");}catch(e){document.documentElement.setAttribute("data-av-theme","light");}</script>
+<script>try{var _t=localStorage.getItem("av-theme");if(!_t)_t=(window.matchMedia&&window.matchMedia("(prefers-color-scheme: light)").matches)?"light":"dark";if(_t==="light")document.documentElement.setAttribute("data-av-theme","light");}catch(e){}</script>
+<noscript><style>[data-reveal]{transform:none !important}</style></noscript>
 <meta name="description" content="Software engineer at Oracle. I ship full-stack products and applied-AI systems: RAG and LLM evaluation. Ask the grounded assistant anything about my work.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -72,11 +73,15 @@
     .projgrid{grid-template-columns:1fr 1fr !important}
     .aboutgrid{grid-template-columns:1fr !important;gap:40px !important}
   }
+  #nav-burger{display:none}
+  #mobile-sheet{display:none}
+  #mobile-sheet.open{display:block}
   @media (max-width:640px){
     .projgrid{grid-template-columns:1fr !important}
     .bloggrid{grid-template-columns:1fr !important}
     .nav-links{gap:0 !important}
     .nav-link{display:none !important}
+    #nav-burger{display:inline-flex !important}
     #cur-ring,#cur-dot{display:none !important}
     .oss-reach{grid-template-columns:1fr !important}
     .oss-reach>div:last-child{text-align:left !important}
@@ -143,7 +148,7 @@
 <div id="av-root" style="position:relative;min-height:100vh;overflow:hidden">
 
   <!-- instrument graph grid -->
-  <div aria-hidden="true" style="position:fixed;inset:0;background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:64px 64px;pointer-events:none;z-index:0"></div>
+  <div aria-hidden="true" style="position:fixed;inset:0;background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:28px 28px;pointer-events:none;z-index:0"></div>
 
   <!-- NAV -->
   <div id="scroll-progress" aria-hidden="true" style="position:fixed;top:0;left:0;height:2px;width:0;background:var(--accent);z-index:60;box-shadow:0 0 8px rgba(255,75,38,.55);transition:width .05s linear;will-change:width"></div>
@@ -174,10 +179,22 @@
         <a class="nav-link" href="#opensource" style="text-decoration:none;color:var(--text-3);font-size:13.5px;padding:7px 12px;border-radius:2px;transition:color .2s" data-hover="color:var(--text)">Open source</a>
         <a class="nav-link" href="#about" style="text-decoration:none;color:var(--text-3);font-size:13.5px;padding:7px 12px;border-radius:2px;transition:color .2s" data-hover="color:var(--text)">About</a>
         <button id="theme-btn" onclick="App.toggleTheme()" aria-label="Toggle light or dark theme" title="Toggle theme"><svg class="tt-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg><svg class="tt-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><span class="tt-thumb"></span></button>
+        <button id="nav-burger" onclick="App.toggleMenu()" aria-label="Open menu" aria-expanded="false" style="align-items:center;justify-content:center;width:36px;height:30px;border:1px solid var(--w12);background:var(--bubble);border-radius:2px;cursor:pointer;margin-left:4px;flex:0 0 auto"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-2)" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
         <a href="#contact" style="text-decoration:none;color:var(--invert-fg);font-size:13.5px;font-weight:600;padding:8px 15px;border-radius:2px;background:var(--invert-bg);margin-left:6px;transition:transform .2s" data-hover="transform:translateY(-1px)">Contact</a>
       </div>
     </div>
   </nav>
+
+  <!-- MOBILE MENU SHEET -->
+  <div id="mobile-sheet" onclick="App.toggleMenu()" style="position:fixed;inset:0;z-index:55;background:var(--scrim)">
+    <div onclick="event.stopPropagation()" style="position:absolute;top:64px;left:20px;right:20px;background:var(--surface);border:1px solid var(--w10);border-radius:2px;padding:8px;display:flex;flex-direction:column;animation:sheetIn .22s cubic-bezier(.22,1,.36,1) both">
+      <a href="#projects" onclick="App.toggleMenu()" style="text-decoration:none;color:var(--text-2);font-size:15px;padding:14px 12px;border-bottom:1px solid var(--w06)">Projects</a>
+      <a href="#eval" onclick="App.toggleMenu()" style="text-decoration:none;color:var(--text-2);font-size:15px;padding:14px 12px;border-bottom:1px solid var(--w06)">Evaluation</a>
+      <a href="/blog" style="text-decoration:none;color:var(--text-2);font-size:15px;padding:14px 12px;border-bottom:1px solid var(--w06)">Notes</a>
+      <a href="#opensource" onclick="App.toggleMenu()" style="text-decoration:none;color:var(--text-2);font-size:15px;padding:14px 12px;border-bottom:1px solid var(--w06)">Open source</a>
+      <a href="#about" onclick="App.toggleMenu()" style="text-decoration:none;color:var(--text-2);font-size:15px;padding:14px 12px">About</a>
+    </div>
+  </div>
 
   <main id="top" style="position:relative;z-index:1;max-width:1140px;margin:0 auto;padding:0 24px">
 
@@ -186,7 +203,8 @@
 
       <!-- spec bar -->
       <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:9px 0;border-top:1px solid var(--w10);border-bottom:1px solid var(--w10);font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.06em;color:var(--faint);text-transform:uppercase;animation:fadeUp .5s ease both">
-        <span style="display:flex;align-items:center;gap:9px"><span style="width:6px;height:6px;border-radius:50%;background:var(--live);box-shadow:0 0 8px var(--live)"></span>Available · software &amp; AI engineering roles</span>
+        <span style="display:flex;align-items:center;gap:9px"><span style="width:6px;height:6px;border-radius:50%;background:var(--live);box-shadow:0 0 8px var(--live)"></span>Open to software &amp; AI engineering roles</span>
+        <span>Replies are grounded &amp; cited</span>
       </div>
 
       <div class="hero-grid" style="display:grid;grid-template-columns:1.55fr 1fr;gap:44px;align-items:start;margin-top:46px">
@@ -207,7 +225,7 @@
         <!-- readout card -->
         <div class="hero-readout" style="border:1px solid var(--w10);background:var(--surface);animation:fadeUp .6s .12s ease both">
           <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 14px;border-bottom:1px solid var(--w08);font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.1em;color:var(--faint);text-transform:uppercase">
-            <span>Live readout</span><span style="display:flex;align-items:center;gap:6px;color:var(--accent)"><span style="width:6px;height:6px;border-radius:50%;background:var(--accent)"></span>REC</span>
+            <span>Latest eval run</span><span style="display:flex;align-items:center;gap:6px;color:var(--pass)"><span style="width:6px;height:6px;border-radius:50%;background:var(--pass)"></span>PASS</span>
           </div>
           <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding:13px 14px;border-bottom:1px solid var(--w06)">
             <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.05em;color:var(--text-3);text-transform:uppercase">Citation precision</span>
@@ -267,7 +285,7 @@
     </section>
 
     <!-- TIMELINE -->
-    <section id="timeline" data-reveal="1" style="padding:60px 0 0;scroll-margin-top:90px;opacity:0;transform:translateY(24px)">
+    <section id="timeline" data-reveal="1" style="padding:60px 0 0;scroll-margin-top:90px;opacity:1;transform:translateY(24px)">
       <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px">
         <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;color:var(--accent)">§01</span>
         <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;color:var(--faint);text-transform:uppercase">Experience</span>
@@ -299,7 +317,7 @@
     </section>
 
     <!-- OPEN SOURCE -->
-    <section id="opensource" data-reveal="1" style="padding:60px 0;scroll-margin-top:90px;opacity:0;transform:translateY(24px)">
+    <section id="opensource" data-reveal="1" style="padding:60px 0;scroll-margin-top:90px;opacity:1;transform:translateY(24px)">
       <div style="display:flex;align-items:center;gap:14px">
         <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;color:var(--accent)">§02</span>
         <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;color:var(--faint);text-transform:uppercase">Open source</span>
@@ -309,7 +327,7 @@
     </section>
 
     <!-- EVAL DASHBOARD -->
-    <section id="eval" data-reveal="1" style="padding:80px 0 60px;scroll-margin-top:90px;opacity:0;transform:translateY(24px)">
+    <section id="eval" data-reveal="1" style="padding:80px 0 60px;scroll-margin-top:90px;opacity:1;transform:translateY(24px)">
       <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px">
         <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;color:var(--accent)">§03</span>
         <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;color:var(--faint);text-transform:uppercase">Evaluation</span>
@@ -394,7 +412,7 @@
     </section>
 
     <!-- PROJECTS -->
-    <section id="projects" data-reveal="1" style="padding:60px 0;scroll-margin-top:90px;opacity:0;transform:translateY(24px)">
+    <section id="projects" data-reveal="1" style="padding:60px 0;scroll-margin-top:90px;opacity:1;transform:translateY(24px)">
       <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px">
         <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;color:var(--accent)">§04</span>
         <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;color:var(--faint);text-transform:uppercase">Selected work</span>
@@ -513,7 +531,7 @@
     </section>
 
     <!-- WRITING / BLOG -->
-    <section id="writing" data-reveal="1" style="padding:60px 0;scroll-margin-top:90px;opacity:0;transform:translateY(24px)">
+    <section id="writing" data-reveal="1" style="padding:60px 0;scroll-margin-top:90px;opacity:1;transform:translateY(24px)">
       <div style="display:flex;align-items:center;gap:14px">
         <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;color:var(--accent)">§05</span>
         <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;color:var(--faint);text-transform:uppercase">Writing</span>
@@ -528,7 +546,7 @@
     </section>
 
     <!-- ABOUT -->
-    <section id="about" data-reveal="1" style="padding:60px 0;scroll-margin-top:90px;opacity:0;transform:translateY(24px)">
+    <section id="about" data-reveal="1" style="padding:60px 0;scroll-margin-top:90px;opacity:1;transform:translateY(24px)">
       <div style="max-width:680px">
         <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px">
           <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;color:var(--accent)">§06</span>
@@ -543,7 +561,7 @@
     </section>
 
     <!-- CONTACT -->
-    <section id="contact" data-reveal="1" style="padding:76px 0 92px;scroll-margin-top:90px;opacity:0;transform:translateY(24px)">
+    <section id="contact" data-reveal="1" style="padding:76px 0 92px;scroll-margin-top:90px;opacity:1;transform:translateY(24px)">
       <div style="border:1px solid var(--w10);background:var(--surface)">
         <div style="display:flex;align-items:center;gap:14px;padding:12px 18px;border-bottom:1px solid var(--w08)">
           <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;color:var(--accent)">§07</span>
@@ -1030,7 +1048,7 @@
   // ---- entrance animations ----
   function revealAll(){
     var els = document.querySelectorAll(".hero-word,[data-reveal]");
-    for (var i=0;i<els.length;i++){ els[i].style.opacity="1"; els[i].style.transform="none"; }
+    for (var i=0;i<els.length;i++){ els[i].style.transform="none"; }
   }
   function initMotion(){
     var M = window.Motion;
@@ -1038,7 +1056,7 @@
     for (var i=0;i<sections.length;i++){
       (function(el){
         M.inView(el, function(){
-          M.animate(el, { opacity:[0,1], transform:["translateY(28px)","translateY(0px)"] },
+          M.animate(el, { transform:["translateY(28px)","translateY(0px)"] },
             { duration:0.7, ease:[.22,1,.36,1] });
         }, { margin: "-10% 0px -10% 0px" });
       })(sections[i]);
@@ -1056,8 +1074,11 @@
   }
 
   function boot(){
-    var stored = "light";
-    try { stored = localStorage.getItem("av-theme") || "light"; } catch(e){}
+    var stored;
+    try {
+      stored = localStorage.getItem("av-theme");
+      if (!stored) stored = (window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches) ? "light" : "dark";
+    } catch(e){ stored = "dark"; }
     applyTheme(stored);
     bindHovers(document);
     renderPosts();
@@ -1066,18 +1087,25 @@
     window.addEventListener("scroll", handleScroll, { passive:true });
     handleScroll();
     initCursor();
-    document.addEventListener("keydown", function(e){ if (e.key === "Escape") closePost(); });
+    document.addEventListener("keydown", function(e){ if (e.key === "Escape"){ closePost(); document.getElementById("mobile-sheet").classList.remove("open"); } });
     startMotion();
   }
 
   function openPost(i){ state.activePost = posts[i]; renderOverlay(); }
   function closePost(){ state.activePost = null; renderOverlay(); }
 
+  function toggleMenu(){
+    var sheet = document.getElementById("mobile-sheet"), btn = document.getElementById("nav-burger");
+    var open = sheet.classList.toggle("open");
+    if (btn) btn.setAttribute("aria-expanded", open ? "true" : "false");
+  }
+
   window.App = {
     send: send,
     onSend: function(){ send(document.getElementById("av-input").value); },
     onKey: function(e){ if (e.key === "Enter") send(document.getElementById("av-input").value); },
     toggleTheme: toggleTheme,
+    toggleMenu: toggleMenu,
     openPost: openPost,
     closePost: closePost,
     ossTab: function(t){ ossCur = t; ossPaint(); }

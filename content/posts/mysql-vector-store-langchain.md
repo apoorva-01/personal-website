@@ -28,7 +28,9 @@ So the temptation: emit some `CREATE INDEX ... USING HNSW`, wrap it in a `build_
 
 I built the index in application code instead. IVF: run k-means over the stored vectors, keep the centroids, tag each row with its nearest one, and at query time only scan the handful of clusters closest to the query. Same idea as pgvector's IVFFlat, just done in Python because the database won't do it for me. Recall is approximate and you trade it against how many clusters you probe. The point is it actually runs, on a MySQL you can start in a container, and I can measure the recall and show you the curve. A fake `CREATE INDEX` can't be measured, because it was never real.
 
-HeatWave is the exception, and I only learned this by reading the docs properly: since 9.5 it builds an HNSW index automatically and uses it on ordinary `ORDER BY DISTANCE` queries. So on HeatWave you get native ANN for free and you should not call my IVF thing at all. Writing "here is when NOT to use my feature" into the README felt more honest than pretending my feature was always the answer.
+HeatWave is the exception, and I only learned this by reading the docs properly. Writing "here is when NOT to use my feature" into the README felt more honest than pretending my feature was always the answer.
+
+> **If you're on HeatWave:** since 9.5 it builds an HNSW index automatically and uses it on ordinary `ORDER BY DISTANCE` queries. You get native ANN for free — don't call my IVF thing at all.
 
 ## When the docs are silent, read the source
 
@@ -60,7 +62,9 @@ The answer is an in-memory backend that mirrors the real one. Same distance math
 
 The payoff I like: LangChain ships a standard integration test suite that every vector store is supposed to pass. I run it against the in-memory backend in CI, offline, on every push. So "behaves like a real LangChain vector store" isn't a claim I'm making, it's a test that's passing.
 
-The honest limit, and it's in the README: the actual SQL and the async driver can't be verified without a real database, same as any DB client. I test them against the query builders and say plainly what a live run covers and what it doesn't. "Every claim measured" only holds if you're loud about the ones you've deferred.
+> **Limitation, stated plainly:** the actual SQL and the async driver can't be verified without a real database, same as any DB client. I test them against the query builders — the honest limit is in the README, not buried in a footnote.
+
+"Every claim measured" only holds if you're loud about the ones you've deferred.
 
 ## Hybrid search, and why I fuse ranks instead of scores
 

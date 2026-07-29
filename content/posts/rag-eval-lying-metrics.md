@@ -35,7 +35,9 @@ So the first lesson is boring and important: a metric that's already pinned at t
 
 Two things moved, and they're where all the real signal was.
 
-Retrieval was the big one. I ran a ladder from naive to senior:
+### Retrieval: the big lever
+
+I ran a ladder from naive to senior:
 
 | retriever | NDCG@5 | Recall@5 | MRR |
 |---|--:|--:|--:|
@@ -45,7 +47,11 @@ Retrieval was the big one. I ran a ladder from naive to senior:
 
 <figure class="chart"><div style="overflow-x:auto"><svg viewBox="0 0 660 360" role="img" aria-label="Bar chart of NDCG at 5 across three retrievers: dense 0.33, plus BM25 hybrid 0.43, plus cross-encoder rerank 0.62" style="width:100%;height:auto;font-family:'IBM Plex Sans',system-ui,sans-serif"><defs><linearGradient id="ndcgbar" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="var(--accent)"></stop><stop offset="1" stop-color="var(--accent)"></stop></linearGradient></defs><text x="0" y="22" fill="var(--heading)" font-size="16" font-weight="500">Retrieval ladder: NDCG@5 across 50 questions</text><g stroke="var(--w09)" stroke-width="1"><line x1="60" y1="310" x2="636" y2="310"></line><line x1="60" y1="241" x2="636" y2="241"></line><line x1="60" y1="173" x2="636" y2="173"></line><line x1="60" y1="104" x2="636" y2="104"></line></g><g fill="var(--faint)" font-size="11" text-anchor="end"><text x="50" y="314">0.0</text><text x="50" y="245">0.2</text><text x="50" y="177">0.4</text><text x="50" y="108">0.6</text></g><rect x="96" y="196" width="120" height="114" rx="5" fill="url(#ndcgbar)" opacity="0.55"></rect><rect x="288" y="161" width="120" height="149" rx="5" fill="url(#ndcgbar)" opacity="0.78"></rect><rect x="480" y="98" width="120" height="212" rx="5" fill="url(#ndcgbar)"></rect><g fill="var(--heading)" font-size="15" font-weight="600" text-anchor="middle"><text x="156" y="184">0.33</text><text x="348" y="149">0.43</text><text x="540" y="86">0.62</text></g><g fill="var(--text-3)" font-size="12" text-anchor="middle"><text x="156" y="332">dense</text><text x="348" y="332">+ BM25 hybrid</text><text x="540" y="332">+ cross-encoder rerank</text></g><text x="540" y="68" fill="var(--accent)" font-size="13" font-weight="600" text-anchor="middle">+86% vs naive dense</text></svg></div><figcaption>The whole retrieval ladder. The cross-encoder is the single biggest rung (0.43 to 0.62).</figcaption></figure>
 
-Naive dense to hybrid-plus-rerank is NDCG@5 0.33 to 0.62. That's an 86% lift, and it's monotonic, every rung helps. The single biggest jump is the cross-encoder (0.43 to 0.62). If you have one afternoon to spend on your RAG stack, spend it there, not on a bigger generation model.
+Naive dense to hybrid-plus-rerank is NDCG@5 0.33 to 0.62, and it's monotonic — every rung helps. The single biggest jump is the cross-encoder (0.43 to 0.62).
+
+> **Key finding:** that's an 86% lift from retrieval alone. If you have one afternoon to spend on your RAG stack, spend it on reranking, not on a bigger generation model.
+
+### Context precision: a smaller, real tradeoff
 
 The other thing that moved was context precision, and it was the only generation metric that did. It went 0.754 to 0.846 across the matrix, and the winner was semantic chunking with e5-large. Worth knowing e5-large costs about 3x the embedding compute of bge-small, so that 0.09 is a real tradeoff, not a free lunch. There's also one config (semantic chunking with bge-small) that quietly trades recall down to 0.733 to buy precision, which is the kind of thing you only see when you grade the whole grid instead of one happy-path run.
 
@@ -67,7 +73,7 @@ If I don't fully trust the gold set, I shouldn't lead with a metric that depends
 
 Two parts. Citation precision: of the claims that carry a `[n]`, what fraction are actually stated by the source they cite. When you cite, are you right? Citation recall: of all the factual claims in the answer, what fraction carry at least one citation. Do you cite everything you assert, or just some of it?
 
-The detail I care about most: honest refusals ("the sources don't cover this") have no claims to cite, so they're excluded, not scored zero. A model that correctly says "I don't know" shouldn't get punished by your eval for being honest. That's the difference between measuring grounding and measuring confidence.
+> **The detail I care about most:** honest refusals ("the sources don't cover this") have no claims to cite, so they're excluded, not scored zero. A model that correctly says "I don't know" shouldn't get punished by your eval for being honest. That's the difference between measuring grounding and measuring confidence.
 
 And because "the metric said 1.0" is exactly the kind of claim you shouldn't take on faith, the behavior is pinned down by tests. A correctly-cited answer scores 1.0 / 1.0. An answer that cites the wrong source and leaves one claim uncited scores precision 0.0 and recall 0.5, by construction. The metric is graded before I let it grade anything else.
 

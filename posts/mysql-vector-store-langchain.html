@@ -127,7 +127,7 @@
   "dateModified": "2026-07-15",
   "inLanguage": "en",
   "articleSection": "Vector Search",
-  "wordCount": 1571,
+  "wordCount": 1566,
   "timeRequired": "PT8M",
   "keywords": [
     "MySQL",
@@ -239,7 +239,10 @@
 <p>The thing a vector database gives you here is an approximate index, the HNSW and IVF family. MySQL 9 doesn&#39;t have one. Neither does ShannonBase (I read the source to be sure, more on that below).</p>
 <p>So the temptation: emit some <code>CREATE INDEX ... USING HNSW</code>, wrap it in a <code>build_index()</code> method, and let it fail quietly on backends that don&#39;t support it. The library would look like it had ANN. It would demo great. It would be a lie.</p>
 <p>I built the index in application code instead. IVF: run k-means over the stored vectors, keep the centroids, tag each row with its nearest one, and at query time only scan the handful of clusters closest to the query. Same idea as pgvector&#39;s IVFFlat, just done in Python because the database won&#39;t do it for me. Recall is approximate and you trade it against how many clusters you probe. The point is it actually runs, on a MySQL you can start in a container, and I can measure the recall and show you the curve. A fake <code>CREATE INDEX</code> can&#39;t be measured, because it was never real.</p>
-<p>HeatWave is the exception, and I only learned this by reading the docs properly: since 9.5 it builds an HNSW index automatically and uses it on ordinary <code>ORDER BY DISTANCE</code> queries. So on HeatWave you get native ANN for free and you should not call my IVF thing at all. Writing &quot;here is when NOT to use my feature&quot; into the README felt more honest than pretending my feature was always the answer.</p>
+<p>HeatWave is the exception, and I only learned this by reading the docs properly. Writing &quot;here is when NOT to use my feature&quot; into the README felt more honest than pretending my feature was always the answer.</p>
+<blockquote>
+<p><strong>If you&#39;re on HeatWave:</strong> since 9.5 it builds an HNSW index automatically and uses it on ordinary <code>ORDER BY DISTANCE</code> queries. You get native ANN for free — don&#39;t call my IVF thing at all.</p>
+</blockquote>
 <h2 id="when-the-docs-are-silent-read-the-source">When the docs are silent, read the source<a class="anchor-link" href="#when-the-docs-are-silent-read-the-source" aria-label="Link to this section">#</a></h2>
 <p>MySQL&#39;s <code>DISTANCE</code> supports a <code>DOT</code> metric. I needed to know one specific thing: does dot-product distance come back as the raw inner product, or negated?</p>
 <p>This matters more than it sounds. Vector stores sort ascending, smallest distance first. Cosine and euclidean are naturally smaller-is-closer. A dot product is the opposite, bigger-is-closer, so to make it act like a distance you negate it. If MySQL negates and I assume it doesn&#39;t, my dot-metric search returns results in exactly the wrong order. And no test against my in-memory fake would catch it, because I&#39;d have written the fake with the same wrong assumption.</p>
@@ -257,7 +260,10 @@
 <p>Here&#39;s a constraint: I don&#39;t want a running MySQL just to run the tests, and I certainly can&#39;t require a HeatWave instance, since that&#39;s a paid managed cloud. But not testing the thing isn&#39;t an option either.</p>
 <p>The answer is an in-memory backend that mirrors the real one. Same distance math (I copied the three functions straight from the source I&#39;d just been reading), same filtering, same behavior, in pure Python over a dict. The vector store talks to a small <code>Store</code> interface. In production that&#39;s MySQL; in tests it&#39;s the in-memory one. All the logic that matters, filtering, MMR, IVF, hybrid fusion, relevance scoring, is backend-agnostic, so exercising it against the fake exercises the real code path.</p>
 <p>The payoff I like: LangChain ships a standard integration test suite that every vector store is supposed to pass. I run it against the in-memory backend in CI, offline, on every push. So &quot;behaves like a real LangChain vector store&quot; isn&#39;t a claim I&#39;m making, it&#39;s a test that&#39;s passing.</p>
-<p>The honest limit, and it&#39;s in the README: the actual SQL and the async driver can&#39;t be verified without a real database, same as any DB client. I test them against the query builders and say plainly what a live run covers and what it doesn&#39;t. &quot;Every claim measured&quot; only holds if you&#39;re loud about the ones you&#39;ve deferred.</p>
+<blockquote>
+<p><strong>Limitation, stated plainly:</strong> the actual SQL and the async driver can&#39;t be verified without a real database, same as any DB client. I test them against the query builders — the honest limit is in the README, not buried in a footnote.</p>
+</blockquote>
+<p>&quot;Every claim measured&quot; only holds if you&#39;re loud about the ones you&#39;ve deferred.</p>
 <h2 id="hybrid-search-and-why-i-fuse-ranks-instead-of-scores">Hybrid search, and why I fuse ranks instead of scores<a class="anchor-link" href="#hybrid-search-and-why-i-fuse-ranks-instead-of-scores" aria-label="Link to this section">#</a></h2>
 <p>Vector search is good at meaning and bad at exact tokens. Ask it for an error code like <code>E4021</code> or a name like <code>O&#39;Brien</code> and semantic similarity just shrugs. Keyword search is the reverse. Hybrid search runs both and merges the results, and MySQL already has <code>FULLTEXT</code> keyword search built in, so the parts were sitting right there.</p>
 <p>The trick is merging a cosine distance with a FULLTEXT relevance score. Different scales, different meanings, and squashing them into a shared range is fiddly and a little arbitrary. So I don&#39;t. I use reciprocal rank fusion: drop the scores, keep the ranks, and give each document <code>1/(k + rank)</code> summed across both lists. A doc that&#39;s 2nd on vectors and 1st on keywords beats one that&#39;s 1st in a single list and absent from the other. It&#39;s simple, it never has to reconcile the two scales, and it&#39;s what a lot of real search stacks use. The best fix for &quot;these numbers aren&#39;t comparable&quot; turned out to be to stop comparing the numbers.</p>

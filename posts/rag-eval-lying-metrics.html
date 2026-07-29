@@ -127,7 +127,7 @@
   "dateModified": "2026-07-08",
   "inLanguage": "en",
   "articleSection": "LLM Evaluation",
-  "wordCount": 1118,
+  "wordCount": 1132,
   "timeRequired": "PT6M",
   "keywords": [
     "RAG",
@@ -217,7 +217,7 @@
     </div>
   </nav>
 
-<nav class="toc" aria-label="Table of contents"><div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.12em;color:var(--faint);text-transform:uppercase;margin-bottom:8px;padding-left:11px">On this page</div><a href="#the-metrics-that-saturate-tell-you-nothing" class="toc-link" data-toc-level="2">The metrics that saturate tell you nothing</a><a href="#the-numbers-that-actually-moved" class="toc-link" data-toc-level="2">The numbers that actually moved</a><a href="#the-honest-part-i-dont-fully-trust-my-own-gold-set" class="toc-link" data-toc-level="2">The honest part: I don't fully trust my own gold set</a><a href="#so-i-built-a-metric-that-never-touches-the-gold-set" class="toc-link" data-toc-level="2">So I built a metric that never touches the gold set</a><a href="#what-id-tell-you-to-take-from-this" class="toc-link" data-toc-level="2">What I'd tell you to take from this</a></nav>
+<nav class="toc" aria-label="Table of contents"><div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.12em;color:var(--faint);text-transform:uppercase;margin-bottom:8px;padding-left:11px">On this page</div><a href="#the-metrics-that-saturate-tell-you-nothing" class="toc-link" data-toc-level="2">The metrics that saturate tell you nothing</a><a href="#the-numbers-that-actually-moved" class="toc-link" data-toc-level="2">The numbers that actually moved</a><a href="#retrieval-the-big-lever" class="toc-link" data-toc-level="3">Retrieval: the big lever</a><a href="#context-precision-a-smaller-real-tradeoff" class="toc-link" data-toc-level="3">Context precision: a smaller, real tradeoff</a><a href="#the-honest-part-i-dont-fully-trust-my-own-gold-set" class="toc-link" data-toc-level="2">The honest part: I don't fully trust my own gold set</a><a href="#so-i-built-a-metric-that-never-touches-the-gold-set" class="toc-link" data-toc-level="2">So I built a metric that never touches the gold set</a><a href="#what-id-tell-you-to-take-from-this" class="toc-link" data-toc-level="2">What I'd tell you to take from this</a></nav>
 
   <main style="position:relative;z-index:1;max-width:860px;margin:0 auto;padding:120px 24px 120px">
     <a href="/blog" style="display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.02em;color:var(--text-3);padding:7px 12px;border-radius:0;border:1px solid var(--w10);background:transparent;transition:border-color .18s,color .18s;animation:fadeUp .5s ease both" data-hover="color:var(--heading);border-color:var(--accent)">← Back to writing</a>
@@ -239,7 +239,8 @@
 <p>So the first lesson is boring and important: a metric that&#39;s already pinned at the ceiling has no opinion. It can&#39;t separate your options. Drop it from the comparison and go find one that moves.</p>
 <h2 id="the-numbers-that-actually-moved">The numbers that actually moved<a class="anchor-link" href="#the-numbers-that-actually-moved" aria-label="Link to this section">#</a></h2>
 <p>Two things moved, and they&#39;re where all the real signal was.</p>
-<p>Retrieval was the big one. I ran a ladder from naive to senior:</p>
+<h3 id="retrieval-the-big-lever">Retrieval: the big lever<a class="anchor-link" href="#retrieval-the-big-lever" aria-label="Link to this section">#</a></h3>
+<p>I ran a ladder from naive to senior:</p>
 <div class="tablewrap"><table>
 <thead>
 <tr>
@@ -270,7 +271,11 @@
 </tbody></table></div>
 <figure class="chart"><div style="overflow-x:auto"><svg viewBox="0 0 660 360" role="img" aria-label="Bar chart of NDCG at 5 across three retrievers: dense 0.33, plus BM25 hybrid 0.43, plus cross-encoder rerank 0.62" style="width:100%;height:auto;font-family:'IBM Plex Sans',system-ui,sans-serif"><defs><linearGradient id="ndcgbar" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="var(--accent)"></stop><stop offset="1" stop-color="var(--accent)"></stop></linearGradient></defs><text x="0" y="22" fill="var(--heading)" font-size="16" font-weight="500">Retrieval ladder: NDCG@5 across 50 questions</text><g stroke="var(--w09)" stroke-width="1"><line x1="60" y1="310" x2="636" y2="310"></line><line x1="60" y1="241" x2="636" y2="241"></line><line x1="60" y1="173" x2="636" y2="173"></line><line x1="60" y1="104" x2="636" y2="104"></line></g><g fill="var(--faint)" font-size="11" text-anchor="end"><text x="50" y="314">0.0</text><text x="50" y="245">0.2</text><text x="50" y="177">0.4</text><text x="50" y="108">0.6</text></g><rect x="96" y="196" width="120" height="114" rx="5" fill="url(#ndcgbar)" opacity="0.55"></rect><rect x="288" y="161" width="120" height="149" rx="5" fill="url(#ndcgbar)" opacity="0.78"></rect><rect x="480" y="98" width="120" height="212" rx="5" fill="url(#ndcgbar)"></rect><g fill="var(--heading)" font-size="15" font-weight="600" text-anchor="middle"><text x="156" y="184">0.33</text><text x="348" y="149">0.43</text><text x="540" y="86">0.62</text></g><g fill="var(--text-3)" font-size="12" text-anchor="middle"><text x="156" y="332">dense</text><text x="348" y="332">+ BM25 hybrid</text><text x="540" y="332">+ cross-encoder rerank</text></g><text x="540" y="68" fill="var(--accent)" font-size="13" font-weight="600" text-anchor="middle">+86% vs naive dense</text></svg></div><figcaption>The whole retrieval ladder. The cross-encoder is the single biggest rung (0.43 to 0.62).</figcaption></figure>
 
-<p>Naive dense to hybrid-plus-rerank is NDCG@5 0.33 to 0.62. That&#39;s an 86% lift, and it&#39;s monotonic, every rung helps. The single biggest jump is the cross-encoder (0.43 to 0.62). If you have one afternoon to spend on your RAG stack, spend it there, not on a bigger generation model.</p>
+<p>Naive dense to hybrid-plus-rerank is NDCG@5 0.33 to 0.62, and it&#39;s monotonic — every rung helps. The single biggest jump is the cross-encoder (0.43 to 0.62).</p>
+<blockquote>
+<p><strong>Key finding:</strong> that&#39;s an 86% lift from retrieval alone. If you have one afternoon to spend on your RAG stack, spend it on reranking, not on a bigger generation model.</p>
+</blockquote>
+<h3 id="context-precision-a-smaller-real-tradeoff">Context precision: a smaller, real tradeoff<a class="anchor-link" href="#context-precision-a-smaller-real-tradeoff" aria-label="Link to this section">#</a></h3>
 <p>The other thing that moved was context precision, and it was the only generation metric that did. It went 0.754 to 0.846 across the matrix, and the winner was semantic chunking with e5-large. Worth knowing e5-large costs about 3x the embedding compute of bge-small, so that 0.09 is a real tradeoff, not a free lunch. There&#39;s also one config (semantic chunking with bge-small) that quietly trades recall down to 0.733 to buy precision, which is the kind of thing you only see when you grade the whole grid instead of one happy-path run.</p>
 <p>Everything else was flat. Four metrics, one of them told me anything.</p>
 <h2 id="the-honest-part-i-dont-fully-trust-my-own-gold-set">The honest part: I don&#39;t fully trust my own gold set<a class="anchor-link" href="#the-honest-part-i-dont-fully-trust-my-own-gold-set" aria-label="Link to this section">#</a></h2>
@@ -281,7 +286,9 @@
 <h2 id="so-i-built-a-metric-that-never-touches-the-gold-set">So I built a metric that never touches the gold set<a class="anchor-link" href="#so-i-built-a-metric-that-never-touches-the-gold-set" aria-label="Link to this section">#</a></h2>
 <p>If I don&#39;t fully trust the gold set, I shouldn&#39;t lead with a metric that depends on it. So the number I actually put my name behind is a custom citation-faithfulness metric, framed the way the attribution-eval (ALCE) literature does it, and it&#39;s gold-independent by design. It audits the answer against its own cited sources and never looks at the gold set at all.</p>
 <p>Two parts. Citation precision: of the claims that carry a <code>[n]</code>, what fraction are actually stated by the source they cite. When you cite, are you right? Citation recall: of all the factual claims in the answer, what fraction carry at least one citation. Do you cite everything you assert, or just some of it?</p>
-<p>The detail I care about most: honest refusals (&quot;the sources don&#39;t cover this&quot;) have no claims to cite, so they&#39;re excluded, not scored zero. A model that correctly says &quot;I don&#39;t know&quot; shouldn&#39;t get punished by your eval for being honest. That&#39;s the difference between measuring grounding and measuring confidence.</p>
+<blockquote>
+<p><strong>The detail I care about most:</strong> honest refusals (&quot;the sources don&#39;t cover this&quot;) have no claims to cite, so they&#39;re excluded, not scored zero. A model that correctly says &quot;I don&#39;t know&quot; shouldn&#39;t get punished by your eval for being honest. That&#39;s the difference between measuring grounding and measuring confidence.</p>
+</blockquote>
 <p>And because &quot;the metric said 1.0&quot; is exactly the kind of claim you shouldn&#39;t take on faith, the behavior is pinned down by tests. A correctly-cited answer scores 1.0 / 1.0. An answer that cites the wrong source and leaves one claim uncited scores precision 0.0 and recall 0.5, by construction. The metric is graded before I let it grade anything else.</p>
 <h2 id="what-id-tell-you-to-take-from-this">What I&#39;d tell you to take from this<a class="anchor-link" href="#what-id-tell-you-to-take-from-this" aria-label="Link to this section">#</a></h2>
 <p>Grade the whole grid, not the happy path. The interesting failures live in the cells you didn&#39;t bother to run.</p>

@@ -137,6 +137,20 @@
       <p style="margin-top:18px;max-width:600px;font-size:16px;line-height:1.6;color:var(--text-4);animation:fadeUp .5s .15s ease both">Field notes on applied AI, backend systems, and the evaluation work that keeps both honest.</p>
     </header>
 
+    <!-- NEWSLETTER SIGNUP -->
+    <section style="padding:0 0 40px">
+      <div style="border:1px solid var(--w10);background:var(--surface);padding:24px 22px;display:flex;flex-direction:column;gap:12px">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;color:var(--faint);text-transform:uppercase">Get new notes by email</div>
+        <p style="font-size:14px;line-height:1.6;color:var(--text-4);max-width:52ch">One email when I publish. No spam, unsubscribe anytime.</p>
+        <form id="subscribe-form" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px">
+          <input name="email" type="email" required autocomplete="email" placeholder="you@company.com" style="flex:1;min-width:220px;font-family:'IBM Plex Mono',monospace;font-size:13.5px;color:var(--text);background:var(--bubble);border:1px solid var(--w12);border-radius:0;padding:11px 13px">
+          <input name="company" type="text" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0" placeholder="Company">
+          <button type="submit" style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#fff;padding:11px 22px;border:none;border-radius:0;background:var(--accent);cursor:pointer">Subscribe</button>
+        </form>
+        <span id="subscribe-status" role="status" aria-live="polite" style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--faint)"></span>
+      </div>
+    </section>
+
     <!-- POST LIST (rendered by JS) -->
     <section style="padding:24px 0 120px">
       <div style="display:flex;align-items:baseline;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);padding:0 8px 15px;border-bottom:1px solid var(--w10)">
@@ -226,6 +240,28 @@
     raf = requestAnimationFrame(loop);
   }
 
+  // ---- newsletter subscribe ----
+  function initSubscribe(){
+    var f = document.getElementById("subscribe-form");
+    if (!f) return;
+    var status = document.getElementById("subscribe-status");
+    f.addEventListener("submit", function(e){
+      e.preventDefault();
+      var btn = f.querySelector('button[type="submit"]');
+      var email = f.email.value.trim();
+      if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ status.style.color = "var(--accent)"; status.textContent = "Enter a valid email address."; return; }
+      var label = btn.textContent; btn.disabled = true; btn.textContent = "Subscribing…"; status.style.color = "var(--faint)"; status.textContent = "";
+      fetch("/api/subscribe", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email: email, company: f.company.value }) })
+        .then(function(r){ return r.json().then(function(j){ return { ok: r.ok, j: j }; }); })
+        .then(function(res){
+          if (res.ok){ f.reset(); status.style.color = "var(--live)"; status.textContent = "Subscribed! Watch your inbox."; }
+          else { status.style.color = "var(--accent)"; status.textContent = (res.j && res.j.error) || "Something went wrong. Try again."; }
+        })
+        .catch(function(){ status.style.color = "var(--accent)"; status.textContent = "Network error. Try again."; })
+        .then(function(){ btn.disabled = false; btn.textContent = label; });
+    });
+  }
+
   // ---- entrance animations (cards are server-rendered; this only reveals them) ----
   function revealAll(){
     var els = document.querySelectorAll("[data-reveal]");
@@ -259,6 +295,7 @@
     applyTheme(stored);
     bindHovers(document);
     initCursor();
+    initSubscribe();
     startMotion();
   }
 

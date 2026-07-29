@@ -264,6 +264,19 @@
 
     <div style="margin-top:48px;padding-top:26px;border-top:1px solid var(--w08);display:flex;align-items:center;gap:14px"><img src="/assets/apoorva.jpg" alt="Apoorva Verma" width="46" height="46" style="width:46px;height:46px;border-radius:2px;object-fit:cover;border:1px solid var(--accent);display:block"><div style="flex:1"><div style="font-size:14px;font-weight:500;color:var(--text)">Apoorva Verma</div><div style="font-size:12.5px;color:var(--faint)">Software Engineer · Applied AI</div></div><div style="display:flex;gap:7px"><a href="https://github.com/apoorva-01" target="_blank" rel="noopener" style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text-3);text-decoration:none;padding:6px 11px;border:1px solid var(--w10);border-radius:0;transition:border-color .18s,color .18s" data-hover="color:var(--heading);border-color:var(--accent)">GitHub</a><a href="https://www.linkedin.com/in/apoorva0510/" target="_blank" rel="noopener" style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text-3);text-decoration:none;padding:6px 11px;border:1px solid var(--w10);border-radius:0;transition:border-color .18s,color .18s" data-hover="color:var(--heading);border-color:var(--accent)">LinkedIn</a></div></div>
 
+<section style="padding:0 0 8px">
+    <div style="border:1px solid var(--w10);background:var(--surface);padding:24px 22px;display:flex;flex-direction:column;gap:12px">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;color:var(--faint);text-transform:uppercase">Get new notes by email</div>
+      <p style="font-size:14px;line-height:1.6;color:var(--text-4);max-width:52ch">One email when I publish. No spam, unsubscribe anytime.</p>
+      <form id="subscribe-form" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px">
+        <input name="email" type="email" required autocomplete="email" placeholder="you@company.com" style="flex:1;min-width:220px;font-family:'IBM Plex Mono',monospace;font-size:13.5px;color:var(--text);background:var(--bubble);border:1px solid var(--w12);border-radius:0;padding:11px 13px">
+        <input name="company" type="text" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0" placeholder="Company">
+        <button type="submit" style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#fff;padding:11px 22px;border:none;border-radius:0;background:var(--accent);cursor:pointer">Subscribe</button>
+      </form>
+      <span id="subscribe-status" role="status" aria-live="polite" style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--faint)"></span>
+    </div>
+  </section>
+
     <div style="margin-top:40px"><a href="/blog" style="display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.02em;color:var(--text-3);padding:7px 12px;border-radius:0;border:1px solid var(--w10);background:transparent;transition:border-color .18s,color .18s" data-hover="color:var(--heading);border-color:var(--accent)">← Back to writing</a></div>
 
   </main>
@@ -339,12 +352,33 @@
     document.addEventListener("mouseleave", leave);
     requestAnimationFrame(loop);
   }
+  function initSubscribe(){
+    var f = document.getElementById("subscribe-form");
+    if (!f) return;
+    var status = document.getElementById("subscribe-status");
+    f.addEventListener("submit", function(e){
+      e.preventDefault();
+      var btn = f.querySelector('button[type="submit"]');
+      var email = f.email.value.trim();
+      if (!/^[^@s]+@[^@s]+.[^@s]+$/.test(email)){ status.style.color = "var(--accent)"; status.textContent = "Enter a valid email address."; return; }
+      var label = btn.textContent; btn.disabled = true; btn.textContent = "Subscribing…"; status.style.color = "var(--faint)"; status.textContent = "";
+      fetch("/api/subscribe", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email: email, company: f.company.value }) })
+        .then(function(r){ return r.json().then(function(j){ return { ok: r.ok, j: j }; }); })
+        .then(function(res){
+          if (res.ok){ f.reset(); status.style.color = "var(--live)"; status.textContent = "Subscribed! Watch your inbox."; }
+          else { status.style.color = "var(--accent)"; status.textContent = (res.j && res.j.error) || "Something went wrong. Try again."; }
+        })
+        .catch(function(){ status.style.color = "var(--accent)"; status.textContent = "Network error. Try again."; })
+        .then(function(){ btn.disabled = false; btn.textContent = label; });
+    });
+  }
   function boot(){
     var stored = "light";
     try { stored = localStorage.getItem("av-theme") || "light"; } catch(e){}
     applyTheme(stored);
     bindHovers(document);
     initCursor();
+    initSubscribe();
   }
   window.App = { toggleTheme: toggleTheme };
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);

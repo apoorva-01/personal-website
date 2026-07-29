@@ -1,5 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /admin/
 
 # AI crawlers are welcome — being cited by AI search drives brand visibility.
 # (No llms.txt here on purpose: Google has stated it's not a ranking signal.)

@@ -608,7 +608,7 @@ function cardHtml(post) {
     .join("");
   const href = `/posts/${d.slug}`;
   return (
-    `<a data-reveal="1" data-tags="${escAttr(tagArr.join("|"))}" href="${href}" class="logrow" style="display:grid;grid-template-columns:190px 1fr;gap:36px;align-items:start;text-decoration:none;color:inherit;padding:38px 8px;border-top:1px solid var(--w09);cursor:pointer;opacity:0;transform:translateY(24px);transition:background .2s" data-hover="background:var(--surface-hover)">` +
+    `<a data-reveal="1" data-tags="${escAttr(tagArr.join("|"))}" href="${href}" class="logrow" style="display:grid;grid-template-columns:190px 1fr;gap:36px;align-items:start;text-decoration:none;color:inherit;padding:38px 8px;border-top:1px solid var(--w09);cursor:pointer;transition:background .2s" data-hover="background:var(--surface-hover)">` +
     `<div style="display:flex;flex-direction:column;gap:16px">` +
     `<div style="font-family:'IBM Plex Mono',monospace;font-size:12px;display:flex;flex-direction:column;gap:4px"><span style="color:var(--text-3)">${escHtml(d.date || "")}</span><span style="color:var(--faint)">${escHtml(d.read || "")}</span></div>` +
     `<div style="display:flex;flex-wrap:wrap;gap:6px">${tags}</div>` +
@@ -636,7 +636,7 @@ function featuredCardHtml(post) {
   const href = `/posts/${d.slug}`;
   const primaryTag = tagArr[0] || "Notes";
   return (
-    `<a data-reveal="1" data-tags="${escAttr(tagArr.join("|"))}" href="${href}" class="featured-card" style="display:flex;flex-direction:column;text-decoration:none;color:inherit;border:1px solid var(--w09);background:var(--surface);overflow:hidden;opacity:0;transform:translateY(24px);transition:border-color .2s" data-hover="border-color:rgba(255,75,38,.4)">` +
+    `<a data-reveal="1" data-tags="${escAttr(tagArr.join("|"))}" href="${href}" class="featured-card" style="display:flex;flex-direction:column;text-decoration:none;color:inherit;border:1px solid var(--w09);background:var(--surface);overflow:hidden;transition:border-color .2s" data-hover="border-color:rgba(255,75,38,.4)">` +
     `<div style="height:130px;position:relative;background-image:repeating-linear-gradient(90deg,var(--w06) 0 1px,transparent 1px 26px);border-bottom:1px solid var(--w09)">` +
     `<span style="position:absolute;left:22px;bottom:16px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;color:var(--accent);text-transform:uppercase">Latest · ${escHtml(primaryTag)}</span>` +
     `</div>` +

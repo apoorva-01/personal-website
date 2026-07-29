@@ -44,25 +44,108 @@ function renderBody(md) {
   return html;
 }
 
+// marked entity-escapes text (&amp; &lt; &gt; &quot; &#39;) before we ever see
+// it; decode those back before slugifying, or entities like &#39; leak stray
+// digits ("don&#39;t" -> "don39t") into the generated id.
+function decodeEntities(s) {
+  return s
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'");
+}
+
+function slugify(text) {
+  return (
+    text
+      .toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, "")
+      .trim()
+      .replace(/\s+/g, "-") || "section"
+  );
+}
+
+// Wraps fenced code blocks with a copy button. Runs before processHeadings
+// so the h2/h3 regex never has to worry about matching inside a <pre>.
+function processCodeBlocks(html) {
+  return html.replace(
+    /<pre>(<code[^>]*>[\s\S]*?<\/code>)<\/pre>/g,
+    (m, codeInner) =>
+      `<div class="code-block"><button type="button" class="copy-btn" aria-label="Copy code">Copy</button><pre>${codeInner}</pre></div>`
+  );
+}
+
+// Adds a stable id + hover-to-copy anchor to every h2/h3, and returns a flat
+// table-of-contents list alongside the annotated HTML.
+function processHeadings(html) {
+  const seen = new Map();
+  const toc = [];
+  const out = html.replace(/<h([23])>([\s\S]*?)<\/h\1>/g, (match, level, inner) => {
+    const plain = decodeEntities(inner.replace(/<[^>]+>/g, "").trim());
+    let slug = slugify(plain);
+    const count = seen.get(slug) || 0;
+    seen.set(slug, count + 1);
+    if (count > 0) slug = `${slug}-${count + 1}`;
+    toc.push({ level: Number(level), id: slug, text: plain });
+    return `<h${level} id="${slug}">${inner}<a class="anchor-link" href="#${slug}" aria-label="Link to this section">#</a></h${level}>`;
+  });
+  return { html: out, toc };
+}
+
+function renderToc(toc) {
+  if (!toc.length) return "";
+  const items = toc
+    .map(
+      (t) =>
+        `<a href="#${t.id}" class="toc-link" data-toc-level="${t.level}">${escHtml(t.text)}</a>`
+    )
+    .join("");
+  return `<nav class="toc" aria-label="Table of contents"><div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.12em;color:var(--faint);text-transform:uppercase;margin-bottom:8px;padding-left:11px">On this page</div>${items}</nav>`;
+}
+
+// prevNewer/nextOlder are posts array-adjacent entries (posts are sorted newest-first).
+function renderPostNav(prevNewer, nextOlder) {
+  if (!prevNewer && !nextOlder) return "";
+  const older = nextOlder
+    ? `<a class="postnav-link" href="/posts/${nextOlder.data.slug}" data-hover="border-color:var(--accent)"><span class="postnav-label">← Older</span><span class="postnav-title">${escHtml(nextOlder.data.title)}</span></a>`
+    : "";
+  const newer = prevNewer
+    ? `<a class="postnav-link next" href="/posts/${prevNewer.data.slug}" data-hover="border-color:var(--accent)"><span class="postnav-label">Newer →</span><span class="postnav-title">${escHtml(prevNewer.data.title)}</span></a>`
+    : "";
+  const twoUp = older && newer ? " two" : "";
+  return `<nav class="postnav${twoUp}" aria-label="More notes" style="margin-top:44px">${older}${newer}</nav>`;
+}
+
 function readingMinutes(post, plainWords) {
   const m = String(post.data.read || "").match(/(\d+)/);
   return m ? Number(m[1]) : Math.max(1, Math.round(plainWords / 200));
 }
 
 const ARTICLE_CSS = `
-  .article{display:flex;flex-direction:column;gap:22px}
-  .article>p{font-size:17.5px;line-height:1.78;color:var(--text-2);letter-spacing:-.005em}
+  .article{display:flex;flex-direction:column;gap:24px}
+  .article>p{max-width:68ch;font-size:18.5px;line-height:1.7;color:var(--text-2);letter-spacing:-.005em}
   .article>p:first-of-type{font-size:20px;line-height:1.62;color:var(--text);letter-spacing:-.01em}
-  .article h2{margin-top:14px;font-size:24px;font-weight:400;letter-spacing:-.03em;line-height:1.25;color:var(--heading)}
-  .article h3{margin-top:8px;font-size:19px;font-weight:500;letter-spacing:-.02em;line-height:1.3;color:var(--heading)}
+  .article h2,.article h3{position:relative}
+  .article h2{margin-top:16px;font-size:28px;font-weight:500;letter-spacing:-.03em;line-height:1.22;color:var(--heading)}
+  .article h3{margin-top:8px;font-size:20.5px;font-weight:500;letter-spacing:-.02em;line-height:1.3;color:var(--heading)}
+  .article h2 .anchor-link,.article h3 .anchor-link{opacity:0;margin-left:9px;color:var(--faint);text-decoration:none;font-weight:400;font-size:.7em;border-bottom:none;transition:opacity .15s,color .15s}
+  .article h2:hover .anchor-link,.article h3:hover .anchor-link{opacity:1}
+  .article h2 .anchor-link:hover,.article h3 .anchor-link:hover{color:var(--accent)}
   .article a{color:var(--accent);text-decoration:none;border-bottom:1px solid color-mix(in srgb,var(--accent) 40%,transparent)}
   .article a:hover{border-bottom-color:var(--accent)}
-  .article code{font-family:'IBM Plex Mono',monospace;font-size:.88em;background:var(--bubble);border:1px solid var(--w09);padding:1px 6px;border-radius:0}
-  .article pre{margin:0;overflow-x:auto;background:var(--bubble);border:1px solid var(--w09);border-radius:0;padding:16px 18px}
-  .article pre code{background:none;border:0;padding:0;font-size:13.5px;line-height:1.6;color:var(--text-2)}
-  .article ul,.article ol{padding-left:22px;display:flex;flex-direction:column;gap:8px;font-size:17.5px;line-height:1.7;color:var(--text-2)}
+  .article code{font-family:'IBM Plex Mono',monospace;font-size:.85em;background:var(--bubble);border:1px solid var(--w09);padding:1px 6px;border-radius:0}
+  .article .code-block{position:relative;margin:2px 0}
+  .article .code-block .copy-btn{position:absolute;top:10px;right:10px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.04em;color:var(--text-3);background:var(--surface);border:1px solid var(--w10);border-radius:0;padding:5px 10px;cursor:pointer;opacity:0;transition:opacity .15s,border-color .15s,color .15s}
+  .article .code-block:hover .copy-btn{opacity:1}
+  .article .code-block .copy-btn:hover{border-color:var(--accent);color:var(--heading)}
+  .article pre{margin:0;overflow-x:auto;background:#0d1117;border:1px solid var(--w09);border-radius:0;padding:16px 18px}
+  .article pre code{background:none;border:0;padding:0;font-size:13.5px;line-height:1.6;color:#c9d1d9}
+  .article ul,.article ol{max-width:68ch;padding-left:22px;display:flex;flex-direction:column;gap:8px;font-size:18px;line-height:1.7;color:var(--text-2)}
   .article li{padding-left:3px}
-  .article blockquote{margin:0;padding:2px 0 2px 18px;border-left:2px solid var(--accent);color:var(--text-3)}
+  .article blockquote{margin:6px 0;padding:16px 20px;background:var(--surface);border-left:3px solid var(--accent);border-radius:0;color:var(--text-2);font-size:17px;line-height:1.65}
+  .article blockquote p{margin:0 0 8px}
+  .article blockquote p:last-child{margin-bottom:0}
   .article strong{color:var(--text);font-weight:600}
   .article img{max-width:100%;height:auto;border:1px solid var(--w08)}
   .article .tablewrap{overflow-x:auto}
@@ -73,7 +156,22 @@ const ARTICLE_CSS = `
   .article td[align="right"]{font-family:'IBM Plex Mono',monospace}
   .article figure{margin:0}
   .article figure svg{width:100%;height:auto}
-  .article figcaption{margin-top:10px;font-size:12.5px;color:var(--faint);text-align:center}`;
+  .article figcaption{margin-top:10px;font-size:12.5px;color:var(--faint);text-align:center}
+  .dek{margin-top:16px;max-width:68ch;font-size:18px;line-height:1.55;color:var(--text-3)}
+  .toc{display:none}
+  @media (min-width:1360px){
+    .toc{display:block;position:fixed;top:150px;left:calc(50% + 470px);width:220px;max-height:calc(100vh - 190px);overflow-y:auto}
+  }
+  .toc-link{display:block;padding:5px 0;font-size:13px;line-height:1.4;color:var(--text-4);text-decoration:none;border-left:2px solid transparent;padding-left:11px;transition:color .15s,border-color .15s}
+  .toc-link[data-toc-level="3"]{padding-left:22px;font-size:12px}
+  .toc-link.active{color:var(--heading);border-left-color:var(--accent)}
+  #back-to-top{position:fixed;right:24px;bottom:24px;width:44px;height:44px;border-radius:2px;border:1px solid var(--w12);background:var(--surface);color:var(--text-2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;opacity:0;pointer-events:none;transition:opacity .2s,border-color .18s,color .18s;z-index:40}
+  #back-to-top.show{opacity:1;pointer-events:auto}
+  .postnav{margin-top:8px;display:grid;gap:14px}
+  .postnav-link{display:flex;flex-direction:column;gap:6px;padding:18px 20px;border:1px solid var(--w09);background:var(--surface);text-decoration:none;transition:border-color .18s}
+  .postnav-label{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
+  .postnav-title{font-size:15.5px;font-weight:500;color:var(--heading);line-height:1.35}
+  @media (min-width:640px){ .postnav.two{grid-template-columns:1fr 1fr} .postnav-link.next{text-align:right;align-items:flex-end} }`;
 
 const BASE_CSS = `
   :root{
@@ -231,6 +329,74 @@ const PAGE_SCRIPT = `<script>
         .then(function(){ btn.disabled = false; btn.textContent = label; });
     });
   }
+  function initCodeCopy(){
+    var btns = document.querySelectorAll(".copy-btn");
+    for (var i=0;i<btns.length;i++){
+      (function(btn){
+        btn.addEventListener("click", function(){
+          var pre = btn.parentElement.querySelector("pre");
+          var text = pre ? pre.textContent : "";
+          if (!(navigator.clipboard && navigator.clipboard.writeText)) return;
+          navigator.clipboard.writeText(text).then(function(){
+            var label = btn.textContent;
+            btn.textContent = "Copied!";
+            setTimeout(function(){ btn.textContent = label; }, 1500);
+          });
+        });
+      })(btns[i]);
+    }
+  }
+  function initToc(){
+    var links = document.querySelectorAll(".toc-link");
+    var headings = document.querySelectorAll(".article h2[id], .article h3[id]");
+    if (!links.length || !headings.length || !window.IntersectionObserver) return;
+    function setActive(id){
+      for (var i=0;i<links.length;i++){
+        var on = links[i].getAttribute("href") === "#"+id;
+        links[i].classList.toggle("active", on);
+      }
+    }
+    var observer = new IntersectionObserver(function(entries){
+      for (var i=0;i<entries.length;i++){
+        if (entries[i].isIntersecting) setActive(entries[i].target.id);
+      }
+    }, { rootMargin: "-15% 0px -70% 0px" });
+    for (var i=0;i<headings.length;i++) observer.observe(headings[i]);
+  }
+  function initBackToTop(){
+    var btn = document.getElementById("back-to-top");
+    if (!btn) return;
+    function upd(){ btn.classList.toggle("show", (window.scrollY||0) > 600); }
+    window.addEventListener("scroll", upd, { passive:true });
+    upd();
+  }
+  function initHighlight(){
+    if (window.hljs) { try { window.hljs.highlightAll(); } catch(e){} }
+  }
+  function revealArticle(){
+    var article = document.querySelector(".article");
+    if (!article) return;
+    var children = article.children;
+    for (var i=0;i<children.length;i++){
+      (function(el){
+        el.style.opacity = "0"; el.style.transform = "translateY(16px)";
+        window.Motion.inView(el, function(){
+          window.Motion.animate(el, { opacity:[0,1], transform:["translateY(16px)","translateY(0px)"] },
+            { duration:0.5, ease:[.22,1,.36,1] });
+        }, { margin: "-10% 0px -10% 0px" });
+      })(children[i]);
+    }
+  }
+  var articleTries = 0;
+  function startArticleReveal(){
+    var reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduced) return; // leave content visible as server-rendered — no reveal
+    if (!(window.Motion && window.Motion.animate && window.Motion.inView)){
+      if (articleTries++ < 40){ setTimeout(startArticleReveal, 75); return; }
+      return;
+    }
+    revealArticle();
+  }
   function boot(){
     var stored = "light";
     try { stored = localStorage.getItem("av-theme") || "light"; } catch(e){}
@@ -238,6 +404,11 @@ const PAGE_SCRIPT = `<script>
     bindHovers(document);
     initCursor();
     initSubscribe();
+    initCodeCopy();
+    initToc();
+    initBackToTop();
+    initHighlight();
+    startArticleReveal();
   }
   window.App = { toggleTheme: toggleTheme };
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
@@ -245,13 +416,16 @@ const PAGE_SCRIPT = `<script>
 })();
 </script>`;
 
-function pageHtml(post) {
+function pageHtml(post, prevNewer, nextOlder) {
   const d = post.data;
   const url = `${SITE}/posts/${d.slug}`;
   const og = d.ogImage ? SITE + d.ogImage : SITE + DEFAULT_OG;
   const desc = d.excerpt || "";
   const tags = Array.isArray(d.tags) ? d.tags : [];
-  const bodyHtml = renderBody(post.content);
+  let bodyHtml = renderBody(post.content);
+  bodyHtml = processCodeBlocks(bodyHtml);
+  const { html: bodyHtmlWithIds, toc } = processHeadings(bodyHtml);
+  bodyHtml = bodyHtmlWithIds;
   const plainWords = bodyHtml.replace(/<[^>]+>/g, " ").split(/\s+/).filter(Boolean).length;
   const minutes = readingMinutes(post, plainWords);
   const twTitle = d.twitterTitle || d.title;
@@ -318,6 +492,8 @@ function pageHtml(post) {
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/motion@11.11.13/dist/motion.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <style>${BASE_CSS}${ARTICLE_CSS}
 </style>
   <!-- RB2B person-level visitor identification (US traffic) -> Slack -->
@@ -354,17 +530,22 @@ ${JSON.stringify(ldCrumb, null, 2)}
   </script>
 ${NAV}
 
+${renderToc(toc)}
+
   <main style="position:relative;z-index:1;max-width:860px;margin:0 auto;padding:120px 24px 120px">
     <a href="/blog" style="display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.02em;color:var(--text-3);padding:7px 12px;border-radius:0;border:1px solid var(--w10);background:transparent;transition:border-color .18s,color .18s;animation:fadeUp .5s ease both" data-hover="color:var(--heading);border-color:var(--accent)">← Back to writing</a>
 
     <article style="margin-top:0">
     <div style="display:flex;align-items:center;gap:10px;margin-top:30px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--faint)"><span>${escHtml(d.date || "")}</span><span style="opacity:.5">·</span><span>${escHtml(d.read || minutes + " min read")}</span></div>
     <h1 style="margin-top:14px;font-size:clamp(30px,5vw,46px);font-weight:500;letter-spacing:-.04em;line-height:1.08;color:var(--heading)">${escHtml(d.title)}</h1>
+    ${desc ? `<p class="dek">${escHtml(desc)}</p>` : ""}
     <div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:18px">${tagPills}</div>
     <div style="margin-top:32px;height:1px;background:linear-gradient(90deg,rgba(255,75,38,.5),transparent)"></div>
 
     <div class="article" style="margin-top:30px">${bodyHtml}</div>
     </article>
+
+    ${renderPostNav(prevNewer, nextOlder)}
 
     <div style="margin-top:48px;padding-top:26px;border-top:1px solid var(--w08);display:flex;align-items:center;gap:14px"><img src="/assets/apoorva.jpg" alt="Apoorva Verma" width="46" height="46" style="width:46px;height:46px;border-radius:2px;object-fit:cover;border:1px solid var(--accent);display:block"><div style="flex:1"><div style="font-size:14px;font-weight:500;color:var(--text)">Apoorva Verma</div><div style="font-size:12.5px;color:var(--faint)">Software Engineer · Applied AI</div></div><div style="display:flex;gap:7px"><a href="https://github.com/apoorva-01" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:7px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text-3);text-decoration:none;padding:6px 11px;border:1px solid var(--w10);border-radius:0;transition:border-color .18s,color .18s" data-hover="color:var(--heading);border-color:var(--accent)"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0"><path d="M12 .5C5.37.5 0 5.87 0 12.5c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58 0-.29-.01-1.04-.02-2.05-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.33-1.76-1.33-1.76-1.09-.75.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49.99.11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.34-5.47-5.96 0-1.32.47-2.39 1.24-3.23-.12-.31-.54-1.53.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.65.24 2.87.12 3.18.77.84 1.24 1.91 1.24 3.23 0 4.63-2.81 5.65-5.49 5.95.43.37.81 1.1.81 2.22 0 1.6-.01 2.9-.01 3.29 0 .32.22.7.83.58A12.01 12.01 0 0 0 24 12.5C24 5.87 18.63.5 12 .5Z"/></svg>GitHub</a><a href="https://www.linkedin.com/in/apoorva0510/" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:7px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text-3);text-decoration:none;padding:6px 11px;border:1px solid var(--w10);border-radius:0;transition:border-color .18s,color .18s" data-hover="color:var(--heading);border-color:var(--accent)"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14ZM7.12 20.45H3.56V9h3.56v11.45ZM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0Z"/></svg>LinkedIn</a></div></div>
 
@@ -375,6 +556,8 @@ ${SUBSCRIBE_BLOCK}
   </main>
 
 </div>
+
+<button id="back-to-top" type="button" aria-label="Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 
 ${PAGE_SCRIPT}
   <script src="/visit.js" defer></script>
@@ -448,10 +631,12 @@ function writeSitemap(posts) {
 function main() {
   const posts = readPosts();
   mkdirSync(POSTS_OUT, { recursive: true });
-  for (const post of posts) {
-    writeFileSync(join(POSTS_OUT, `${post.data.slug}.html`), pageHtml(post));
+  posts.forEach((post, i) => {
+    const prevNewer = posts[i - 1] || null;
+    const nextOlder = posts[i + 1] || null;
+    writeFileSync(join(POSTS_OUT, `${post.data.slug}.html`), pageHtml(post, prevNewer, nextOlder));
     console.log(`  posts/${post.data.slug}.html`);
-  }
+  });
   writeBlogIndex(posts);
   writeSitemap(posts);
   console.log(`Built ${posts.length} post(s), blog index, sitemap.`);

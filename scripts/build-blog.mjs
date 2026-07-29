@@ -228,7 +228,7 @@ const NAV = `  <nav style="position:fixed;top:0;left:0;right:0;z-index:50;displa
   </nav>`;
 
 const SUBSCRIBE_BLOCK = `<section style="padding:0 0 8px">
-    <div style="border:1px solid var(--w10);background:var(--surface);padding:34px 22px 24px;display:flex;flex-direction:column;gap:12px">
+    <div style="border:1px solid var(--w10);background:var(--surface);padding:48px 22px 24px;display:flex;flex-direction:column;gap:12px">
       <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;color:var(--faint);text-transform:uppercase">Get new notes by email</div>
       <p style="font-size:14px;line-height:1.6;color:var(--text-4);max-width:52ch">One email when I publish. No spam, unsubscribe anytime.</p>
       <form id="subscribe-form" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px">

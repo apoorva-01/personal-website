@@ -228,7 +228,7 @@ const NAV = `  <nav style="position:fixed;top:0;left:0;right:0;z-index:50;displa
   </nav>`;
 
 const SUBSCRIBE_BLOCK = `<section style="padding:0 0 8px">
-    <div style="border:1px solid var(--w10);background:var(--surface);padding:24px 22px;display:flex;flex-direction:column;gap:12px">
+    <div style="border:1px solid var(--w10);background:var(--surface);padding:34px 22px 24px;display:flex;flex-direction:column;gap:12px">
       <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;color:var(--faint);text-transform:uppercase">Get new notes by email</div>
       <p style="font-size:14px;line-height:1.6;color:var(--text-4);max-width:52ch">One email when I publish. No spam, unsubscribe anytime.</p>
       <form id="subscribe-form" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px">
@@ -273,6 +273,8 @@ const PAGE_SCRIPT = `<script>
     try { localStorage.setItem("av-theme", curTheme); } catch(e){}
     var btn = document.getElementById("theme-btn");
     if (btn) btn.setAttribute("aria-pressed", curTheme === "dark" ? "true" : "false");
+    var giscusFrame = document.querySelector("iframe.giscus-frame");
+    if (giscusFrame) giscusFrame.contentWindow.postMessage({ giscus: { setConfig: { theme: curTheme } } }, "https://giscus.app");
   }
   function toggleTheme(){
     var cur = "dark";
@@ -373,6 +375,26 @@ const PAGE_SCRIPT = `<script>
   function initHighlight(){
     if (window.hljs) { try { window.hljs.highlightAll(); } catch(e){} }
   }
+  function initGiscus(){
+    var container = document.getElementById("giscus-container");
+    if (!container) return;
+    var script = document.createElement("script");
+    script.src = "https://giscus.app/client.js";
+    script.setAttribute("data-repo", "apoorva-01/personal-website");
+    script.setAttribute("data-repo-id", "R_kgDOTDS6WA");
+    script.setAttribute("data-category", "General");
+    script.setAttribute("data-category-id", "DIC_kwDOTDS6WM4DCRJQ");
+    script.setAttribute("data-mapping", "pathname");
+    script.setAttribute("data-strict", "0");
+    script.setAttribute("data-reactions-enabled", "1");
+    script.setAttribute("data-emit-metadata", "0");
+    script.setAttribute("data-input-position", "bottom");
+    script.setAttribute("data-theme", curTheme === "light" ? "light" : "dark");
+    script.setAttribute("data-lang", "en");
+    script.setAttribute("crossorigin", "anonymous");
+    script.async = true;
+    container.appendChild(script);
+  }
   function revealArticle(){
     var article = document.querySelector(".article");
     if (!article) return;
@@ -408,6 +430,7 @@ const PAGE_SCRIPT = `<script>
     initToc();
     initBackToTop();
     initHighlight();
+    initGiscus();
     startArticleReveal();
   }
   window.App = { toggleTheme: toggleTheme };
@@ -546,6 +569,14 @@ ${renderToc(toc)}
     </article>
 
     ${renderPostNav(prevNewer, nextOlder)}
+
+    <section style="margin-top:48px" aria-label="Comments and reactions">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:22px">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;color:var(--faint);text-transform:uppercase">Comments &amp; reactions</span>
+        <span style="flex:1;height:1px;background:var(--w10)"></span>
+      </div>
+      <div id="giscus-container"></div>
+    </section>
 
     <div style="margin-top:48px;padding-top:26px;border-top:1px solid var(--w08);display:flex;align-items:center;gap:14px"><img src="/assets/apoorva.jpg" alt="Apoorva Verma" width="46" height="46" style="width:46px;height:46px;border-radius:2px;object-fit:cover;border:1px solid var(--accent);display:block"><div style="flex:1"><div style="font-size:14px;font-weight:500;color:var(--text)">Apoorva Verma</div><div style="font-size:12.5px;color:var(--faint)">Software Engineer · Applied AI</div></div><div style="display:flex;gap:7px"><a href="https://github.com/apoorva-01" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:7px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text-3);text-decoration:none;padding:6px 11px;border:1px solid var(--w10);border-radius:0;transition:border-color .18s,color .18s" data-hover="color:var(--heading);border-color:var(--accent)"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0"><path d="M12 .5C5.37.5 0 5.87 0 12.5c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58 0-.29-.01-1.04-.02-2.05-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.33-1.76-1.33-1.76-1.09-.75.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49.99.11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.34-5.47-5.96 0-1.32.47-2.39 1.24-3.23-.12-.31-.54-1.53.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.65.24 2.87.12 3.18.77.84 1.24 1.91 1.24 3.23 0 4.63-2.81 5.65-5.49 5.95.43.37.81 1.1.81 2.22 0 1.6-.01 2.9-.01 3.29 0 .32.22.7.83.58A12.01 12.01 0 0 0 24 12.5C24 5.87 18.63.5 12 .5Z"/></svg>GitHub</a><a href="https://www.linkedin.com/in/apoorva0510/" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:7px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text-3);text-decoration:none;padding:6px 11px;border:1px solid var(--w10);border-radius:0;transition:border-color .18s,color .18s" data-hover="color:var(--heading);border-color:var(--accent)"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14ZM7.12 20.45H3.56V9h3.56v11.45ZM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0Z"/></svg>LinkedIn</a></div></div>
 

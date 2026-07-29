@@ -689,21 +689,35 @@
   var STREAM_CARET = '<span style="display:inline-block;width:7px;height:15px;margin-left:2px;background:var(--accent);vertical-align:-2px;animation:blink 1s step-end infinite"></span>';
 
   // ---- hover handler (mouseenter/leave, append-and-restore) ----
+  // Only sets/restores the exact CSS properties named in data-hover — never
+  // swaps the whole style attribute, so it can't clobber opacity/transform
+  // that Motion's scroll-reveal animates on the same element (WAAPI-driven
+  // animations don't rewrite the inline style attribute string, so a
+  // full-attribute snapshot/restore would freeze a card at its
+  // pre-animation opacity:0 the moment it's ever hovered).
   function bindHovers(scope){
     var els = scope.querySelectorAll("[data-hover]");
     for (var i=0;i<els.length;i++){
       (function(el){
         if (el.__hb) return; el.__hb = 1;
-        var hov = el.getAttribute("data-hover");
+        var hov = el.getAttribute("data-hover") || "";
+        var decls = hov.split(";").map(function(s){ return s.trim(); }).filter(Boolean).map(function(pair){
+          var idx = pair.indexOf(":");
+          return [pair.slice(0, idx).trim(), pair.slice(idx + 1).trim()];
+        });
+        var prev = [];
         el.addEventListener("mouseenter", function(){
-          if (el.__hovering) return;
+          if (el.__hovering || !decls.length) return;
           el.__hovering = 1;
-          el.__base = el.getAttribute("style") || "";
-          el.setAttribute("style", el.__base + ";" + hov);
+          prev = decls.map(function(d){ return el.style.getPropertyValue(d[0]); });
+          decls.forEach(function(d){ el.style.setProperty(d[0], d[1]); });
         });
         el.addEventListener("mouseleave", function(){
           el.__hovering = 0;
-          el.setAttribute("style", el.__base);
+          decls.forEach(function(d, idx2){
+            if (prev[idx2]) el.style.setProperty(d[0], prev[idx2]);
+            else el.style.removeProperty(d[0]);
+          });
         });
       })(els[i]);
     }

@@ -64,6 +64,12 @@
     .nav-link{display:none !important}
     #cur-ring,#cur-dot{display:none !important}
   }
+
+  .tag-chip{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.02em;color:var(--text-3);padding:7px 13px;border:1px solid var(--w10);background:transparent;cursor:pointer;transition:border-color .18s,color .18s}
+  .tag-chip.active{border-color:var(--accent);color:var(--heading);background:rgba(255,75,38,.08)}
+  .logrow.tag-hidden,.featured-card.tag-hidden{display:none !important}
+  #back-to-top{position:fixed;right:24px;bottom:24px;width:44px;height:44px;border-radius:2px;border:1px solid var(--w12);background:var(--surface);color:var(--text-2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;opacity:0;pointer-events:none;transition:opacity .2s,border-color .18s,color .18s;z-index:40}
+  #back-to-top.show{opacity:1;pointer-events:auto}
 </style>
   <!-- RB2B person-level visitor identification (US traffic) -> Slack -->
   <script>!function(key) {if (window.reb2b) return;window.reb2b = {loaded: true};var s = document.createElement("script");s.async = true;s.src = "https://ddwl4m2hdecbv.cloudfront.net/b/" + key + "/" + key + ".js.gz";document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.getElementsByTagName("script")[0]);}("4O7Z0HE0XPNX");</script>
@@ -150,18 +156,21 @@
       </div>
     </section>
 
-    <!-- POST LIST (rendered by JS) -->
+    <!-- POST LIST (cards rendered at build time; filter bar rendered by JS) -->
     <section style="padding:24px 0 120px">
+      <div id="av-tagfilter" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px"></div>
       <div style="display:flex;align-items:baseline;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);padding:0 8px 15px;border-bottom:1px solid var(--w10)">
         <span>The log</span>
         <span id="av-count"><!--BUILD:COUNT-->2 entries<!--/BUILD:COUNT--></span>
       </div>
-      <div id="av-bloggrid" style="border-bottom:1px solid var(--w09)"><!--BUILD:CARDS--><a data-reveal="1" href="/posts/mysql-vector-store-langchain" class="logrow" style="display:grid;grid-template-columns:190px 1fr;gap:36px;align-items:start;text-decoration:none;color:inherit;padding:38px 8px;border-top:1px solid var(--w09);cursor:pointer;opacity:0;transform:translateY(24px);transition:background .2s" data-hover="background:var(--surface-hover)"><div style="display:flex;flex-direction:column;gap:16px"><div style="font-family:'IBM Plex Mono',monospace;font-size:12px;display:flex;flex-direction:column;gap:4px"><span style="color:var(--text-3)">Jul 2026</span><span style="color:var(--faint)">8 min read</span></div><div style="display:flex;flex-wrap:wrap;gap:6px"><span style="font-size:11px;color:var(--text-3);padding:3px 10px;border-radius:2px;background:rgba(255,75,38,.08);border:1px solid rgba(255,75,38,.2)">Vector Search</span><span style="font-size:11px;color:var(--text-3);padding:3px 10px;border-radius:2px;background:rgba(255,75,38,.08);border:1px solid rgba(255,75,38,.2)">LangChain</span><span style="font-size:11px;color:var(--text-3);padding:3px 10px;border-radius:2px;background:rgba(255,75,38,.08);border:1px solid rgba(255,75,38,.2)">Open Source</span></div></div><div><h3 style="font-size:clamp(23px,2.7vw,31px);font-weight:500;letter-spacing:-.03em;line-height:1.16;color:var(--heading)">Building a vector store on MySQL 9, and everything I refused to fake</h3><p style="margin-top:15px;font-size:16px;line-height:1.65;color:var(--text-4);max-width:60ch">MySQL 9 gives you a VECTOR column and a distance function. No index, no relevance scores, nothing else. Here's what I learned building a real LangChain and LlamaIndex vector store on top of that, without pretending it had features it doesn't.</p><span style="display:inline-flex;align-items:center;gap:8px;margin-top:22px;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.02em;color:var(--accent)">Read the note →</span></div></a><a data-reveal="1" href="/posts/rag-eval-lying-metrics" class="logrow" style="display:grid;grid-template-columns:190px 1fr;gap:36px;align-items:start;text-decoration:none;color:inherit;padding:38px 8px;border-top:1px solid var(--w09);cursor:pointer;opacity:0;transform:translateY(24px);transition:background .2s" data-hover="background:var(--surface-hover)"><div style="display:flex;flex-direction:column;gap:16px"><div style="font-family:'IBM Plex Mono',monospace;font-size:12px;display:flex;flex-direction:column;gap:4px"><span style="color:var(--text-3)">Jul 2026</span><span style="color:var(--faint)">6 min read</span></div><div style="display:flex;flex-wrap:wrap;gap:6px"><span style="font-size:11px;color:var(--text-3);padding:3px 10px;border-radius:2px;background:rgba(255,75,38,.08);border:1px solid rgba(255,75,38,.2)">RAG</span><span style="font-size:11px;color:var(--text-3);padding:3px 10px;border-radius:2px;background:rgba(255,75,38,.08);border:1px solid rgba(255,75,38,.2)">LLM Evaluation</span></div></div><div><h3 style="font-size:clamp(23px,2.7vw,31px);font-weight:500;letter-spacing:-.03em;line-height:1.16;color:var(--heading)">I graded 50 RAG answers with a hand-built harness. Half the metrics were lying to me.</h3><p style="margin-top:15px;font-size:16px;line-height:1.65;color:var(--text-4);max-width:60ch">Faithfulness sat at 1.0 across every config I tried. That number told me nothing, and here's the one I actually trust instead.</p><span style="display:inline-flex;align-items:center;gap:8px;margin-top:22px;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.02em;color:var(--accent)">Read the note →</span></div></a><!--/BUILD:CARDS--></div>
+      <div id="av-bloggrid" style="border-bottom:1px solid var(--w09)"><!--BUILD:CARDS--><a data-reveal="1" data-tags="Vector Search|LangChain|Open Source" href="/posts/mysql-vector-store-langchain" class="featured-card" style="display:flex;flex-direction:column;text-decoration:none;color:inherit;border:1px solid var(--w09);background:var(--surface);overflow:hidden;opacity:0;transform:translateY(24px);transition:border-color .2s" data-hover="border-color:rgba(255,75,38,.4)"><div style="height:130px;position:relative;background-image:repeating-linear-gradient(90deg,var(--w06) 0 1px,transparent 1px 26px);border-bottom:1px solid var(--w09)"><span style="position:absolute;left:22px;bottom:16px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;color:var(--accent);text-transform:uppercase">Latest · Vector Search</span></div><div style="padding:30px 32px 34px"><div style="font-family:'IBM Plex Mono',monospace;font-size:12px;display:flex;gap:10px;color:var(--faint)"><span style="color:var(--text-3)">Jul 2026</span><span>·</span><span>8 min read</span></div><h3 style="margin-top:14px;font-size:clamp(26px,3.2vw,36px);font-weight:500;letter-spacing:-.03em;line-height:1.15;color:var(--heading)">Building a vector store on MySQL 9, and everything I refused to fake</h3><p style="margin-top:14px;font-size:16.5px;line-height:1.65;color:var(--text-4);max-width:70ch">MySQL 9 gives you a VECTOR column and a distance function. No index, no relevance scores, nothing else. Here's what I learned building a real LangChain and LlamaIndex vector store on top of that, without pretending it had features it doesn't.</p><div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:18px"><span style="font-size:11px;color:var(--text-3);padding:3px 10px;border-radius:2px;background:rgba(255,75,38,.08);border:1px solid rgba(255,75,38,.2)">Vector Search</span><span style="font-size:11px;color:var(--text-3);padding:3px 10px;border-radius:2px;background:rgba(255,75,38,.08);border:1px solid rgba(255,75,38,.2)">LangChain</span><span style="font-size:11px;color:var(--text-3);padding:3px 10px;border-radius:2px;background:rgba(255,75,38,.08);border:1px solid rgba(255,75,38,.2)">Open Source</span></div><span style="display:inline-flex;align-items:center;gap:8px;margin-top:20px;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.02em;color:var(--accent)">Read the note →</span></div></a><a data-reveal="1" data-tags="RAG|LLM Evaluation" href="/posts/rag-eval-lying-metrics" class="logrow" style="display:grid;grid-template-columns:190px 1fr;gap:36px;align-items:start;text-decoration:none;color:inherit;padding:38px 8px;border-top:1px solid var(--w09);cursor:pointer;opacity:0;transform:translateY(24px);transition:background .2s" data-hover="background:var(--surface-hover)"><div style="display:flex;flex-direction:column;gap:16px"><div style="font-family:'IBM Plex Mono',monospace;font-size:12px;display:flex;flex-direction:column;gap:4px"><span style="color:var(--text-3)">Jul 2026</span><span style="color:var(--faint)">6 min read</span></div><div style="display:flex;flex-wrap:wrap;gap:6px"><span style="font-size:11px;color:var(--text-3);padding:3px 10px;border-radius:2px;background:rgba(255,75,38,.08);border:1px solid rgba(255,75,38,.2)">RAG</span><span style="font-size:11px;color:var(--text-3);padding:3px 10px;border-radius:2px;background:rgba(255,75,38,.08);border:1px solid rgba(255,75,38,.2)">LLM Evaluation</span></div></div><div><h3 style="font-size:clamp(23px,2.7vw,31px);font-weight:500;letter-spacing:-.03em;line-height:1.16;color:var(--heading)">I graded 50 RAG answers with a hand-built harness. Half the metrics were lying to me.</h3><p style="margin-top:15px;font-size:16px;line-height:1.65;color:var(--text-4);max-width:60ch">Faithfulness sat at 1.0 across every config I tried. That number told me nothing, and here's the one I actually trust instead.</p><span style="display:inline-flex;align-items:center;gap:8px;margin-top:22px;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.02em;color:var(--accent)">Read the note →</span></div></a><!--/BUILD:CARDS--></div>
     </section>
 
   </main>
 
 </div>
+
+<button id="back-to-top" type="button" aria-label="Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 
 <script>
 (function(){
@@ -261,6 +270,59 @@
     });
   }
 
+  // ---- tag filter ----
+  function initTagFilter(){
+    var bar = document.getElementById("av-tagfilter");
+    var cards = document.querySelectorAll("#av-bloggrid [data-tags]");
+    if (!bar || !cards.length) return;
+    var tagSet = {};
+    for (var i=0;i<cards.length;i++){
+      var t = cards[i].getAttribute("data-tags");
+      if (!t) continue;
+      var parts = t.split("|");
+      for (var j=0;j<parts.length;j++){ if (parts[j]) tagSet[parts[j]] = true; }
+    }
+    var tagList = Object.keys(tagSet).sort();
+    if (!tagList.length) return;
+
+    function applyFilter(tag){
+      for (var i=0;i<cards.length;i++){
+        var cardTags = (cards[i].getAttribute("data-tags") || "").split("|");
+        var match = !tag || cardTags.indexOf(tag) !== -1;
+        cards[i].classList.toggle("tag-hidden", !match);
+      }
+    }
+
+    var chips = ["All"].concat(tagList).map(function(label){
+      var tag = label === "All" ? "" : label;
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "tag-chip" + (tag === "" ? " active" : "");
+      btn.textContent = label;
+      btn.setAttribute("data-tag", tag);
+      return btn;
+    });
+    chips.forEach(function(btn){ bar.appendChild(btn); });
+
+    bar.addEventListener("click", function(e){
+      var btn = e.target.closest && e.target.closest(".tag-chip");
+      if (!btn) return;
+      var all = bar.querySelectorAll(".tag-chip");
+      for (var i=0;i<all.length;i++) all[i].classList.remove("active");
+      btn.classList.add("active");
+      applyFilter(btn.getAttribute("data-tag"));
+    });
+  }
+
+  // ---- back to top ----
+  function initBackToTop(){
+    var btn = document.getElementById("back-to-top");
+    if (!btn) return;
+    function upd(){ btn.classList.toggle("show", (window.scrollY||0) > 600); }
+    window.addEventListener("scroll", upd, { passive:true });
+    upd();
+  }
+
   // ---- entrance animations (cards are server-rendered; this only reveals them) ----
   function revealAll(){
     var els = document.querySelectorAll("[data-reveal]");
@@ -295,6 +357,8 @@
     bindHovers(document);
     initCursor();
     initSubscribe();
+    initTagFilter();
+    initBackToTop();
     startMotion();
   }
 

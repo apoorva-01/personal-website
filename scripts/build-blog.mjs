@@ -568,7 +568,8 @@ ${PAGE_SCRIPT}
 
 function cardHtml(post) {
   const d = post.data;
-  const tags = (Array.isArray(d.tags) ? d.tags : [])
+  const tagArr = Array.isArray(d.tags) ? d.tags : [];
+  const tags = tagArr
     .map(
       (t) =>
         `<span style="font-size:11px;color:var(--text-3);padding:3px 10px;border-radius:2px;background:rgba(255,75,38,.08);border:1px solid rgba(255,75,38,.2)">${escHtml(t)}</span>`
@@ -576,7 +577,7 @@ function cardHtml(post) {
     .join("");
   const href = `/posts/${d.slug}`;
   return (
-    `<a data-reveal="1" href="${href}" class="logrow" style="display:grid;grid-template-columns:190px 1fr;gap:36px;align-items:start;text-decoration:none;color:inherit;padding:38px 8px;border-top:1px solid var(--w09);cursor:pointer;opacity:0;transform:translateY(24px);transition:background .2s" data-hover="background:var(--surface-hover)">` +
+    `<a data-reveal="1" data-tags="${escAttr(tagArr.join("|"))}" href="${href}" class="logrow" style="display:grid;grid-template-columns:190px 1fr;gap:36px;align-items:start;text-decoration:none;color:inherit;padding:38px 8px;border-top:1px solid var(--w09);cursor:pointer;opacity:0;transform:translateY(24px);transition:background .2s" data-hover="background:var(--surface-hover)">` +
     `<div style="display:flex;flex-direction:column;gap:16px">` +
     `<div style="font-family:'IBM Plex Mono',monospace;font-size:12px;display:flex;flex-direction:column;gap:4px"><span style="color:var(--text-3)">${escHtml(d.date || "")}</span><span style="color:var(--faint)">${escHtml(d.read || "")}</span></div>` +
     `<div style="display:flex;flex-wrap:wrap;gap:6px">${tags}</div>` +
@@ -585,6 +586,35 @@ function cardHtml(post) {
     `<h3 style="font-size:clamp(23px,2.7vw,31px);font-weight:500;letter-spacing:-.03em;line-height:1.16;color:var(--heading)">${escHtml(d.title)}</h3>` +
     `<p style="margin-top:15px;font-size:16px;line-height:1.65;color:var(--text-4);max-width:60ch">${escHtml(d.excerpt || "")}</p>` +
     `<span style="display:inline-flex;align-items:center;gap:8px;margin-top:22px;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.02em;color:var(--accent)">Read the note →</span>` +
+    `</div>` +
+    `</a>`
+  );
+}
+
+// The newest post gets a larger "featured" treatment; everything else stays
+// as a compact row (rendered by cardHtml).
+function featuredCardHtml(post) {
+  const d = post.data;
+  const tagArr = Array.isArray(d.tags) ? d.tags : [];
+  const tagPills = tagArr
+    .map(
+      (t) =>
+        `<span style="font-size:11px;color:var(--text-3);padding:3px 10px;border-radius:2px;background:rgba(255,75,38,.08);border:1px solid rgba(255,75,38,.2)">${escHtml(t)}</span>`
+    )
+    .join("");
+  const href = `/posts/${d.slug}`;
+  const primaryTag = tagArr[0] || "Notes";
+  return (
+    `<a data-reveal="1" data-tags="${escAttr(tagArr.join("|"))}" href="${href}" class="featured-card" style="display:flex;flex-direction:column;text-decoration:none;color:inherit;border:1px solid var(--w09);background:var(--surface);overflow:hidden;opacity:0;transform:translateY(24px);transition:border-color .2s" data-hover="border-color:rgba(255,75,38,.4)">` +
+    `<div style="height:130px;position:relative;background-image:repeating-linear-gradient(90deg,var(--w06) 0 1px,transparent 1px 26px);border-bottom:1px solid var(--w09)">` +
+    `<span style="position:absolute;left:22px;bottom:16px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;color:var(--accent);text-transform:uppercase">Latest · ${escHtml(primaryTag)}</span>` +
+    `</div>` +
+    `<div style="padding:30px 32px 34px">` +
+    `<div style="font-family:'IBM Plex Mono',monospace;font-size:12px;display:flex;gap:10px;color:var(--faint)"><span style="color:var(--text-3)">${escHtml(d.date || "")}</span><span>·</span><span>${escHtml(d.read || "")}</span></div>` +
+    `<h3 style="margin-top:14px;font-size:clamp(26px,3.2vw,36px);font-weight:500;letter-spacing:-.03em;line-height:1.15;color:var(--heading)">${escHtml(d.title)}</h3>` +
+    `<p style="margin-top:14px;font-size:16.5px;line-height:1.65;color:var(--text-4);max-width:70ch">${escHtml(d.excerpt || "")}</p>` +
+    `<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:18px">${tagPills}</div>` +
+    `<span style="display:inline-flex;align-items:center;gap:8px;margin-top:20px;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.02em;color:var(--accent)">Read the note →</span>` +
     `</div>` +
     `</a>`
   );
@@ -600,7 +630,8 @@ function replaceBetween(src, startMark, endMark, inner) {
 function writeBlogIndex(posts) {
   const file = join(ROOT, "blog.html");
   let html = readFileSync(file, "utf8");
-  const cards = posts.map(cardHtml).join("");
+  const [first, ...rest] = posts;
+  const cards = (first ? featuredCardHtml(first) : "") + rest.map(cardHtml).join("");
   const count = posts.length + (posts.length === 1 ? " entry" : " entries");
   html = replaceBetween(html, "<!--BUILD:CARDS-->", "<!--/BUILD:CARDS-->", cards);
   html = replaceBetween(html, "<!--BUILD:COUNT-->", "<!--/BUILD:COUNT-->", count);

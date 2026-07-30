@@ -105,7 +105,7 @@ function renderToc(toc) {
         `<a href="#${t.id}" class="toc-link" data-toc-level="${t.level}">${escHtml(t.text)}</a>`
     )
     .join("");
-  return `<nav class="toc" aria-label="Table of contents"><div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.12em;color:var(--faint);text-transform:uppercase;margin-bottom:8px;padding-left:11px">On this page</div>${items}</nav>`;
+  return `<nav class="toc" aria-label="Table of contents"><div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.12em;color:var(--faint);text-transform:uppercase;font-weight:700;margin-bottom:8px;padding-left:11px">Table of contents</div>${items}</nav>`;
 }
 
 // prevNewer/nextOlder are posts array-adjacent entries (posts are sorted newest-first).
@@ -128,9 +128,9 @@ function readingMinutes(post, plainWords) {
 
 const ARTICLE_CSS = `
   .article{display:flex;flex-direction:column;gap:24px}
-  .article>p{max-width:68ch;font-size:18.5px;line-height:1.7;color:var(--text-2);letter-spacing:-.005em}
+  .article>p{font-size:18.5px;line-height:1.7;color:var(--text-2);letter-spacing:-.005em}
   .article>p:first-of-type{font-size:20px;line-height:1.62;color:var(--text);letter-spacing:-.01em}
-  .article h2,.article h3{position:relative}
+  .article h2,.article h3{position:relative;scroll-margin-top:96px}
   .article h2{margin-top:16px;font-size:28px;font-weight:500;letter-spacing:-.03em;line-height:1.22;color:var(--heading)}
   .article h3{margin-top:8px;font-size:20.5px;font-weight:500;letter-spacing:-.02em;line-height:1.3;color:var(--heading)}
   .article h2 .anchor-link,.article h3 .anchor-link{opacity:.4;margin-left:9px;color:var(--faint);text-decoration:none;font-weight:400;font-size:.7em;border-bottom:none;transition:opacity .15s,color .15s}
@@ -149,7 +149,7 @@ const ARTICLE_CSS = `
   .article .code-block .copy-btn:hover{border-color:var(--accent);color:#fff}
   .article pre{margin:0;overflow-x:auto;background:#0d1117;border:0;border-radius:0;padding:16px 18px}
   .article pre code{background:none;border:0;padding:0;font-size:13.5px;line-height:1.6;color:#c9d1d9}
-  .article ul,.article ol{max-width:68ch;padding-left:22px;display:flex;flex-direction:column;gap:8px;font-size:18px;line-height:1.7;color:var(--text-2)}
+  .article ul,.article ol{padding-left:22px;display:flex;flex-direction:column;gap:8px;font-size:18px;line-height:1.7;color:var(--text-2)}
   .article li{padding-left:3px}
   .article blockquote{margin:6px 0;padding:16px 20px;background:var(--surface);border-left:3px solid var(--accent);border-radius:0;color:var(--text-2);font-size:17px;line-height:1.65}
   .article blockquote p{margin:0 0 8px}
@@ -165,14 +165,17 @@ const ARTICLE_CSS = `
   .article figure{margin:0}
   .article figure svg{width:100%;height:auto}
   .article figcaption{margin-top:10px;font-size:12.5px;color:var(--faint);text-align:center}
-  .dek{margin-top:16px;max-width:68ch;font-size:18px;line-height:1.55;color:var(--text-3)}
+  .dek{margin-top:16px;font-size:18px;line-height:1.55;color:var(--text-3)}
   .toc{display:none}
   @media (min-width:1280px){
-    .toc{display:block;position:fixed;top:150px;left:calc(50% + 448px);width:172px;max-height:calc(100vh - 190px);overflow-y:auto}
+    .toc{display:block;position:fixed;top:50%;transform:translateY(-50%);left:28px;width:210px;max-height:calc(100vh - 120px);overflow-y:auto;z-index:20}
+    main{padding-left:266px !important}
   }
   .toc-link{display:block;padding:5px 0;font-size:13px;line-height:1.4;color:var(--text-4);text-decoration:none;border-left:2px solid transparent;padding-left:11px;transition:color .15s,border-color .15s}
   .toc-link[data-toc-level="3"]{padding-left:22px;font-size:12px}
   .toc-link.active{color:var(--heading);border-left-color:var(--accent)}
+  .tts-seg{transition:background .18s,box-shadow .18s;border-radius:3px}
+  .tts-active{background:rgba(255,75,38,.16);box-shadow:0 0 0 5px rgba(255,75,38,.16)}
   #back-to-top{position:fixed;right:24px;bottom:24px;width:44px;height:44px;border-radius:2px;border:1px solid var(--w12);background:var(--surface);color:var(--text-2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;opacity:0;pointer-events:none;transition:opacity .2s,border-color .18s,color .18s;z-index:40}
   #back-to-top.show{opacity:1;pointer-events:auto}
   .postnav{margin-top:8px;display:grid;gap:14px}
@@ -190,7 +193,7 @@ const BASE_CSS = `
     --w025:rgba(255,255,255,.03);--w03:rgba(255,255,255,.035);--w04:rgba(255,255,255,.045);--w05:rgba(255,255,255,.06);--w06:rgba(255,255,255,.07);--w07:rgba(255,255,255,.085);--w08:rgba(255,255,255,.1);--w09:rgba(255,255,255,.11);--w10:rgba(255,255,255,.13);--w12:rgba(255,255,255,.16);--w14:rgba(255,255,255,.19);--w30:rgba(255,255,255,.34);
   }
   :root[data-av-theme="light"]{
-    --bg:#f4f3ef;--surface:#ffffff;--surface-hover:#ffffff;--bubble:#ffffff;--nav-bg:rgba(244,243,239,.92);
+    --bg:#fbfbf9;--surface:#ffffff;--surface-hover:#ffffff;--bubble:#ffffff;--nav-bg:rgba(251,251,249,.92);
     --text:#1a1b1e;--text-2:#3b3d42;--text-3:#54565c;--text-4:#6a6c72;--faint:#8e9096;--heading:#0d0e11;
     --on-accent:#fff;--invert-bg:#1a1b1e;--invert-fg:#f4f3ef;--dot:#d7d5cd;--scroll:#cbc9c0;--scrim:rgba(244,243,239,.86);
     --accent:#e03c15;--accent-ink:#bf3210;--live:#1f9d55;--pass:#6a6c72;--grid:rgba(0,0,0,.04);
@@ -220,7 +223,7 @@ const BASE_CSS = `
     #cur-ring,#cur-dot{display:none !important}
   }`;
 
-const NAV = `  <nav style="position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:center;padding:16px 20px">
+const NAV = `  <nav style="position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:center;padding:9px 20px">
     <div style="display:flex;align-items:center;justify-content:space-between;width:100%;max-width:1180px;padding:9px 10px 9px 16px;background:var(--nav-bg);border:1px solid var(--w08);border-radius:2px">
       <a href="/" style="display:flex;align-items:center;gap:11px;text-decoration:none;color:var(--text)">
         <img src="/assets/apoorva.jpg" alt="Apoorva Verma" width="28" height="28" style="width:28px;height:28px;border-radius:2px;object-fit:cover;border:1px solid var(--accent);display:block">
@@ -243,7 +246,7 @@ function subscribeCard() {
       <div style="padding:32px 30px 30px">
         <div style="display:flex;align-items:center;gap:9px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;color:var(--faint);text-transform:uppercase"><span style="width:6px;height:6px;border-radius:50%;background:var(--live);box-shadow:0 0 8px var(--live)"></span>Newsletter</div>
         <h2 style="margin-top:14px;font-size:clamp(21px,3vw,27px);font-weight:500;letter-spacing:-.02em;line-height:1.2;color:var(--heading)">New notes, straight to your inbox.</h2>
-        <p style="margin-top:10px;font-size:15px;line-height:1.6;color:var(--text-4);max-width:56ch">One email when I publish something new on RAG, retrieval, and evaluation. No cadence quota, no spam &mdash; unsubscribe in one click.</p>
+        <p style="margin-top:10px;font-size:15px;line-height:1.6;color:var(--text-4)">One email when I publish something new on RAG, retrieval, and evaluation.</p>
         <form id="subscribe-form" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:20px;max-width:460px">
           <div style="flex:1;min-width:220px;display:flex;align-items:center;background:var(--bubble);border:1px solid var(--w12);transition:border-color .18s" data-hover="border-color:var(--w30)">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0;margin-left:13px;color:var(--faint)"><path d="M2 4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h20a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2H2Zm.4 2h19.2l-9.6 6.4L2.4 6ZM2 7.87 12 14l10-6.13V18H2V7.87Z"/></svg>
@@ -455,6 +458,135 @@ const PAGE_SCRIPT = `<script>
     }
     revealArticle();
   }
+  function initListen(){
+    var btn = document.getElementById("listen-btn");
+    var label = document.getElementById("listen-label");
+    if (!btn || !label) return;
+    var synth = window.speechSynthesis;
+    if (!synth || typeof window.SpeechSynthesisUtterance === "undefined"){ btn.style.display = "none"; return; }
+    var article = document.querySelector(".article");
+    var titleEl = document.querySelector("article h1");
+    var dekEl = document.querySelector(".dek");
+    var segs = [], idx = 0, state = "idle", voice = null, active = null, built = false, rate = 1, seq = 0; // idle | playing | paused
+    var speedBtn = document.getElementById("speed-btn");
+    var speedLabel = document.getElementById("speed-label");
+    var SPEEDS = [1, 1.25, 1.5];
+    if (speedBtn) speedBtn.style.display = "inline-flex";
+    // Prefer a natural-sounding voice over the OS default (Samantha/eSpeak etc.).
+    // The good ones expose "Natural"/"Neural"/"Enhanced"/"Premium" in the name,
+    // or are named cloud voices (Google/Microsoft). getVoices() can be empty on
+    // first call, so also refresh on the voiceschanged event.
+    function pickVoice(){
+      var v = synth.getVoices() || [];
+      if (!v.length) return null;
+      var byName = ["Google US English","Google UK English Female","Samantha (Enhanced)","Ava (Enhanced)","Ava (Premium)","Zoe (Enhanced)","Jamie (Enhanced)","Microsoft Aria Online (Natural) - English (United States)","Microsoft Jenny Online (Natural) - English (United States)","Microsoft Guy Online (Natural) - English (United States)","Samantha","Ava"];
+      for (var p=0;p<byName.length;p++){ for (var i=0;i<v.length;i++){ if (v[i].name === byName[p]) return v[i]; } }
+      var rx = /natural|neural|enhanced|premium/i;
+      for (var i=0;i<v.length;i++){ if (/^en/i.test(v[i].lang) && rx.test(v[i].name)) return v[i]; }
+      for (var i=0;i<v.length;i++){ if (/^en[-_]us/i.test(v[i].lang)) return v[i]; }
+      for (var i=0;i<v.length;i++){ if (/^en/i.test(v[i].lang)) return v[i]; }
+      return v[0];
+    }
+    voice = pickVoice();
+    if (!voice && typeof synth.onvoiceschanged !== "undefined"){
+      synth.addEventListener("voiceschanged", function(){ if (!voice) voice = pickVoice(); });
+    }
+    // Wrap a block's readable text into sentence <span class="tts-seg">…</span>
+    // in place, so we can highlight exactly the phrase being spoken. Inline
+    // elements (links, code, bold) are carried into whichever sentence they
+    // belong to, so formatting survives. Runs once, lazily, on first play.
+    function wrapBlock(block){
+      if (block.getAttribute("data-tts-wrapped")) return;
+      block.setAttribute("data-tts-wrapped", "1");
+      var nodes = [].slice.call(block.childNodes);
+      var frag = document.createDocumentFragment();
+      var span;
+      function open(){ span = document.createElement("span"); span.className = "tts-seg"; frag.appendChild(span); }
+      open();
+      for (var n=0;n<nodes.length;n++){
+        var node = nodes[n];
+        if (node.nodeType === 3){
+          var parts = node.nodeValue.match(/[^.!?]*[.!?]+|[^.!?]+$/g) || [node.nodeValue];
+          for (var p=0;p<parts.length;p++){
+            span.appendChild(document.createTextNode(parts[p]));
+            if (/[.!?]["')\]]?\s*$/.test(parts[p])) open();
+          }
+        } else if (node.nodeType === 1 && node.classList && node.classList.contains("anchor-link")){
+          // keep the heading's "#" link, but outside any segment so it isn't spoken
+          frag.appendChild(node); open();
+        } else {
+          span.appendChild(node);
+        }
+      }
+      block.innerHTML = "";
+      block.appendChild(frag);
+      var segEls = block.querySelectorAll(".tts-seg");
+      for (var e=0;e<segEls.length;e++){ if (!segEls[e].textContent.trim()) segEls[e].parentNode.removeChild(segEls[e]); }
+    }
+    function build(){
+      if (built) return;
+      built = true;
+      segs = [];
+      if (titleEl) segs.push({ el: titleEl, text: titleEl.innerText });
+      if (dekEl) segs.push({ el: dekEl, text: dekEl.innerText });
+      if (!article) return;
+      var blocks = [].slice.call(article.querySelectorAll("p, li, h2, h3, blockquote"));
+      for (var b=0;b<blocks.length;b++){
+        var bl = blocks[b];
+        // skip code, charts/figures, and blocks nested inside an already-wrapped block
+        if (bl.closest(".code-block") || bl.closest("figure") || bl.closest(".tts-seg")) continue;
+        if (bl.parentElement && bl.parentElement.closest("[data-tts-wrapped]")) continue;
+        if (!(bl.innerText || "").trim()) continue;
+        wrapBlock(bl);
+        var segEls = bl.querySelectorAll(".tts-seg");
+        for (var s=0;s<segEls.length;s++){
+          var tx = segEls[s].textContent.replace(/\s+/g, " ").trim();
+          if (tx) segs.push({ el: segEls[s], text: tx });
+        }
+      }
+    }
+    function highlight(el){
+      if (active) active.classList.remove("tts-active");
+      active = el || null;
+      if (active){
+        active.classList.add("tts-active");
+        try { active.scrollIntoView({ block: "center", behavior: "smooth" }); } catch(e){}
+      }
+    }
+    function speakFrom(i){
+      if (i >= segs.length){ finish(); return; }
+      idx = i;
+      var seg = segs[i];
+      highlight(seg.el);
+      var u = new window.SpeechSynthesisUtterance(seg.text);
+      if (!voice) voice = pickVoice();
+      if (voice){ u.voice = voice; u.lang = voice.lang; }
+      u.rate = 0.96 * rate; u.pitch = 1.02;
+      var mySeq = ++seq; // ignore the stale onend of any utterance we cancel to restart
+      u.onend = function(){ if (state === "playing" && mySeq === seq) speakFrom(idx + 1); };
+      synth.speak(u);
+    }
+    function finish(){ ++seq; synth.cancel(); state = "idle"; label.textContent = "Listen to this post"; highlight(null); }
+    if (speedBtn) speedBtn.addEventListener("click", function(){
+      var pos = SPEEDS.indexOf(rate);
+      rate = SPEEDS[(pos + 1) % SPEEDS.length];
+      speedLabel.textContent = rate + "×";
+      // apply immediately: re-speak the current sentence at the new rate
+      if (state === "playing"){ synth.cancel(); speakFrom(idx); }
+    });
+    btn.addEventListener("click", function(){
+      if (state === "idle"){
+        build();
+        if (!segs.length) return;
+        state = "playing"; label.textContent = "Pause"; speakFrom(0);
+      } else if (state === "playing"){
+        state = "paused"; synth.pause(); label.textContent = "Resume";
+      } else {
+        state = "playing"; synth.resume(); label.textContent = "Pause";
+      }
+    });
+    window.addEventListener("beforeunload", function(){ synth.cancel(); });
+  }
   function boot(){
     var stored = "light";
     try { stored = localStorage.getItem("av-theme") || "light"; } catch(e){}
@@ -465,6 +597,7 @@ const PAGE_SCRIPT = `<script>
     initCodeCopy();
     initToc();
     initBackToTop();
+    initListen();
     initHighlight();
     initGiscus();
     startArticleReveal();
@@ -523,7 +656,7 @@ function pageHtml(post, prevNewer, nextOlder) {
   const tagPills = tags
     .map(
       (t) =>
-        `<span style="font-size:11.5px;color:var(--text-2);padding:4px 11px;border-radius:2px;background:rgba(255,75,38,.1);border:1px solid rgba(255,75,38,.25)">${escHtml(t)}</span>`
+        `<span style="font-size:11.5px;color:#fff;padding:4px 11px;border-radius:2px;background:var(--accent);border:none">${escHtml(t)}</span>`
     )
     .join("");
 
@@ -549,7 +682,7 @@ function pageHtml(post, prevNewer, nextOlder) {
 <meta name="twitter:image" content="${og}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/motion@11.11.13/dist/motion.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
@@ -591,14 +724,15 @@ ${NAV}
 
 ${renderToc(toc)}
 
-  <main style="position:relative;z-index:1;max-width:860px;margin:0 auto;padding:120px 24px 120px">
-    <a href="/blog" style="display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.02em;color:var(--text-3);padding:7px 12px;border-radius:0;border:1px solid var(--w10);background:transparent;transition:border-color .18s,color .18s;animation:fadeUp .5s ease both" data-hover="color:var(--heading);border-color:var(--accent)">← Back to writing</a>
+  <main style="position:relative;z-index:1;max-width:none;margin:0;padding:78px 32px 120px">
+    <a href="/blog" style="display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.02em;color:var(--text-3);padding:7px 12px;border-radius:0;border:1px solid var(--w10);background:transparent;transition:border-color .18s,color .18s;animation:fadeUp .5s ease both" data-hover="color:var(--heading);border-color:var(--accent)">← Back to notes</a>
 
     <article style="margin-top:0">
     <div style="display:flex;align-items:center;gap:10px;margin-top:30px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--faint)"><span>${escHtml(d.date || "")}</span><span style="opacity:.5">·</span><span>${escHtml(d.read || minutes + " min read")}</span></div>
     <h1 style="margin-top:14px;font-size:clamp(30px,5vw,46px);font-weight:500;letter-spacing:-.04em;line-height:1.08;color:var(--heading)">${escHtml(d.title)}</h1>
     ${desc ? `<p class="dek">${escHtml(desc)}</p>` : ""}
     <div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:18px">${tagPills}</div>
+    <div style="margin-top:20px;display:flex;align-items:center;gap:10px;flex-wrap:wrap"><button id="listen-btn" type="button" aria-label="Listen to this post" style="display:inline-flex;align-items:center;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.02em;color:var(--text-3);padding:8px 14px;border-radius:0;border:1px solid var(--w10);background:transparent;cursor:pointer;transition:border-color .18s,color .18s" data-hover="color:var(--heading);border-color:var(--accent)"><svg id="listen-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg><span id="listen-label">Listen to this post</span></button><button id="speed-btn" type="button" aria-label="Playback speed" title="Playback speed" style="display:none;align-items:center;gap:6px;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.02em;color:var(--text-3);padding:8px 12px;border-radius:0;border:1px solid var(--w10);background:transparent;cursor:pointer;transition:border-color .18s,color .18s" data-hover="color:var(--heading);border-color:var(--accent)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><circle cx="12" cy="13" r="8"></circle><path d="M12 9v4l2 2"></path><path d="M5 3 2 6"></path><path d="m22 6-3-3"></path></svg><span id="speed-label">1&times;</span></button></div>
     <div style="margin-top:32px;height:1px;background:linear-gradient(90deg,rgba(255,75,38,.5),transparent)"></div>
 
     <div class="article" style="margin-top:30px">${bodyHtml}</div>
@@ -618,7 +752,7 @@ ${renderToc(toc)}
 
 ${SUBSCRIBE_BLOCK}
 
-    <div style="margin-top:40px"><a href="/blog" style="display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.02em;color:var(--text-3);padding:7px 12px;border-radius:0;border:1px solid var(--w10);background:transparent;transition:border-color .18s,color .18s" data-hover="color:var(--heading);border-color:var(--accent)">← Back to writing</a></div>
+    <div style="margin-top:40px"><a href="/blog" style="display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.02em;color:var(--text-3);padding:7px 12px;border-radius:0;border:1px solid var(--w10);background:transparent;transition:border-color .18s,color .18s" data-hover="color:var(--heading);border-color:var(--accent)">← Back to notes</a></div>
 
   </main>
 
@@ -639,7 +773,7 @@ function cardHtml(post) {
   const tags = tagArr
     .map(
       (t) =>
-        `<span style="font-size:11px;color:var(--text-3);padding:3px 10px;border-radius:2px;background:rgba(255,75,38,.08);border:1px solid rgba(255,75,38,.2)">${escHtml(t)}</span>`
+        `<span style="font-size:11px;color:#fff;padding:3px 10px;border-radius:2px;background:var(--accent);border:none">${escHtml(t)}</span>`
     )
     .join("");
   const href = `/posts/${d.slug}`;
@@ -666,7 +800,7 @@ function featuredCardHtml(post) {
   const tagPills = tagArr
     .map(
       (t) =>
-        `<span style="font-size:11px;color:var(--text-3);padding:3px 10px;border-radius:2px;background:rgba(255,75,38,.08);border:1px solid rgba(255,75,38,.2)">${escHtml(t)}</span>`
+        `<span style="font-size:11px;color:#fff;padding:3px 10px;border-radius:2px;background:var(--accent);border:none">${escHtml(t)}</span>`
     )
     .join("");
   const href = `/posts/${d.slug}`;

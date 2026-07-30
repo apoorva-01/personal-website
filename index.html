@@ -33,7 +33,7 @@
     --w025:rgba(255,255,255,.03);--w03:rgba(255,255,255,.035);--w04:rgba(255,255,255,.045);--w05:rgba(255,255,255,.06);--w06:rgba(255,255,255,.07);--w07:rgba(255,255,255,.085);--w08:rgba(255,255,255,.1);--w09:rgba(255,255,255,.11);--w10:rgba(255,255,255,.13);--w12:rgba(255,255,255,.16);--w14:rgba(255,255,255,.19);--w30:rgba(255,255,255,.34);
   }
   :root[data-av-theme="light"]{
-    --bg:#f4f3ef;--surface:#ffffff;--surface-hover:#ffffff;--bubble:#ffffff;--nav-bg:rgba(244,243,239,.92);
+    --bg:#fbfbf9;--surface:#ffffff;--surface-hover:#ffffff;--bubble:#ffffff;--nav-bg:rgba(251,251,249,.92);
     --text:#1a1b1e;--text-2:#3b3d42;--text-3:#54565c;--text-4:#6a6c72;--faint:#8e9096;--heading:#0d0e11;
     --on-accent:#fff;--invert-bg:#1a1b1e;--invert-fg:#f4f3ef;--dot:#d7d5cd;--scroll:#cbc9c0;--scrim:rgba(244,243,239,.86);
     --accent:#e03c15;--accent-ink:#bf3210;--live:#1f9d55;--pass:#6a6c72;--grid:rgba(0,0,0,.04);
@@ -167,7 +167,7 @@
     upd();
   })();
   </script>
-  <nav style="position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:center;padding:16px 20px">
+  <nav style="position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:center;padding:9px 20px">
     <div id="av-nav" style="display:flex;align-items:center;justify-content:space-between;width:100%;max-width:1180px;padding:9px 10px 9px 16px;background:var(--nav-bg);border:1px solid var(--w08);border-radius:2px">
       <a href="#top" style="display:flex;align-items:center;gap:11px;text-decoration:none;color:var(--text)">
         <img src="/assets/apoorva.jpg" alt="Apoorva Verma" width="28" height="28" style="width:28px;height:28px;border-radius:2px;object-fit:cover;border:1px solid var(--accent);display:block">
@@ -177,7 +177,7 @@
         <a class="nav-link" href="#projects" style="text-decoration:none;color:var(--text-3);font-size:13.5px;padding:7px 12px;border-radius:2px;transition:color .2s" data-hover="color:var(--text)">Projects</a>
         <a class="nav-link" href="/blog" style="text-decoration:none;color:var(--text-3);font-size:13.5px;padding:7px 12px;border-radius:2px;transition:color .2s" data-hover="color:var(--text)">My notes</a>
         <a class="nav-link" href="#opensource" style="text-decoration:none;color:var(--text-3);font-size:13.5px;padding:7px 12px;border-radius:2px;transition:color .2s" data-hover="color:var(--text)">Open source</a>
-        <a class="nav-link" href="#about" style="text-decoration:none;color:var(--text-3);font-size:13.5px;padding:7px 12px;border-radius:2px;transition:color .2s" data-hover="color:var(--text)">About</a>
+        <a class="nav-link" href="/about" style="text-decoration:none;color:var(--text-3);font-size:13.5px;padding:7px 12px;border-radius:2px;transition:color .2s" data-hover="color:var(--text)">About</a>
         <button id="theme-btn" onclick="App.toggleTheme()" aria-label="Toggle light or dark theme" title="Toggle theme"><svg class="tt-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg><svg class="tt-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><span class="tt-thumb"></span></button>
         <button id="nav-burger" onclick="App.toggleMenu()" aria-label="Open menu" aria-expanded="false" style="align-items:center;justify-content:center;width:36px;height:30px;border:1px solid var(--w12);background:var(--bubble);border-radius:2px;cursor:pointer;margin-left:4px;flex:0 0 auto"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-2)" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
         <a href="#contact" style="text-decoration:none;color:var(--invert-fg);font-size:13.5px;font-weight:600;padding:8px 15px;border-radius:2px;background:var(--invert-bg);margin-left:6px;transition:transform .2s" data-hover="transform:translateY(-1px)">Contact</a>
@@ -191,14 +191,14 @@
       <a href="#projects" onclick="App.toggleMenu()" style="text-decoration:none;color:var(--text-2);font-size:15px;padding:14px 12px;border-bottom:1px solid var(--w06)">Projects</a>
       <a href="/blog" style="text-decoration:none;color:var(--text-2);font-size:15px;padding:14px 12px;border-bottom:1px solid var(--w06)">My notes</a>
       <a href="#opensource" onclick="App.toggleMenu()" style="text-decoration:none;color:var(--text-2);font-size:15px;padding:14px 12px;border-bottom:1px solid var(--w06)">Open source</a>
-      <a href="#about" onclick="App.toggleMenu()" style="text-decoration:none;color:var(--text-2);font-size:15px;padding:14px 12px">About</a>
+      <a href="/about" onclick="App.toggleMenu()" style="text-decoration:none;color:var(--text-2);font-size:15px;padding:14px 12px">About</a>
     </div>
   </div>
 
   <main id="top" style="position:relative;z-index:1;max-width:1140px;margin:0 auto;padding:0 24px">
 
     <!-- HERO -->
-    <section style="padding:118px 0 60px;position:relative">
+    <section style="padding:76px 0 60px;position:relative">
 
       <!-- spec bar -->
       <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:9px 0;border-top:1px solid var(--w10);border-bottom:1px solid var(--w10);font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.06em;color:var(--faint);text-transform:uppercase;animation:fadeUp .5s ease both">
@@ -324,7 +324,8 @@
       <div id="av-oss" style="margin-top:26px"></div>
     </section>
 
-    <!-- EVAL DASHBOARD -->
+    <!-- EVAL DASHBOARD — commented out per request -->
+    <!--
     <section id="eval" data-reveal="1" style="padding:80px 0 60px;scroll-margin-top:90px;opacity:1;transform:translateY(24px)">
       <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px">
         <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;color:var(--accent)">§03</span>
@@ -336,7 +337,6 @@
 
       <div class="evalgrid" style="display:grid;grid-template-columns:1.3fr 1fr;gap:20px;margin-top:34px">
 
-        <!-- TABLE -->
         <div style="background:var(--surface);border:1px solid var(--w09);border-radius:0;padding:6px;overflow:hidden">
           <div style="padding:14px 16px 12px;font-size:13px;color:var(--text-3);font-weight:500;letter-spacing:-.01em">Generation matrix · chunk × embedding</div>
           <div style="overflow-x:auto">
@@ -384,7 +384,6 @@
           </div>
         </div>
 
-        <!-- BAR CHART -->
         <div style="background:var(--surface);border:1px solid var(--w09);border-radius:0;padding:18px 20px 16px;display:flex;flex-direction:column">
           <div style="font-size:13px;color:var(--text-3);font-weight:500;margin-bottom:4px">NDCG@5 by retriever</div>
           <div style="font-size:11.5px;color:var(--faint);margin-bottom:auto">naive → hybrid → rerank · +86%</div>
@@ -408,6 +407,7 @@
         </div>
       </div>
     </section>
+    -->
 
     <!-- PROJECTS -->
     <section id="projects" data-reveal="1" style="padding:60px 0;scroll-margin-top:90px;opacity:1;transform:translateY(24px)">
@@ -543,7 +543,8 @@
       <div id="av-bloggrid" class="bloggrid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:34px"></div>
     </section>
 
-    <!-- ABOUT -->
+    <!-- ABOUT — commented out per request -->
+    <!--
     <section id="about" data-reveal="1" style="padding:60px 0;scroll-margin-top:90px;opacity:1;transform:translateY(24px)">
       <div style="max-width:680px">
         <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px">
@@ -557,6 +558,7 @@
         <div style="margin-top:22px"><a href="/about" style="text-decoration:none;font-size:13px;color:var(--accent);padding:6px 0;transition:color .2s" data-hover="color:var(--accent-ink)">Read the full profile →</a></div>
       </div>
     </section>
+    -->
 
     <!-- CONTACT -->
     <section id="contact" data-reveal="1" style="padding:76px 0 92px;scroll-margin-top:90px;opacity:1;transform:translateY(24px)">
@@ -568,8 +570,8 @@
           <span style="display:flex;align-items:center;gap:7px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;color:var(--accent);text-transform:uppercase"><span style="width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent)"></span>Status: open</span>
         </div>
         <div style="padding:44px 32px 40px">
-          <h2 style="font-size:clamp(26px,4vw,40px);font-weight:500;letter-spacing:-.02em;line-height:1.05;max-width:16ch">Let's build something measurable.</h2>
-          <p style="margin-top:14px;font-size:15px;line-height:1.6;color:var(--text-4);max-width:44ch">Open to software and AI engineering roles and collaborations. Replies are grounded and cited.</p>
+          <h2 style="font-size:clamp(26px,4vw,40px);font-weight:500;letter-spacing:-.02em;line-height:1.05">Let's build something measurable.</h2>
+          <p style="margin-top:14px;font-size:15px;line-height:1.6;color:var(--text-4)">Open to software and AI engineering roles and collaborations.</p>
           <form id="contact-form" style="margin-top:28px;max-width:460px;display:flex;flex-direction:column;gap:16px">
             <label style="display:flex;flex-direction:column;gap:7px">
               <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint)">Email</span>
@@ -631,7 +633,7 @@
           </script>
         </div>
         <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:11px 18px;border-top:1px solid var(--w08);font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.04em;color:var(--faint)">
-          <span>© <span id="yr">2026</span> Apoorva Verma</span><span>Built &amp; evaluated end-to-end</span>
+          <span>© <span id="yr">2026</span> Apoorva Verma</span>
         </div>
       </div>
     </section>

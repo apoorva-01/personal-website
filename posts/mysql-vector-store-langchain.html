@@ -68,17 +68,21 @@
   .article h2,.article h3{position:relative}
   .article h2{margin-top:16px;font-size:28px;font-weight:500;letter-spacing:-.03em;line-height:1.22;color:var(--heading)}
   .article h3{margin-top:8px;font-size:20.5px;font-weight:500;letter-spacing:-.02em;line-height:1.3;color:var(--heading)}
-  .article h2 .anchor-link,.article h3 .anchor-link{opacity:0;margin-left:9px;color:var(--faint);text-decoration:none;font-weight:400;font-size:.7em;border-bottom:none;transition:opacity .15s,color .15s}
-  .article h2:hover .anchor-link,.article h3:hover .anchor-link{opacity:1}
-  .article h2 .anchor-link:hover,.article h3 .anchor-link:hover{color:var(--accent)}
+  .article h2 .anchor-link,.article h3 .anchor-link{opacity:.4;margin-left:9px;color:var(--faint);text-decoration:none;font-weight:400;font-size:.7em;border-bottom:none;transition:opacity .15s,color .15s}
+  .article h2 .anchor-link:hover,.article h3 .anchor-link:hover{color:var(--accent);opacity:1}
+  @media (hover:hover){
+    .article h2 .anchor-link,.article h3 .anchor-link{opacity:0}
+    .article h2:hover .anchor-link,.article h3:hover .anchor-link{opacity:1}
+  }
   .article a{color:var(--accent);text-decoration:none;border-bottom:1px solid color-mix(in srgb,var(--accent) 40%,transparent)}
   .article a:hover{border-bottom-color:var(--accent)}
   .article code{font-family:'IBM Plex Mono',monospace;font-size:.85em;background:var(--bubble);border:1px solid var(--w09);padding:1px 6px;border-radius:0}
-  .article .code-block{position:relative;margin:2px 0}
-  .article .code-block .copy-btn{position:absolute;top:10px;right:10px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.04em;color:var(--text-3);background:var(--surface);border:1px solid var(--w10);border-radius:0;padding:5px 10px;cursor:pointer;opacity:0;transition:opacity .15s,border-color .15s,color .15s}
-  .article .code-block:hover .copy-btn{opacity:1}
-  .article .code-block .copy-btn:hover{border-color:var(--accent);color:var(--heading)}
-  .article pre{margin:0;overflow-x:auto;background:#0d1117;border:1px solid var(--w09);border-radius:0;padding:16px 18px}
+  .article .code-block{margin:4px 0;border:1px solid var(--w09)}
+  .article .code-head{display:flex;align-items:center;justify-content:space-between;gap:12px;background:#161b22;border-bottom:1px solid rgba(255,255,255,.08);padding:7px 12px 7px 16px}
+  .article .code-lang{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#8b949e}
+  .article .code-block .copy-btn{flex:0 0 auto;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.04em;color:#8b949e;background:transparent;border:1px solid rgba(255,255,255,.13);border-radius:0;padding:3px 11px;cursor:pointer;transition:border-color .15s,color .15s}
+  .article .code-block .copy-btn:hover{border-color:var(--accent);color:#fff}
+  .article pre{margin:0;overflow-x:auto;background:#0d1117;border:0;border-radius:0;padding:16px 18px}
   .article pre code{background:none;border:0;padding:0;font-size:13.5px;line-height:1.6;color:#c9d1d9}
   .article ul,.article ol{max-width:68ch;padding-left:22px;display:flex;flex-direction:column;gap:8px;font-size:18px;line-height:1.7;color:var(--text-2)}
   .article li{padding-left:3px}
@@ -98,8 +102,8 @@
   .article figcaption{margin-top:10px;font-size:12.5px;color:var(--faint);text-align:center}
   .dek{margin-top:16px;max-width:68ch;font-size:18px;line-height:1.55;color:var(--text-3)}
   .toc{display:none}
-  @media (min-width:1360px){
-    .toc{display:block;position:fixed;top:150px;left:calc(50% + 470px);width:220px;max-height:calc(100vh - 190px);overflow-y:auto}
+  @media (min-width:1280px){
+    .toc{display:block;position:fixed;top:150px;left:calc(50% + 448px);width:172px;max-height:calc(100vh - 190px);overflow-y:auto}
   }
   .toc-link{display:block;padding:5px 0;font-size:13px;line-height:1.4;color:var(--text-4);text-decoration:none;border-left:2px solid transparent;padding-left:11px;transition:color .15s,border-color .15s}
   .toc-link[data-toc-level="3"]{padding-left:22px;font-size:12px}
@@ -127,7 +131,7 @@
   "dateModified": "2026-07-15",
   "inLanguage": "en",
   "articleSection": "Vector Search",
-  "wordCount": 1566,
+  "wordCount": 1567,
   "timeRequired": "PT8M",
   "keywords": [
     "MySQL",
@@ -248,7 +252,7 @@
 <p>This matters more than it sounds. Vector stores sort ascending, smallest distance first. Cosine and euclidean are naturally smaller-is-closer. A dot product is the opposite, bigger-is-closer, so to make it act like a distance you negate it. If MySQL negates and I assume it doesn&#39;t, my dot-metric search returns results in exactly the wrong order. And no test against my in-memory fake would catch it, because I&#39;d have written the fake with the same wrong assumption.</p>
 <p>The MySQL and HeatWave docs list <code>DOT</code> as supported and say nothing about the sign. The web has plenty of confident secondhand answers. I didn&#39;t want secondhand for something that decides whether search works.</p>
 <p>ShannonBase is open source and it&#39;s a MySQL fork, so its <code>DISTANCE</code> lives where MySQL&#39;s would. I found the function. It&#39;s four lines:</p>
-<div class="code-block"><button type="button" class="copy-btn" aria-label="Copy code">Copy</button><pre><code class="language-cpp">double calculate_dot_distance(const float* a, const float* b, uint32 dim) {
+<div class="code-block"><div class="code-head"><span class="code-lang">cpp</span><button type="button" class="copy-btn" aria-label="Copy code">Copy</button></div><pre><code class="language-cpp">double calculate_dot_distance(const float* a, const float* b, uint32 dim) {
   double dot = 0.0;
   for (uint32 i = 0; i &lt; dim; i++) dot += a[i] * b[i];
   return -dot;  // negated, so smaller = closer
@@ -483,15 +487,18 @@
   function revealArticle(){
     var article = document.querySelector(".article");
     if (!article) return;
-    var children = article.children;
-    for (var i=0;i<children.length;i++){
+    // Only reveal structural blocks — never body <p>. Animating paragraph text
+    // that isn't there when the eye arrives is a readability tax, and it's the
+    // same opacity-toggle mechanism that caused the earlier hover bug.
+    var blocks = article.querySelectorAll(":scope > h2, :scope > h3, :scope > .code-block, :scope > figure, :scope > blockquote, :scope > .tablewrap");
+    for (var i=0;i<blocks.length;i++){
       (function(el){
         el.style.opacity = "0"; el.style.transform = "translateY(16px)";
         window.Motion.inView(el, function(){
           window.Motion.animate(el, { opacity:[0,1], transform:["translateY(16px)","translateY(0px)"] },
             { duration:0.5, ease:[.22,1,.36,1] });
         }, { margin: "-10% 0px -10% 0px" });
-      })(children[i]);
+      })(blocks[i]);
     }
   }
   var articleTries = 0;

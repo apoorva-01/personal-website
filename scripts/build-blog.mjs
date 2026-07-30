@@ -235,18 +235,29 @@ const NAV = `  <nav style="position:fixed;top:0;left:0;right:0;z-index:50;displa
     </div>
   </nav>`;
 
-const SUBSCRIBE_BLOCK = `<section style="padding:0 0 8px">
-    <div style="border:1px solid var(--w10);background:var(--surface);padding:48px 22px 24px;display:flex;flex-direction:column;gap:12px">
-      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;color:var(--faint);text-transform:uppercase">Get new notes by email</div>
-      <p style="font-size:14px;line-height:1.6;color:var(--text-4);max-width:52ch">One email when I publish. No spam, unsubscribe anytime.</p>
-      <form id="subscribe-form" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px">
-        <input name="email" type="email" required autocomplete="email" placeholder="you@example.com" style="flex:1;min-width:220px;font-family:'IBM Plex Mono',monospace;font-size:13.5px;color:var(--text);background:var(--bubble);border:1px solid var(--w12);border-radius:0;padding:11px 13px">
-        <input name="company" type="text" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0" placeholder="Company">
-        <button type="submit" style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#fff;padding:11px 22px;border:none;border-radius:0;background:var(--accent);cursor:pointer">Subscribe</button>
-      </form>
-      <span id="subscribe-status" role="status" aria-live="polite" style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--faint)"></span>
-    </div>
-  </section>`;
+// Shared newsletter card markup — kept byte-identical to the copy hand-written
+// in blog.html (a CI drift-check could byte-compare the two if they diverge).
+function subscribeCard() {
+  return `<div style="border:1px solid var(--w10);background:var(--surface);overflow:hidden">
+      <div style="height:2px;background:linear-gradient(90deg,var(--accent),transparent)"></div>
+      <div style="padding:32px 30px 30px">
+        <div style="display:flex;align-items:center;gap:9px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;color:var(--faint);text-transform:uppercase"><span style="width:6px;height:6px;border-radius:50%;background:var(--live);box-shadow:0 0 8px var(--live)"></span>Newsletter</div>
+        <h2 style="margin-top:14px;font-size:clamp(21px,3vw,27px);font-weight:500;letter-spacing:-.02em;line-height:1.2;color:var(--heading)">New notes, straight to your inbox.</h2>
+        <p style="margin-top:10px;font-size:15px;line-height:1.6;color:var(--text-4);max-width:56ch">One email when I publish something new on RAG, retrieval, and evaluation. No cadence quota, no spam &mdash; unsubscribe in one click.</p>
+        <form id="subscribe-form" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:20px;max-width:460px">
+          <div style="flex:1;min-width:220px;display:flex;align-items:center;background:var(--bubble);border:1px solid var(--w12);transition:border-color .18s" data-hover="border-color:var(--w30)">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0;margin-left:13px;color:var(--faint)"><path d="M2 4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h20a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2H2Zm.4 2h19.2l-9.6 6.4L2.4 6ZM2 7.87 12 14l10-6.13V18H2V7.87Z"/></svg>
+            <input name="email" type="email" required autocomplete="email" placeholder="you@example.com" style="flex:1;min-width:0;font-family:'IBM Plex Mono',monospace;font-size:13.5px;color:var(--text);background:transparent;border:none;outline:none;padding:12px 13px 12px 10px">
+          </div>
+          <input name="company" type="text" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0" placeholder="Company">
+          <button type="submit" style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#fff;padding:12px 22px;border:none;border-radius:0;background:var(--accent);cursor:pointer;transition:opacity .18s" data-hover="opacity:.85">Subscribe &rarr;</button>
+        </form>
+        <span id="subscribe-status" role="status" aria-live="polite" style="display:block;margin-top:12px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--faint)"></span>
+      </div>
+    </div>`;
+}
+
+const SUBSCRIBE_BLOCK = `<section style="padding:8px 0">${subscribeCard()}</section>`;
 
 const PAGE_SCRIPT = `<script>
 (function(){

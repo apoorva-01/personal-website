@@ -1,10 +1,10 @@
 {
-  "generated": "2026-08-06",
+  "generated": "2026-08-07",
   "shipped": {
     "prs": 57,
     "repos": 28,
     "languages": 7,
-    "reach": 446036,
+    "reach": 446285,
     "privatePrs": 0,
     "privateRepos": 0,
     "rows": [
@@ -12,7 +12,7 @@
         "date": "2026-07-22",
         "lang": "RS",
         "repo": "zed-industries/zed",
-        "stars": 88116,
+        "stars": 88184,
         "num": 61365,
         "title": "project: Restart context servers when their working directory changes",
         "docs": false
@@ -21,7 +21,7 @@
         "date": "2026-07-14",
         "lang": "C++",
         "repo": "duckdb/duckdb",
-        "stars": 40036,
+        "stars": 40058,
         "num": 23781,
         "title": "Fix INTERNAL error casting pre-epoch TIMESTAMP_NS to TIME_NS",
         "docs": false
@@ -30,7 +30,7 @@
         "date": "2026-07-02",
         "lang": "PY",
         "repo": "PostHog/posthog",
-        "stars": 37524,
+        "stars": 37541,
         "num": 66505,
         "title": "fix: stop bigint filter values from crashing the feature flags page",
         "docs": false
@@ -39,7 +39,7 @@
         "date": "2026-07-21",
         "lang": "TS",
         "repo": "directus/directus",
-        "stars": 37176,
+        "stars": 37214,
         "num": 27864,
         "title": "Fix aliased relational fields returning null in GraphQL when nested inside a M2A field",
         "docs": false
@@ -48,7 +48,7 @@
         "date": "2026-07-14",
         "lang": "JV",
         "repo": "keycloak/keycloak",
-        "stars": 36031,
+        "stars": 36046,
         "num": 50641,
         "title": "Fix ConcurrentModificationException updating organization attributes",
         "docs": false
@@ -57,7 +57,7 @@
         "date": "2026-07-08",
         "lang": "GO",
         "repo": "weaviate/weaviate",
-        "stars": 16700,
+        "stars": 16703,
         "num": 12049,
         "title": "gh-12041 return 422 for batch delete with missing match fields",
         "docs": false
@@ -75,7 +75,7 @@
         "date": "2026-07-09",
         "lang": "PY",
         "repo": "livekit/agents",
-        "stars": 12685,
+        "stars": 12715,
         "num": 6362,
         "title": "fix(azure): recover from STT error cancellations instead of hanging",
         "docs": false
@@ -84,7 +84,7 @@
         "date": "2026-07-26",
         "lang": "PY",
         "repo": "sqlfluff/sqlfluff",
-        "stars": 9846,
+        "stars": 9848,
         "num": 8222,
         "title": "Postgres: stop LT01 spacing array types like `int []`",
         "docs": false
@@ -111,7 +111,7 @@
         "date": "2026-07-10",
         "lang": "JV",
         "repo": "redis/lettuce",
-        "stars": 5775,
+        "stars": 5777,
         "num": 3832,
         "title": "Count YIELD_SCORE_AS tokens in FT.HYBRID COMBINE clause #3811",
         "docs": false
@@ -165,7 +165,7 @@
         "date": "2026-07-06",
         "lang": "JS",
         "repo": "twigjs/twig.js",
-        "stars": 1934,
+        "stars": 1933,
         "num": 968,
         "title": "Report a syntax error for unclosed brackets in expressions",
         "docs": false
@@ -210,7 +210,7 @@
         "date": "2026-07-27",
         "lang": "TS",
         "repo": "fullcalendar/temporal-polyfill",
-        "stars": 755,
+        "stars": 760,
         "num": 96,
         "title": "Reject Duration strings with a dangling time designator",
         "docs": false
@@ -228,7 +228,7 @@
         "date": "2026-07-09",
         "lang": "PY",
         "repo": "livekit/python-sdks",
-        "stars": 372,
+        "stars": 373,
         "num": 742,
         "title": "Start AudioStream _run task after the FFI handle is assigned",
         "docs": false
@@ -255,7 +255,7 @@
         "date": "2026-04-29",
         "lang": "TS",
         "repo": "supabase/supabase",
-        "stars": 107608,
+        "stars": 107655,
         "num": 45299,
         "title": "docs: fix \"an\" → \"a\" grammar errors before consonant words",
         "docs": true
@@ -263,8 +263,8 @@
     ]
   },
   "answered": {
-    "total": 31,
-    "repos": 22,
+    "total": 32,
+    "repos": 23,
     "rows": [
       {
         "date": "2026-07-16",
@@ -370,6 +370,13 @@
         "repo": "nushell/nushell",
         "title": "Nushell on a Synology NAS?",
         "url": "https://github.com/nushell/nushell/discussions/18472#discussioncomment-17537897"
+      },
+      {
+        "date": "2026-07-05",
+        "lang": "RS",
+        "repo": "DioxusLabs/dioxus",
+        "title": "Sending a signal at a specific time and date",
+        "url": "https://github.com/DioxusLabs/dioxus/discussions/5486#discussioncomment-17537899"
       },
       {
         "date": "2026-07-05",

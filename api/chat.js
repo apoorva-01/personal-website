@@ -1,6 +1,17 @@
 import Anthropic from "@anthropic-ai/sdk";
+import OpenAI from "openai";
 
-const client = new Anthropic(); // reads ANTHROPIC_API_KEY from the environment
+// Pick a provider. LLM_PROVIDER pins it explicitly ("openai" | "anthropic");
+// otherwise prefer Anthropic, then fall back to OpenAI if only that key is set.
+const PROVIDER =
+  (process.env.LLM_PROVIDER || "").toLowerCase() ||
+  (process.env.ANTHROPIC_API_KEY ? "anthropic" : process.env.OPENAI_API_KEY ? "openai" : "anthropic");
+
+const ANTHROPIC_MODEL = process.env.ANTHROPIC_MODEL || "claude-haiku-4-5";
+const OPENAI_MODEL = process.env.OPENAI_MODEL || "gpt-4o-mini";
+
+const anthropic = new Anthropic(); // reads ANTHROPIC_API_KEY from the environment
+const openai = new OpenAI();       // reads OPENAI_API_KEY from the environment
 
 // Everything the assistant is allowed to know. Answers are grounded ONLY in this.
 const KNOWLEDGE = `
@@ -33,9 +44,17 @@ backend to frontend. Open to software and AI engineering roles and collaboration
    startup signals: data pipelines, scoring, and a dashboard. Stack: Next.js, TypeScript, Postgres.
 3. promptguard — regression testing for LLM apps, "pytest for prompts." Write checks against
    prompt outputs so quality regressions fail in CI instead of reaching users. Stack: Python, pytest.
+4. langchain-shannonbase — a published LangChain VectorStore for MySQL 9's native VECTOR type, so
+   you can do RAG on ShannonBase, self-hosted MySQL, or MySQL HeatWave without standing up a
+   separate vector database. On PyPI as langchain-shannonbase, currently v0.8.0
+   (pip install "langchain-shannonbase[mysql]"). Repo: https://github.com/apoorva-01/langchain-shannonbase,
+   package: https://pypi.org/project/langchain-shannonbase/. It has a LlamaIndex sibling,
+   llama-index-vector-stores-shannonbase (PyPI, v0.1.1): vector, hybrid, and MMR queries over
+   LlamaIndex nodes with metadata filters, on the same MySQL 9 engine. Repo:
+   https://github.com/apoorva-01/llama-index-vector-stores-shannonbase, package:
+   https://pypi.org/project/llama-index-vector-stores-shannonbase/. Stack: Python, LangChain, LlamaIndex, MySQL 9.
 Other work includes judgelab (LLM-as-judge calibration that quantifies position bias and
-verbosity), semcache (semantic caching for LLM APIs), langchain-shannonbase (a LangChain
-VectorStore for MySQL 9's native VECTOR type), and a range of full-stack web apps: Next.js
+verbosity), semcache (semantic caching for LLM APIs), and a range of full-stack web apps: Next.js
 platforms, an e-commerce CMS, Flask apps, and Chrome extensions.
 
 ## Evaluation methodology (a differentiator)
@@ -76,6 +95,9 @@ Formatting rules:
 - When you mention several things (like multiple projects), give each its own short paragraph,
   separated by a BLANK LINE. Never cram them into one long paragraph.
 - You may bold a name with **double asterisks**, sparingly. No headers, bullets, or numbered lists.
+- When a project comes up, you may share the exact GitHub or PyPI links written in KNOWLEDGE
+  (e.g. the langchain-shannonbase repo and package). Copy links verbatim; never guess, shorten,
+  or invent one that isn't written there.
 - Never use em dashes; use a comma, colon, or a new sentence instead.
 
 KNOWLEDGE:
@@ -245,7 +267,8 @@ export default async function handler(req, res) {
     return;
   }
 
-  if (!process.env.ANTHROPIC_API_KEY) {
+  const providerKey = PROVIDER === "openai" ? process.env.OPENAI_API_KEY : process.env.ANTHROPIC_API_KEY;
+  if (!providerKey) {
     sse(res, { error: "Chat isn't configured yet — the API key is missing." });
     res.end();
     return;
@@ -253,17 +276,37 @@ export default async function handler(req, res) {
 
   let answer = "";
   try {
-    const stream = client.messages.stream({
-      model: "claude-haiku-4-5",
-      max_tokens: 512,
-      system: SYSTEM,
-      messages: [{ role: "user", content: question }],
-    });
+    if (PROVIDER === "openai") {
+      const stream = await openai.chat.completions.create({
+        model: OPENAI_MODEL,
+        max_tokens: 512,
+        stream: true,
+        messages: [
+          { role: "system", content: SYSTEM },
+          { role: "user", content: question },
+        ],
+      });
 
-    for await (const event of stream) {
-      if (event.type === "content_block_delta" && event.delta.type === "text_delta") {
-        answer += event.delta.text;
-        sse(res, { text: event.delta.text });
+      for await (const chunk of stream) {
+        const text = chunk.choices?.[0]?.delta?.content || "";
+        if (text) {
+          answer += text;
+          sse(res, { text });
+        }
+      }
+    } else {
+      const stream = anthropic.messages.stream({
+        model: ANTHROPIC_MODEL,
+        max_tokens: 512,
+        system: SYSTEM,
+        messages: [{ role: "user", content: question }],
+      });
+
+      for await (const event of stream) {
+        if (event.type === "content_block_delta" && event.delta.type === "text_delta") {
+          answer += event.delta.text;
+          sse(res, { text: event.delta.text });
+        }
       }
     }
     sse(res, { done: true });

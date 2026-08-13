@@ -1,10 +1,10 @@
 {
-  "generated": "2026-08-12",
+  "generated": "2026-08-13",
   "shipped": {
-    "prs": 61,
+    "prs": 62,
     "repos": 29,
     "languages": 8,
-    "reach": 447840,
+    "reach": 448087,
     "privatePrs": 0,
     "privateRepos": 0,
     "rows": [
@@ -12,7 +12,7 @@
         "date": "2026-08-08",
         "lang": "RS",
         "repo": "zed-industries/zed",
-        "stars": 88464,
+        "stars": 88538,
         "num": 61128,
         "title": "text_finder: Highlight the query as a regex when the regex filter is on",
         "docs": false
@@ -21,7 +21,7 @@
         "date": "2026-07-14",
         "lang": "C++",
         "repo": "duckdb/duckdb",
-        "stars": 40179,
+        "stars": 40203,
         "num": 23781,
         "title": "Fix INTERNAL error casting pre-epoch TIMESTAMP_NS to TIME_NS",
         "docs": false
@@ -30,7 +30,7 @@
         "date": "2026-07-02",
         "lang": "PY",
         "repo": "PostHog/posthog",
-        "stars": 37621,
+        "stars": 37644,
         "num": 66505,
         "title": "fix: stop bigint filter values from crashing the feature flags page",
         "docs": false
@@ -39,7 +39,7 @@
         "date": "2026-07-21",
         "lang": "TS",
         "repo": "directus/directus",
-        "stars": 37316,
+        "stars": 37344,
         "num": 27864,
         "title": "Fix aliased relational fields returning null in GraphQL when nested inside a M2A field",
         "docs": false
@@ -48,7 +48,7 @@
         "date": "2026-07-14",
         "lang": "JV",
         "repo": "keycloak/keycloak",
-        "stars": 36130,
+        "stars": 36151,
         "num": 50641,
         "title": "Fix ConcurrentModificationException updating organization attributes",
         "docs": false
@@ -57,7 +57,7 @@
         "date": "2026-07-08",
         "lang": "GO",
         "repo": "weaviate/weaviate",
-        "stars": 16724,
+        "stars": 16727,
         "num": 12049,
         "title": "gh-12041 return 422 for batch delete with missing match fields",
         "docs": false
@@ -66,7 +66,7 @@
         "date": "2026-07-03",
         "lang": "JS",
         "repo": "mholt/PapaParse",
-        "stars": 13541,
+        "stars": 13540,
         "num": 1128,
         "title": "fix: guess delimiter by row consistency before field count",
         "docs": false
@@ -75,7 +75,7 @@
         "date": "2026-07-09",
         "lang": "PY",
         "repo": "livekit/agents",
-        "stars": 12940,
+        "stars": 12964,
         "num": 6362,
         "title": "fix(azure): recover from STT error cancellations instead of hanging",
         "docs": false
@@ -192,7 +192,7 @@
         "date": "2026-07-12",
         "lang": "PY",
         "repo": "MDAnalysis/mdanalysis",
-        "stars": 1623,
+        "stars": 1624,
         "num": 5415,
         "title": "BUG: combine cmaps when merging Universes (Issue #3672)",
         "docs": false
@@ -228,7 +228,7 @@
         "date": "2026-08-10",
         "lang": "MDX",
         "repo": "langchain-ai/docs",
-        "stars": 394,
+        "stars": 395,
         "num": 4958,
         "title": "Add ShannonBase vector store integration",
         "docs": false
@@ -252,19 +252,19 @@
         "docs": false
       },
       {
-        "date": "2026-08-11",
+        "date": "2026-08-12",
         "lang": "GO",
         "repo": "Kong/kongctl",
-        "stars": 15,
-        "num": 1832,
-        "title": "feat(extensions): control host flag visibility in command help",
+        "stars": 16,
+        "num": 1839,
+        "title": "fix(konnect): gate static login banner on terminal height",
         "docs": false
       },
       {
         "date": "2026-04-29",
         "lang": "TS",
         "repo": "supabase/supabase",
-        "stars": 107867,
+        "stars": 107915,
         "num": 45299,
         "title": "docs: fix \"an\" → \"a\" grammar errors before consonant words",
         "docs": true

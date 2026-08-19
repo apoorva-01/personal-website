@@ -1173,9 +1173,12 @@
     var btn = document.getElementById("av-book");
     if (btn) btn.addEventListener("click", function () {
       var light = document.documentElement.getAttribute("data-av-theme") === "light";
+      // Force the wide month grid only on desktop; on phones use Cal's compact
+      // single-column layout so the date + time slots fit without a cramped grid.
+      var mobile = window.matchMedia("(max-width: 640px)").matches;
       Cal.ns[NS]("modal", {
         calLink: CAL_LINK,
-        config: { layout: "month_view", theme: light ? "light" : "dark" }
+        config: { layout: mobile ? "column_view" : "month_view", theme: light ? "light" : "dark" }
       });
     });
   })();

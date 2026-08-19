@@ -231,24 +231,24 @@
 
     <article style="margin-top:0">
     <div style="display:flex;align-items:center;gap:10px;margin-top:30px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--faint)"><span>Jul 2026</span><span style="opacity:.5">·</span><span>6 min read</span></div>
-    <h1 style="margin-top:14px;font-size:clamp(30px,5vw,46px);font-weight:500;letter-spacing:-.04em;line-height:1.08;color:var(--heading)">I graded 50 RAG answers with a hand-built harness. Half the metrics were lying to me.</h1>
-    <p class="dek">Faithfulness sat at 1.0 across every config I tried. That number told me nothing, and here's the one I actually trust instead.</p>
+    <h1 data-ts="0" style="margin-top:14px;font-size:clamp(30px,5vw,46px);font-weight:500;letter-spacing:-.04em;line-height:1.08;color:var(--heading)">I graded 50 RAG answers with a hand-built harness. Half the metrics were lying to me.</h1>
+    <p class="dek" data-ts="1">Faithfulness sat at 1.0 across every config I tried. That number told me nothing, and here's the one I actually trust instead.</p>
     <div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:18px"><span style="font-size:11.5px;color:#fff;padding:4px 11px;border-radius:2px;background:var(--accent);border:none">RAG</span><span style="font-size:11.5px;color:#fff;padding:4px 11px;border-radius:2px;background:var(--accent);border:none">LLM Evaluation</span></div>
     <div style="margin-top:20px;display:flex;align-items:center;gap:10px;flex-wrap:wrap"><button id="listen-btn" type="button" aria-label="Listen to this post" style="display:inline-flex;align-items:center;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.02em;color:var(--text-3);padding:8px 14px;border-radius:0;border:1px solid var(--w10);background:transparent;cursor:pointer;transition:border-color .18s,color .18s" data-hover="color:var(--heading);border-color:var(--accent)"><svg id="listen-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg><span id="listen-label">Listen to this post</span></button><button id="speed-btn" type="button" aria-label="Playback speed" title="Playback speed" style="display:none;align-items:center;gap:6px;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.02em;color:var(--text-3);padding:8px 12px;border-radius:0;border:1px solid var(--w10);background:transparent;cursor:pointer;transition:border-color .18s,color .18s" data-hover="color:var(--heading);border-color:var(--accent)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><circle cx="12" cy="13" r="8"></circle><path d="M12 9v4l2 2"></path><path d="M5 3 2 6"></path><path d="m22 6-3-3"></path></svg><span id="speed-label">1&times;</span></button></div>
     <div style="margin-top:32px;height:1px;background:linear-gradient(90deg,rgba(255,75,38,.5),transparent)"></div>
 
-    <div class="article" style="margin-top:30px"><p>I built a RAG system over 15 arXiv papers, the usual chat-with-your-documents thing. Then I did the part most people skip: I wrote an evaluation harness, made a gold set of 50 questions, and graded every single answer across every config I could think of. Retrieval ladder, chunking strategies, two embedding models, the works.</p>
-<p>The point wasn&#39;t the chatbot. The chatbot is a weekend. The point was to find out which knobs actually matter, with numbers, instead of shipping on vibes.</p>
-<p>Most of the numbers lied to me. Here&#39;s how I figured out which ones.</p>
-<h2 id="the-metrics-that-saturate-tell-you-nothing">The metrics that saturate tell you nothing<a class="anchor-link" href="#the-metrics-that-saturate-tell-you-nothing" aria-label="Link to this section">#</a></h2>
-<p>First thing I ran was the generation matrix: two chunking strategies crossed with two embedding models, scored with DeepEval on faithfulness, answer relevance, context precision, context recall. Four configs, four grounding-quality metrics each.</p>
-<p>Faithfulness came back at 1.0. On every config. Citation precision, same story, 1.0 across the board.</p>
-<p>For about ten minutes I felt great. Then it clicked that a metric which reads 1.0 no matter what you feed it isn&#39;t measuring your config. It&#39;s measuring the generator. Claude, handed a decent prompt and some numbered sources, basically doesn&#39;t make things up. That&#39;s a fact about the model, not about my fixed-vs-semantic chunking decision. If I&#39;d picked a config based on faithfulness I would have been reading tea leaves.</p>
-<p>So the first lesson is boring and important: a metric that&#39;s already pinned at the ceiling has no opinion. It can&#39;t separate your options. Drop it from the comparison and go find one that moves.</p>
-<h2 id="the-numbers-that-actually-moved">The numbers that actually moved<a class="anchor-link" href="#the-numbers-that-actually-moved" aria-label="Link to this section">#</a></h2>
-<p>Two things moved, and they&#39;re where all the real signal was.</p>
-<h3 id="retrieval-the-big-lever">Retrieval: the big lever<a class="anchor-link" href="#retrieval-the-big-lever" aria-label="Link to this section">#</a></h3>
-<p>I ran a ladder from naive to senior:</p>
+    <div class="article" style="margin-top:30px"><p data-ts="2">I built a RAG system over 15 arXiv papers, the usual chat-with-your-documents thing. Then I did the part most people skip: I wrote an evaluation harness, made a gold set of 50 questions, and graded every single answer across every config I could think of. Retrieval ladder, chunking strategies, two embedding models, the works.</p>
+<p data-ts="3">The point wasn&#39;t the chatbot. The chatbot is a weekend. The point was to find out which knobs actually matter, with numbers, instead of shipping on vibes.</p>
+<p data-ts="4">Most of the numbers lied to me. Here&#39;s how I figured out which ones.</p>
+<h2 id="the-metrics-that-saturate-tell-you-nothing" data-ts="5">The metrics that saturate tell you nothing<a class="anchor-link" href="#the-metrics-that-saturate-tell-you-nothing" aria-label="Link to this section">#</a></h2>
+<p data-ts="6">First thing I ran was the generation matrix: two chunking strategies crossed with two embedding models, scored with DeepEval on faithfulness, answer relevance, context precision, context recall. Four configs, four grounding-quality metrics each.</p>
+<p data-ts="7">Faithfulness came back at 1.0. On every config. Citation precision, same story, 1.0 across the board.</p>
+<p data-ts="8">For about ten minutes I felt great. Then it clicked that a metric which reads 1.0 no matter what you feed it isn&#39;t measuring your config. It&#39;s measuring the generator. Claude, handed a decent prompt and some numbered sources, basically doesn&#39;t make things up. That&#39;s a fact about the model, not about my fixed-vs-semantic chunking decision. If I&#39;d picked a config based on faithfulness I would have been reading tea leaves.</p>
+<p data-ts="9">So the first lesson is boring and important: a metric that&#39;s already pinned at the ceiling has no opinion. It can&#39;t separate your options. Drop it from the comparison and go find one that moves.</p>
+<h2 id="the-numbers-that-actually-moved" data-ts="10">The numbers that actually moved<a class="anchor-link" href="#the-numbers-that-actually-moved" aria-label="Link to this section">#</a></h2>
+<p data-ts="11">Two things moved, and they&#39;re where all the real signal was.</p>
+<h3 id="retrieval-the-big-lever" data-ts="12">Retrieval: the big lever<a class="anchor-link" href="#retrieval-the-big-lever" aria-label="Link to this section">#</a></h3>
+<p data-ts="13">I ran a ladder from naive to senior:</p>
 <div class="tablewrap"><table>
 <thead>
 <tr>
@@ -279,31 +279,32 @@
 </tbody></table></div>
 <figure class="chart"><div style="overflow-x:auto"><svg viewBox="0 0 660 360" role="img" aria-label="Bar chart of NDCG at 5 across three retrievers: dense 0.33, plus BM25 hybrid 0.43, plus cross-encoder rerank 0.62" style="width:100%;height:auto;font-family:'IBM Plex Sans',system-ui,sans-serif"><defs><linearGradient id="ndcgbar" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="var(--accent)"></stop><stop offset="1" stop-color="var(--accent)"></stop></linearGradient></defs><text x="0" y="22" fill="var(--heading)" font-size="16" font-weight="500">Retrieval ladder: NDCG@5 across 50 questions</text><g stroke="var(--w09)" stroke-width="1"><line x1="60" y1="310" x2="636" y2="310"></line><line x1="60" y1="241" x2="636" y2="241"></line><line x1="60" y1="173" x2="636" y2="173"></line><line x1="60" y1="104" x2="636" y2="104"></line></g><g fill="var(--faint)" font-size="11" text-anchor="end"><text x="50" y="314">0.0</text><text x="50" y="245">0.2</text><text x="50" y="177">0.4</text><text x="50" y="108">0.6</text></g><rect x="96" y="196" width="120" height="114" rx="5" fill="url(#ndcgbar)" opacity="0.55"></rect><rect x="288" y="161" width="120" height="149" rx="5" fill="url(#ndcgbar)" opacity="0.78"></rect><rect x="480" y="98" width="120" height="212" rx="5" fill="url(#ndcgbar)"></rect><g fill="var(--heading)" font-size="15" font-weight="600" text-anchor="middle"><text x="156" y="184">0.33</text><text x="348" y="149">0.43</text><text x="540" y="86">0.62</text></g><g fill="var(--text-3)" font-size="12" text-anchor="middle"><text x="156" y="332">dense</text><text x="348" y="332">+ BM25 hybrid</text><text x="540" y="332">+ cross-encoder rerank</text></g><text x="540" y="68" fill="var(--accent)" font-size="13" font-weight="600" text-anchor="middle">+86% vs naive dense</text></svg></div><figcaption>The whole retrieval ladder. The cross-encoder is the single biggest rung (0.43 to 0.62).</figcaption></figure>
 
-<p>Naive dense to hybrid-plus-rerank is NDCG@5 0.33 to 0.62, and it&#39;s monotonic — every rung helps. The single biggest jump is the cross-encoder (0.43 to 0.62).</p>
-<blockquote>
+<p data-ts="14">Naive dense to hybrid-plus-rerank is NDCG@5 0.33 to 0.62, and it&#39;s monotonic — every rung helps. The single biggest jump is the cross-encoder (0.43 to 0.62).</p>
+<blockquote data-ts="15">
 <p><strong>Key finding:</strong> that&#39;s an 86% lift from retrieval alone. If you have one afternoon to spend on your RAG stack, spend it on reranking, not on a bigger generation model.</p>
 </blockquote>
-<h3 id="context-precision-a-smaller-real-tradeoff">Context precision: a smaller, real tradeoff<a class="anchor-link" href="#context-precision-a-smaller-real-tradeoff" aria-label="Link to this section">#</a></h3>
-<p>The other thing that moved was context precision, and it was the only generation metric that did. It went 0.754 to 0.846 across the matrix, and the winner was semantic chunking with e5-large. Worth knowing e5-large costs about 3x the embedding compute of bge-small, so that 0.09 is a real tradeoff, not a free lunch. There&#39;s also one config (semantic chunking with bge-small) that quietly trades recall down to 0.733 to buy precision, which is the kind of thing you only see when you grade the whole grid instead of one happy-path run.</p>
-<p>Everything else was flat. Four metrics, one of them told me anything.</p>
-<h2 id="the-honest-part-i-dont-fully-trust-my-own-gold-set">The honest part: I don&#39;t fully trust my own gold set<a class="anchor-link" href="#the-honest-part-i-dont-fully-trust-my-own-gold-set" aria-label="Link to this section">#</a></h2>
-<p>Here&#39;s the bit I could have hidden and didn&#39;t.</p>
-<p>My gold set is synthetic. I had Claude generate each question and reference answer from a chunk, then lightly filtered. Which means for retrieval it&#39;s structurally circular: every question&#39;s only ground truth is the exact chunk it was born from, so that chunk tends to rank well under any retriever you throw at it. I de-lexicalized the questions so they don&#39;t just echo keywords from their source passage, and you can see that biting in the numbers (dense alone only hits 0.33 because paraphrase kills pure embedding match). But de-lexicalizing fixes keyword leakage, not the structural coupling. Single-positive ground truth also deflates Recall@k whenever some other chunk was also relevant and I never labeled it.</p>
-<p>So those retrieval absolutes are conservative lower bounds. The 86% lift is real because it&#39;s a relative comparison on the same flawed gold set, and the flaws cancel. The absolute 0.62 is a number I&#39;d argue with.</p>
-<p>This is the trap with eval work. You build a measuring stick, and then you forget the stick itself has error bars. A benchmark you generated from the thing you&#39;re testing is going to flatter the thing you&#39;re testing.</p>
-<h2 id="so-i-built-a-metric-that-never-touches-the-gold-set">So I built a metric that never touches the gold set<a class="anchor-link" href="#so-i-built-a-metric-that-never-touches-the-gold-set" aria-label="Link to this section">#</a></h2>
-<p>If I don&#39;t fully trust the gold set, I shouldn&#39;t lead with a metric that depends on it. So the number I actually put my name behind is a custom citation-faithfulness metric, framed the way the attribution-eval (ALCE) literature does it, and it&#39;s gold-independent by design. It audits the answer against its own cited sources and never looks at the gold set at all.</p>
-<p>Two parts. Citation precision: of the claims that carry a <code>[n]</code>, what fraction are actually stated by the source they cite. When you cite, are you right? Citation recall: of all the factual claims in the answer, what fraction carry at least one citation. Do you cite everything you assert, or just some of it?</p>
-<blockquote>
+<h3 id="context-precision-a-smaller-real-tradeoff" data-ts="16">Context precision: a smaller, real tradeoff<a class="anchor-link" href="#context-precision-a-smaller-real-tradeoff" aria-label="Link to this section">#</a></h3>
+<p data-ts="17">The other thing that moved was context precision, and it was the only generation metric that did. It went 0.754 to 0.846 across the matrix, and the winner was semantic chunking with e5-large. Worth knowing e5-large costs about 3x the embedding compute of bge-small, so that 0.09 is a real tradeoff, not a free lunch. There&#39;s also one config (semantic chunking with bge-small) that quietly trades recall down to 0.733 to buy precision, which is the kind of thing you only see when you grade the whole grid instead of one happy-path run.</p>
+<p data-ts="18">Everything else was flat. Four metrics, one of them told me anything.</p>
+<h2 id="the-honest-part-i-dont-fully-trust-my-own-gold-set" data-ts="19">The honest part: I don&#39;t fully trust my own gold set<a class="anchor-link" href="#the-honest-part-i-dont-fully-trust-my-own-gold-set" aria-label="Link to this section">#</a></h2>
+<p data-ts="20">Here&#39;s the bit I could have hidden and didn&#39;t.</p>
+<p data-ts="21">My gold set is synthetic. I had Claude generate each question and reference answer from a chunk, then lightly filtered. Which means for retrieval it&#39;s structurally circular: every question&#39;s only ground truth is the exact chunk it was born from, so that chunk tends to rank well under any retriever you throw at it. I de-lexicalized the questions so they don&#39;t just echo keywords from their source passage, and you can see that biting in the numbers (dense alone only hits 0.33 because paraphrase kills pure embedding match). But de-lexicalizing fixes keyword leakage, not the structural coupling. Single-positive ground truth also deflates Recall@k whenever some other chunk was also relevant and I never labeled it.</p>
+<p data-ts="22">So those retrieval absolutes are conservative lower bounds. The 86% lift is real because it&#39;s a relative comparison on the same flawed gold set, and the flaws cancel. The absolute 0.62 is a number I&#39;d argue with.</p>
+<p data-ts="23">This is the trap with eval work. You build a measuring stick, and then you forget the stick itself has error bars. A benchmark you generated from the thing you&#39;re testing is going to flatter the thing you&#39;re testing.</p>
+<h2 id="so-i-built-a-metric-that-never-touches-the-gold-set" data-ts="24">So I built a metric that never touches the gold set<a class="anchor-link" href="#so-i-built-a-metric-that-never-touches-the-gold-set" aria-label="Link to this section">#</a></h2>
+<p data-ts="25">If I don&#39;t fully trust the gold set, I shouldn&#39;t lead with a metric that depends on it. So the number I actually put my name behind is a custom citation-faithfulness metric, framed the way the attribution-eval (ALCE) literature does it, and it&#39;s gold-independent by design. It audits the answer against its own cited sources and never looks at the gold set at all.</p>
+<p data-ts="26">Two parts. Citation precision: of the claims that carry a <code>[n]</code>, what fraction are actually stated by the source they cite. When you cite, are you right? Citation recall: of all the factual claims in the answer, what fraction carry at least one citation. Do you cite everything you assert, or just some of it?</p>
+<blockquote data-ts="27">
 <p><strong>The detail I care about most:</strong> honest refusals (&quot;the sources don&#39;t cover this&quot;) have no claims to cite, so they&#39;re excluded, not scored zero. A model that correctly says &quot;I don&#39;t know&quot; shouldn&#39;t get punished by your eval for being honest. That&#39;s the difference between measuring grounding and measuring confidence.</p>
 </blockquote>
-<p>And because &quot;the metric said 1.0&quot; is exactly the kind of claim you shouldn&#39;t take on faith, the behavior is pinned down by tests. A correctly-cited answer scores 1.0 / 1.0. An answer that cites the wrong source and leaves one claim uncited scores precision 0.0 and recall 0.5, by construction. The metric is graded before I let it grade anything else.</p>
-<h2 id="what-id-tell-you-to-take-from-this">What I&#39;d tell you to take from this<a class="anchor-link" href="#what-id-tell-you-to-take-from-this" aria-label="Link to this section">#</a></h2>
-<p>Grade the whole grid, not the happy path. The interesting failures live in the cells you didn&#39;t bother to run.</p>
-<p>When a metric reads the same everywhere, that&#39;s not your system being perfect. That&#39;s the metric being blind to the difference you care about. Go find one that can see it.</p>
-<p>And be suspicious of any eval built on data you generated yourself. Ask what the metric depends on, and prefer the one that depends on the least. In my case the bottleneck turned out to be retrieval, not generation, and the only score I&#39;d defend in a code review is the one that doesn&#39;t lean on a gold set I can&#39;t fully verify.</p>
-<p>The harness, the custom metric, the tests, and every number above are in the repo: <a href="https://github.com/apoorva-01/rag-eval-harness">github.com/apoorva-01/rag-eval-harness</a>. Run <code>python eval/run_matrix.py</code> and it regenerates the tables. If your numbers come out different, I&#39;d genuinely like to know why.</p>
+<p data-ts="28">And because &quot;the metric said 1.0&quot; is exactly the kind of claim you shouldn&#39;t take on faith, the behavior is pinned down by tests. A correctly-cited answer scores 1.0 / 1.0. An answer that cites the wrong source and leaves one claim uncited scores precision 0.0 and recall 0.5, by construction. The metric is graded before I let it grade anything else.</p>
+<h2 id="what-id-tell-you-to-take-from-this" data-ts="29">What I&#39;d tell you to take from this<a class="anchor-link" href="#what-id-tell-you-to-take-from-this" aria-label="Link to this section">#</a></h2>
+<p data-ts="30">Grade the whole grid, not the happy path. The interesting failures live in the cells you didn&#39;t bother to run.</p>
+<p data-ts="31">When a metric reads the same everywhere, that&#39;s not your system being perfect. That&#39;s the metric being blind to the difference you care about. Go find one that can see it.</p>
+<p data-ts="32">And be suspicious of any eval built on data you generated yourself. Ask what the metric depends on, and prefer the one that depends on the least. In my case the bottleneck turned out to be retrieval, not generation, and the only score I&#39;d defend in a code review is the one that doesn&#39;t lean on a gold set I can&#39;t fully verify.</p>
+<p data-ts="33">The harness, the custom metric, the tests, and every number above are in the repo: <a href="https://github.com/apoorva-01/rag-eval-harness">github.com/apoorva-01/rag-eval-harness</a>. Run <code>python eval/run_matrix.py</code> and it regenerates the tables. If your numbers come out different, I&#39;d genuinely like to know why.</p>
 </div>
+    <script id="tts-data" type="application/json">{"src":"/posts/rag-eval-lying-metrics.mp3","h":"aae5d401269f","timings":[0,6.13,14.76,36.315,46.42,50.9,53.855,71.06,78.565,103.345,115.9,118.405,122.335,124.815,127.795,143.6,155.28,159.01,197.765,202.495,206.3,209.305,254.61,270.815,284.02,287.8,310.755,330.435,349.89,373.52,375.9,382.78,393.21,414.315]}</script>
     </article>
 
     <nav class="postnav" aria-label="More notes" style="margin-top:44px"><a class="postnav-link next" href="/posts/mysql-vector-store-langchain" data-hover="border-color:var(--accent)"><span class="postnav-label">Newer →</span><span class="postnav-title">Building a vector store on MySQL 9, and everything I refused to fake</span></a></nav>
@@ -544,15 +545,72 @@
     var btn = document.getElementById("listen-btn");
     var label = document.getElementById("listen-label");
     if (!btn || !label) return;
+    var speedBtn = document.getElementById("speed-btn");
+    var speedLabel = document.getElementById("speed-label");
+    var SPEEDS = [1, 1.25, 1.5];
+    // Prefer the pre-generated natural voice (Kokoro, baked at build time) when
+    // this post has it. Falls back to the browser's robotic Web Speech voice for
+    // posts published before the audio was generated.
+    var dataEl = document.getElementById("tts-data");
+    if (dataEl){
+      try {
+        var data = JSON.parse(dataEl.textContent || "{}");
+        if (data && data.src && data.timings && data.timings.length){
+          initAudioListen(btn, label, speedBtn, speedLabel, SPEEDS, data);
+          return;
+        }
+      } catch(e){}
+    }
+    initSpeechListen(btn, label, speedBtn, speedLabel, SPEEDS);
+  }
+  // Play the pre-rendered MP3 and highlight the block being read using the
+  // per-block start times baked alongside it. Each [data-ts] element maps 1:1
+  // to a timings entry, in order, so there is no runtime segmentation to drift.
+  function initAudioListen(btn, label, speedBtn, speedLabel, SPEEDS, data){
+    var els = [].slice.call(document.querySelectorAll("[data-ts]"))
+      .sort(function(a, b){ return (+a.getAttribute("data-ts")) - (+b.getAttribute("data-ts")); });
+    var timings = data.timings;
+    var audio = new Audio(data.src);
+    audio.preload = "auto";
+    var rate = 1, state = "idle", active = null, curIdx = -1; // idle | playing | paused
+    if (speedBtn) speedBtn.style.display = "inline-flex";
+    function highlight(i){
+      if (i === curIdx) return;
+      curIdx = i;
+      if (active) active.classList.remove("tts-active");
+      active = els[i] || null;
+      if (active){
+        active.classList.add("tts-active");
+        try { active.scrollIntoView({ block: "center", behavior: "smooth" }); } catch(e){}
+      }
+    }
+    function idxFor(t){
+      var lo = 0, hi = timings.length - 1, ans = 0;
+      while (lo <= hi){ var mid = (lo + hi) >> 1; if (timings[mid] <= t){ ans = mid; lo = mid + 1; } else hi = mid - 1; }
+      return ans;
+    }
+    audio.addEventListener("timeupdate", function(){ if (state === "playing") highlight(idxFor(audio.currentTime)); });
+    audio.addEventListener("ended", function(){
+      state = "idle"; label.textContent = "Listen to this post";
+      if (active) active.classList.remove("tts-active"); active = null; curIdx = -1;
+    });
+    btn.addEventListener("click", function(){
+      if (state === "idle" || state === "paused"){ state = "playing"; label.textContent = "Pause"; audio.play(); }
+      else { state = "paused"; label.textContent = "Resume"; audio.pause(); }
+    });
+    if (speedBtn) speedBtn.addEventListener("click", function(){
+      var pos = SPEEDS.indexOf(rate); rate = SPEEDS[(pos + 1) % SPEEDS.length];
+      speedLabel.textContent = rate + "×"; audio.playbackRate = rate;
+    });
+    window.addEventListener("beforeunload", function(){ try { audio.pause(); } catch(e){} });
+  }
+  function initSpeechListen(btn, label, speedBtn, speedLabel, SPEEDS){
     var synth = window.speechSynthesis;
     if (!synth || typeof window.SpeechSynthesisUtterance === "undefined"){ btn.style.display = "none"; return; }
     var article = document.querySelector(".article");
     var titleEl = document.querySelector("article h1");
     var dekEl = document.querySelector(".dek");
     var segs = [], idx = 0, state = "idle", voice = null, active = null, built = false, rate = 1, seq = 0; // idle | playing | paused
-    var speedBtn = document.getElementById("speed-btn");
-    var speedLabel = document.getElementById("speed-label");
-    var SPEEDS = [1, 1.25, 1.5];
     if (speedBtn) speedBtn.style.display = "inline-flex";
     // Prefer a natural-sounding voice over the OS default (Samantha/eSpeak etc.).
     // The good ones expose "Natural"/"Neural"/"Enhanced"/"Premium" in the name,

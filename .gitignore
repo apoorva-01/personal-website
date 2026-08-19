@@ -5,6 +5,9 @@ node_modules/
 .env.local
 .vercel
 
+# Kokoro TTS virtualenv (torch etc.) — recreate with scripts/tts/README, never commit
+scripts/tts/venv/
+
 # Google service-account keys — NEVER commit these (they go in GitHub Actions secrets)
 service_account.json
 portfolio-*.json

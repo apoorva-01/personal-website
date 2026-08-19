@@ -462,15 +462,72 @@ const PAGE_SCRIPT = `<script>
     var btn = document.getElementById("listen-btn");
     var label = document.getElementById("listen-label");
     if (!btn || !label) return;
+    var speedBtn = document.getElementById("speed-btn");
+    var speedLabel = document.getElementById("speed-label");
+    var SPEEDS = [1, 1.25, 1.5];
+    // Prefer the pre-generated natural voice (Kokoro, baked at build time) when
+    // this post has it. Falls back to the browser's robotic Web Speech voice for
+    // posts published before the audio was generated.
+    var dataEl = document.getElementById("tts-data");
+    if (dataEl){
+      try {
+        var data = JSON.parse(dataEl.textContent || "{}");
+        if (data && data.src && data.timings && data.timings.length){
+          initAudioListen(btn, label, speedBtn, speedLabel, SPEEDS, data);
+          return;
+        }
+      } catch(e){}
+    }
+    initSpeechListen(btn, label, speedBtn, speedLabel, SPEEDS);
+  }
+  // Play the pre-rendered MP3 and highlight the block being read using the
+  // per-block start times baked alongside it. Each [data-ts] element maps 1:1
+  // to a timings entry, in order, so there is no runtime segmentation to drift.
+  function initAudioListen(btn, label, speedBtn, speedLabel, SPEEDS, data){
+    var els = [].slice.call(document.querySelectorAll("[data-ts]"))
+      .sort(function(a, b){ return (+a.getAttribute("data-ts")) - (+b.getAttribute("data-ts")); });
+    var timings = data.timings;
+    var audio = new Audio(data.src);
+    audio.preload = "auto";
+    var rate = 1, state = "idle", active = null, curIdx = -1; // idle | playing | paused
+    if (speedBtn) speedBtn.style.display = "inline-flex";
+    function highlight(i){
+      if (i === curIdx) return;
+      curIdx = i;
+      if (active) active.classList.remove("tts-active");
+      active = els[i] || null;
+      if (active){
+        active.classList.add("tts-active");
+        try { active.scrollIntoView({ block: "center", behavior: "smooth" }); } catch(e){}
+      }
+    }
+    function idxFor(t){
+      var lo = 0, hi = timings.length - 1, ans = 0;
+      while (lo <= hi){ var mid = (lo + hi) >> 1; if (timings[mid] <= t){ ans = mid; lo = mid + 1; } else hi = mid - 1; }
+      return ans;
+    }
+    audio.addEventListener("timeupdate", function(){ if (state === "playing") highlight(idxFor(audio.currentTime)); });
+    audio.addEventListener("ended", function(){
+      state = "idle"; label.textContent = "Listen to this post";
+      if (active) active.classList.remove("tts-active"); active = null; curIdx = -1;
+    });
+    btn.addEventListener("click", function(){
+      if (state === "idle" || state === "paused"){ state = "playing"; label.textContent = "Pause"; audio.play(); }
+      else { state = "paused"; label.textContent = "Resume"; audio.pause(); }
+    });
+    if (speedBtn) speedBtn.addEventListener("click", function(){
+      var pos = SPEEDS.indexOf(rate); rate = SPEEDS[(pos + 1) % SPEEDS.length];
+      speedLabel.textContent = rate + "×"; audio.playbackRate = rate;
+    });
+    window.addEventListener("beforeunload", function(){ try { audio.pause(); } catch(e){} });
+  }
+  function initSpeechListen(btn, label, speedBtn, speedLabel, SPEEDS){
     var synth = window.speechSynthesis;
     if (!synth || typeof window.SpeechSynthesisUtterance === "undefined"){ btn.style.display = "none"; return; }
     var article = document.querySelector(".article");
     var titleEl = document.querySelector("article h1");
     var dekEl = document.querySelector(".dek");
     var segs = [], idx = 0, state = "idle", voice = null, active = null, built = false, rate = 1, seq = 0; // idle | playing | paused
-    var speedBtn = document.getElementById("speed-btn");
-    var speedLabel = document.getElementById("speed-label");
-    var SPEEDS = [1, 1.25, 1.5];
     if (speedBtn) speedBtn.style.display = "inline-flex";
     // Prefer a natural-sounding voice over the OS default (Samantha/eSpeak etc.).
     // The good ones expose "Natural"/"Neural"/"Enhanced"/"Premium" in the name,

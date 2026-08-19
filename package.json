@@ -5,7 +5,8 @@
   "type": "module",
   "description": "Apoorva Verma — AI engineer portfolio with a live, grounded chat backend.",
   "scripts": {
-    "build:blog": "node scripts/build-blog.mjs"
+    "build:blog": "node scripts/build-blog.mjs",
+    "build:audio": "node scripts/build-audio.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.40.0",
@@ -13,5 +14,8 @@
     "marked": "^12.0.2",
     "openai": "^4.104.0",
     "resend": "^6.18.1"
+  },
+  "devDependencies": {
+    "node-html-parser": "^9.0.1"
   }
 }

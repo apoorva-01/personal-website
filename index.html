@@ -274,6 +274,10 @@
             <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14ZM7.12 20.45H3.56V9h3.56v11.45ZM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0Z"/></svg>
             LinkedIn
           </a>
+          <button id="av-book" type="button" aria-label="Book a meeting" style="display:inline-flex;align-items:center;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;letter-spacing:.01em;color:var(--text-3);text-decoration:none;padding:7px 12px;border-radius:0;border:1px solid var(--w10);background:transparent;cursor:pointer;transition:border-color .18s,color .18s" data-hover="border-color:var(--accent);color:var(--heading)">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+            Book a Meet
+          </button>
           <span style="display:inline-flex;align-items:center;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;letter-spacing:.01em;color:var(--text-3);padding:7px 12px;border:1px solid var(--w10);background:transparent">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0"><path d="M2 4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h20a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2H2Zm.4 2h19.2l-9.6 6.4L2.4 6ZM2 7.87 12 14l10-6.13V18H2V7.87Z"/></svg>
             vermaapoorva0510@gmail.com
@@ -1155,6 +1159,27 @@
   else boot();
 })();
 </script>
+  <!-- Book a Meet: Cal.com popup. Swap CAL_LINK for your real handle once your -->
+  <!-- cal.com account is set up (e.g. "apoorva/30min"). That is the only edit needed. -->
+  <script>
+  (function () {
+    var CAL_LINK = "apoorva-verma/chat-with-apoorva"; // your cal.com link (username/event-slug)
+    var NS = "book";
+
+    (function (C, A, L) { var p = function (a, ar) { a.q.push(ar); }; var d = C.document; C.Cal = C.Cal || function () { var cal = C.Cal; var ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { var api = function () { p(api, arguments); }; var namespace = ar[1]; api.q = api.q || []; if (typeof namespace === "string") { cal.ns[namespace] = cal.ns[namespace] || api; p(cal.ns[namespace], ar); p(cal, ["initNamespace", namespace]); } else p(cal, ar); return; } p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
+
+    Cal("init", NS, { origin: "https://cal.com" });
+
+    var btn = document.getElementById("av-book");
+    if (btn) btn.addEventListener("click", function () {
+      var light = document.documentElement.getAttribute("data-av-theme") === "light";
+      Cal.ns[NS]("modal", {
+        calLink: CAL_LINK,
+        config: { layout: "month_view", theme: light ? "light" : "dark" }
+      });
+    });
+  })();
+  </script>
   <script src="/visit.js" defer></script>
 </body>
 </html>

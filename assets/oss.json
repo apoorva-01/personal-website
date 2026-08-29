@@ -1,10 +1,10 @@
 {
-  "generated": "2026-08-28",
+  "generated": "2026-08-29",
   "shipped": {
-    "prs": 67,
-    "repos": 29,
+    "prs": 68,
+    "repos": 30,
     "languages": 8,
-    "reach": 452950,
+    "reach": 453637,
     "privatePrs": 0,
     "privateRepos": 0,
     "rows": [
@@ -12,7 +12,7 @@
         "date": "2026-08-08",
         "lang": "RS",
         "repo": "zed-industries/zed",
-        "stars": 89374,
+        "stars": 89398,
         "num": 61128,
         "title": "text_finder: Highlight the query as a regex when the regex filter is on",
         "docs": false
@@ -21,7 +21,7 @@
         "date": "2026-08-20",
         "lang": "C++",
         "repo": "duckdb/duckdb",
-        "stars": 40768,
+        "stars": 40787,
         "num": 23782,
         "title": "Fix percentile_cont/disc(0) with descending order",
         "docs": false
@@ -30,7 +30,7 @@
         "date": "2026-07-02",
         "lang": "PY",
         "repo": "PostHog/posthog",
-        "stars": 39408,
+        "stars": 39451,
         "num": 66505,
         "title": "fix: stop bigint filter values from crashing the feature flags page",
         "docs": false
@@ -39,7 +39,7 @@
         "date": "2026-07-21",
         "lang": "TS",
         "repo": "directus/directus",
-        "stars": 37662,
+        "stars": 37690,
         "num": 27864,
         "title": "Fix aliased relational fields returning null in GraphQL when nested inside a M2A field",
         "docs": false
@@ -48,7 +48,7 @@
         "date": "2026-07-14",
         "lang": "JV",
         "repo": "keycloak/keycloak",
-        "stars": 36469,
+        "stars": 36477,
         "num": 50641,
         "title": "Fix ConcurrentModificationException updating organization attributes",
         "docs": false
@@ -57,7 +57,7 @@
         "date": "2026-07-08",
         "lang": "GO",
         "repo": "weaviate/weaviate",
-        "stars": 16758,
+        "stars": 16759,
         "num": 12049,
         "title": "gh-12041 return 422 for batch delete with missing match fields",
         "docs": false
@@ -66,7 +66,7 @@
         "date": "2026-07-03",
         "lang": "JS",
         "repo": "mholt/PapaParse",
-        "stars": 13552,
+        "stars": 13553,
         "num": 1128,
         "title": "fix: guess delimiter by row consistency before field count",
         "docs": false
@@ -75,7 +75,7 @@
         "date": "2026-07-09",
         "lang": "PY",
         "repo": "livekit/agents",
-        "stars": 13280,
+        "stars": 13466,
         "num": 6362,
         "title": "fix(azure): recover from STT error cancellations instead of hanging",
         "docs": false
@@ -138,7 +138,7 @@
         "date": "2026-07-15",
         "lang": "JS",
         "repo": "jsonata-js/jsonata",
-        "stars": 2680,
+        "stars": 2681,
         "num": 809,
         "title": "Fix $contains crash when the token is undefined",
         "docs": false
@@ -156,7 +156,7 @@
         "date": "2026-07-06",
         "lang": "PY",
         "repo": "pygments/pygments",
-        "stars": 2206,
+        "stars": 2205,
         "num": 3177,
         "title": "Swift: keep `func` a keyword in `class func` methods",
         "docs": false
@@ -228,7 +228,7 @@
         "date": "2026-08-10",
         "lang": "MDX",
         "repo": "langchain-ai/docs",
-        "stars": 400,
+        "stars": 402,
         "num": 4958,
         "title": "Add ShannonBase vector store integration",
         "docs": false
@@ -240,6 +240,15 @@
         "stars": 380,
         "num": 742,
         "title": "Start AudioStream _run task after the FFI handle is assigned",
+        "docs": false
+      },
+      {
+        "date": "2026-08-29",
+        "lang": "PY",
+        "repo": "langchain-ai/langchain-aws",
+        "stars": 346,
+        "num": 1182,
+        "title": "fix(langgraph-checkpoint-aws): make ValkeySaver writes atomic and deduped",
         "docs": false
       },
       {
@@ -264,7 +273,7 @@
         "date": "2026-04-29",
         "lang": "TS",
         "repo": "supabase/supabase",
-        "stars": 108531,
+        "stars": 108560,
         "num": 45299,
         "title": "docs: fix \"an\" → \"a\" grammar errors before consonant words",
         "docs": true

@@ -1,10 +1,10 @@
 {
-  "generated": "2026-09-08",
+  "generated": "2026-09-09",
   "shipped": {
     "prs": 68,
     "repos": 30,
     "languages": 8,
-    "reach": 456047,
+    "reach": 456269,
     "privatePrs": 0,
     "privateRepos": 0,
     "rows": [
@@ -12,7 +12,7 @@
         "date": "2026-08-08",
         "lang": "RS",
         "repo": "zed-industries/zed",
-        "stars": 89935,
+        "stars": 89995,
         "num": 61128,
         "title": "text_finder: Highlight the query as a regex when the regex filter is on",
         "docs": false
@@ -21,7 +21,7 @@
         "date": "2026-08-20",
         "lang": "C++",
         "repo": "duckdb/duckdb",
-        "stars": 41065,
+        "stars": 41084,
         "num": 23782,
         "title": "Fix percentile_cont/disc(0) with descending order",
         "docs": false
@@ -30,7 +30,7 @@
         "date": "2026-07-02",
         "lang": "PY",
         "repo": "PostHog/posthog",
-        "stars": 39656,
+        "stars": 39705,
         "num": 66505,
         "title": "fix: stop bigint filter values from crashing the feature flags page",
         "docs": false
@@ -39,7 +39,7 @@
         "date": "2026-07-21",
         "lang": "TS",
         "repo": "directus/directus",
-        "stars": 37813,
+        "stars": 37826,
         "num": 27864,
         "title": "Fix aliased relational fields returning null in GraphQL when nested inside a M2A field",
         "docs": false
@@ -48,7 +48,7 @@
         "date": "2026-07-14",
         "lang": "JV",
         "repo": "keycloak/keycloak",
-        "stars": 36655,
+        "stars": 36681,
         "num": 50641,
         "title": "Fix ConcurrentModificationException updating organization attributes",
         "docs": false
@@ -57,7 +57,7 @@
         "date": "2026-07-08",
         "lang": "GO",
         "repo": "weaviate/weaviate",
-        "stars": 16792,
+        "stars": 16795,
         "num": 12049,
         "title": "gh-12041 return 422 for batch delete with missing match fields",
         "docs": false
@@ -66,7 +66,7 @@
         "date": "2026-07-09",
         "lang": "PY",
         "repo": "livekit/agents",
-        "stars": 14064,
+        "stars": 14088,
         "num": 6362,
         "title": "fix(azure): recover from STT error cancellations instead of hanging",
         "docs": false
@@ -75,7 +75,7 @@
         "date": "2026-07-03",
         "lang": "JS",
         "repo": "mholt/PapaParse",
-        "stars": 13565,
+        "stars": 13564,
         "num": 1128,
         "title": "fix: guess delimiter by row consistency before field count",
         "docs": false
@@ -102,7 +102,7 @@
         "date": "2026-07-13",
         "lang": "JS",
         "repo": "MikeMcl/decimal.js",
-        "stars": 7252,
+        "stars": 7251,
         "num": 260,
         "title": "Fix asin losing precision near x = 1",
         "docs": false
@@ -120,7 +120,7 @@
         "date": "2026-06-30",
         "lang": "PY",
         "repo": "mne-tools/mne-python",
-        "stars": 3502,
+        "stars": 3504,
         "num": 13999,
         "title": "Fix write_fine_calibration mangling Neuromag channel names",
         "docs": false
@@ -138,7 +138,7 @@
         "date": "2026-07-15",
         "lang": "JS",
         "repo": "jsonata-js/jsonata",
-        "stars": 2688,
+        "stars": 2687,
         "num": 809,
         "title": "Fix $contains crash when the token is undefined",
         "docs": false
@@ -174,7 +174,7 @@
         "date": "2026-07-09",
         "lang": "TS",
         "repo": "eemeli/yaml",
-        "stars": 1688,
+        "stars": 1690,
         "num": 700,
         "title": "fix: Parse a flow collection map key preceded by a blank line or comment",
         "docs": false
@@ -183,7 +183,7 @@
         "date": "2026-07-10",
         "lang": "JS",
         "repo": "js-joda/js-joda",
-        "stars": 1665,
+        "stars": 1664,
         "num": 807,
         "title": "fix: parse zone ids that share a prefix with a fixed id",
         "docs": false
@@ -192,7 +192,7 @@
         "date": "2026-07-12",
         "lang": "PY",
         "repo": "MDAnalysis/mdanalysis",
-        "stars": 1643,
+        "stars": 1644,
         "num": 5415,
         "title": "BUG: combine cmaps when merging Universes (Issue #3672)",
         "docs": false
@@ -210,7 +210,7 @@
         "date": "2026-07-27",
         "lang": "TS",
         "repo": "fullcalendar/temporal-polyfill",
-        "stars": 772,
+        "stars": 773,
         "num": 96,
         "title": "Reject Duration strings with a dangling time designator",
         "docs": false
@@ -228,7 +228,7 @@
         "date": "2026-08-10",
         "lang": "MDX",
         "repo": "langchain-ai/docs",
-        "stars": 408,
+        "stars": 409,
         "num": 4958,
         "title": "Add ShannonBase vector store integration",
         "docs": false
@@ -273,7 +273,7 @@
         "date": "2026-04-29",
         "lang": "TS",
         "repo": "supabase/supabase",
-        "stars": 108960,
+        "stars": 108985,
         "num": 45299,
         "title": "docs: fix \"an\" → \"a\" grammar errors before consonant words",
         "docs": true

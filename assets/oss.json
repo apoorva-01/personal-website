@@ -1,10 +1,10 @@
 {
-  "generated": "2026-11-04",
+  "generated": "2026-11-05",
   "shipped": {
     "prs": 75,
     "repos": 36,
     "languages": 9,
-    "reach": 575250,
+    "reach": 575480,
     "privatePrs": 0,
     "privateRepos": 0,
     "rows": [
@@ -12,7 +12,7 @@
         "date": "2026-08-08",
         "lang": "RS",
         "repo": "zed-industries/zed",
-        "stars": 92667,
+        "stars": 92799,
         "num": 61128,
         "title": "text_finder: Highlight the query as a regex when the regex filter is on",
         "docs": false
@@ -21,7 +21,7 @@
         "date": "2026-10-22",
         "lang": "PY",
         "repo": "home-assistant/core",
-        "stars": 91956,
+        "stars": 91993,
         "num": 175799,
         "title": "Migrate ubus from DeviceScanner to ScannerEntity and add config flow",
         "docs": false
@@ -30,7 +30,7 @@
         "date": "2026-08-20",
         "lang": "C++",
         "repo": "duckdb/duckdb",
-        "stars": 42805,
+        "stars": 42842,
         "num": 23782,
         "title": "Fix percentile_cont/disc(0) with descending order",
         "docs": false
@@ -39,7 +39,7 @@
         "date": "2026-07-02",
         "lang": "PY",
         "repo": "PostHog/posthog",
-        "stars": 40632,
+        "stars": 40659,
         "num": 66505,
         "title": "fix: stop bigint filter values from crashing the feature flags page",
         "docs": false
@@ -48,7 +48,7 @@
         "date": "2026-07-21",
         "lang": "TS",
         "repo": "directus/directus",
-        "stars": 38817,
+        "stars": 38721,
         "num": 27864,
         "title": "Fix aliased relational fields returning null in GraphQL when nested inside a M2A field",
         "docs": false
@@ -57,7 +57,7 @@
         "date": "2026-07-14",
         "lang": "JV",
         "repo": "keycloak/keycloak",
-        "stars": 37698,
+        "stars": 37717,
         "num": 50641,
         "title": "Fix ConcurrentModificationException updating organization attributes",
         "docs": false
@@ -66,7 +66,7 @@
         "date": "2026-07-08",
         "lang": "GO",
         "repo": "weaviate/weaviate",
-        "stars": 16936,
+        "stars": 16938,
         "num": 12049,
         "title": "gh-12041 return 422 for batch delete with missing match fields",
         "docs": false
@@ -75,7 +75,7 @@
         "date": "2026-07-09",
         "lang": "PY",
         "repo": "livekit/agents",
-        "stars": 15082,
+        "stars": 15096,
         "num": 6362,
         "title": "fix(azure): recover from STT error cancellations instead of hanging",
         "docs": false
@@ -138,7 +138,7 @@
         "date": "2026-06-30",
         "lang": "PY",
         "repo": "mne-tools/mne-python",
-        "stars": 3583,
+        "stars": 3584,
         "num": 13999,
         "title": "Fix write_fine_calibration mangling Neuromag channel names",
         "docs": false
@@ -192,7 +192,7 @@
         "date": "2026-07-09",
         "lang": "TS",
         "repo": "eemeli/yaml",
-        "stars": 1702,
+        "stars": 1701,
         "num": 700,
         "title": "fix: Parse a flow collection map key preceded by a blank line or comment",
         "docs": false
@@ -201,7 +201,7 @@
         "date": "2026-07-12",
         "lang": "PY",
         "repo": "MDAnalysis/mdanalysis",
-        "stars": 1681,
+        "stars": 1683,
         "num": 5415,
         "title": "BUG: combine cmaps when merging Universes (Issue #3672)",
         "docs": false
@@ -228,7 +228,7 @@
         "date": "2026-07-02",
         "lang": "PY",
         "repo": "jsonpickle/jsonpickle",
-        "stars": 1319,
+        "stars": 1320,
         "num": 609,
         "title": "Encode __reduce__-only objects instead of null when unpicklable=False",
         "docs": false
@@ -237,7 +237,7 @@
         "date": "2026-07-27",
         "lang": "TS",
         "repo": "fullcalendar/temporal-polyfill",
-        "stars": 785,
+        "stars": 784,
         "num": 96,
         "title": "Reject Duration strings with a dangling time designator",
         "docs": false
@@ -255,7 +255,7 @@
         "date": "2026-08-10",
         "lang": "MDX",
         "repo": "langchain-ai/docs",
-        "stars": 444,
+        "stars": 445,
         "num": 4958,
         "title": "Add ShannonBase vector store integration",
         "docs": false
@@ -327,7 +327,7 @@
         "date": "2026-04-29",
         "lang": "TS",
         "repo": "supabase/supabase",
-        "stars": 114511,
+        "stars": 114566,
         "num": 45299,
         "title": "docs: fix \"an\" → \"a\" grammar errors before consonant words",
         "docs": true

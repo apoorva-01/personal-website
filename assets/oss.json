@@ -1,10 +1,10 @@
 {
-  "generated": "2026-11-06",
+  "generated": "2026-11-07",
   "shipped": {
     "prs": 75,
     "repos": 36,
     "languages": 9,
-    "reach": 575909,
+    "reach": 576943,
     "privatePrs": 0,
     "privateRepos": 0,
     "rows": [
@@ -12,7 +12,7 @@
         "date": "2026-08-08",
         "lang": "RS",
         "repo": "zed-industries/zed",
-        "stars": 93112,
+        "stars": 94053,
         "num": 61128,
         "title": "text_finder: Highlight the query as a regex when the regex filter is on",
         "docs": false
@@ -21,7 +21,7 @@
         "date": "2026-10-22",
         "lang": "PY",
         "repo": "home-assistant/core",
-        "stars": 92007,
+        "stars": 92042,
         "num": 175799,
         "title": "Migrate ubus from DeviceScanner to ScannerEntity and add config flow",
         "docs": false
@@ -30,7 +30,7 @@
         "date": "2026-08-20",
         "lang": "C++",
         "repo": "duckdb/duckdb",
-        "stars": 42851,
+        "stars": 42882,
         "num": 23782,
         "title": "Fix percentile_cont/disc(0) with descending order",
         "docs": false
@@ -39,7 +39,7 @@
         "date": "2026-07-02",
         "lang": "PY",
         "repo": "PostHog/posthog",
-        "stars": 40673,
+        "stars": 40688,
         "num": 66505,
         "title": "fix: stop bigint filter values from crashing the feature flags page",
         "docs": false
@@ -48,7 +48,7 @@
         "date": "2026-07-21",
         "lang": "TS",
         "repo": "directus/directus",
-        "stars": 38727,
+        "stars": 38677,
         "num": 27864,
         "title": "Fix aliased relational fields returning null in GraphQL when nested inside a M2A field",
         "docs": false
@@ -57,7 +57,7 @@
         "date": "2026-07-14",
         "lang": "JV",
         "repo": "keycloak/keycloak",
-        "stars": 37732,
+        "stars": 37744,
         "num": 50641,
         "title": "Fix ConcurrentModificationException updating organization attributes",
         "docs": false
@@ -66,7 +66,7 @@
         "date": "2026-07-08",
         "lang": "GO",
         "repo": "weaviate/weaviate",
-        "stars": 16940,
+        "stars": 16941,
         "num": 12049,
         "title": "gh-12041 return 422 for batch delete with missing match fields",
         "docs": false
@@ -75,7 +75,7 @@
         "date": "2026-07-09",
         "lang": "PY",
         "repo": "livekit/agents",
-        "stars": 15111,
+        "stars": 15123,
         "num": 6362,
         "title": "fix(azure): recover from STT error cancellations instead of hanging",
         "docs": false
@@ -84,7 +84,7 @@
         "date": "2026-07-03",
         "lang": "JS",
         "repo": "mholt/PapaParse",
-        "stars": 13592,
+        "stars": 13593,
         "num": 1128,
         "title": "fix: guess delimiter by row consistency before field count",
         "docs": false
@@ -93,7 +93,7 @@
         "date": "2026-10-24",
         "lang": "JS",
         "repo": "gka/chroma.js",
-        "stars": 10605,
+        "stars": 10604,
         "num": 395,
         "title": "fix(scale): clamp out-of-domain input before applying gamma",
         "docs": false
@@ -102,7 +102,7 @@
         "date": "2026-07-26",
         "lang": "PY",
         "repo": "sqlfluff/sqlfluff",
-        "stars": 10011,
+        "stars": 10013,
         "num": 8222,
         "title": "Postgres: stop LT01 spacing array types like `int []`",
         "docs": false
@@ -156,7 +156,7 @@
         "date": "2026-07-15",
         "lang": "JS",
         "repo": "jsonata-js/jsonata",
-        "stars": 2705,
+        "stars": 2707,
         "num": 809,
         "title": "Fix $contains crash when the token is undefined",
         "docs": false
@@ -219,7 +219,7 @@
         "date": "2026-10-30",
         "lang": "PY",
         "repo": "python-babel/babel",
-        "stars": 1470,
+        "stars": 1471,
         "num": 1288,
         "title": "Fix JS extractor line numbers being off on CRLF files",
         "docs": false
@@ -237,7 +237,7 @@
         "date": "2026-07-27",
         "lang": "TS",
         "repo": "fullcalendar/temporal-polyfill",
-        "stars": 786,
+        "stars": 787,
         "num": 96,
         "title": "Reject Duration strings with a dangling time designator",
         "docs": false
@@ -282,7 +282,7 @@
         "date": "2026-09-12",
         "lang": "GO",
         "repo": "containers/prometheus-podman-exporter",
-        "stars": 244,
+        "stars": 245,
         "num": 492,
         "title": "Fix duplicate image metrics that 500 the whole /metrics gather",
         "docs": false
@@ -327,7 +327,7 @@
         "date": "2026-04-29",
         "lang": "TS",
         "repo": "supabase/supabase",
-        "stars": 114599,
+        "stars": 114629,
         "num": 45299,
         "title": "docs: fix \"an\" → \"a\" grammar errors before consonant words",
         "docs": true

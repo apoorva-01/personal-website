@@ -1,10 +1,10 @@
 {
-  "generated": "2026-11-10",
+  "generated": "2026-11-11",
   "shipped": {
-    "prs": 75,
-    "repos": 36,
+    "prs": 76,
+    "repos": 37,
     "languages": 9,
-    "reach": 577966,
+    "reach": 578506,
     "privatePrs": 0,
     "privateRepos": 0,
     "rows": [
@@ -12,7 +12,7 @@
         "date": "2026-08-08",
         "lang": "RS",
         "repo": "zed-industries/zed",
-        "stars": 94655,
+        "stars": 94709,
         "num": 61128,
         "title": "text_finder: Highlight the query as a regex when the regex filter is on",
         "docs": false
@@ -21,7 +21,7 @@
         "date": "2026-10-22",
         "lang": "PY",
         "repo": "home-assistant/core",
-        "stars": 92121,
+        "stars": 92192,
         "num": 175799,
         "title": "Migrate ubus from DeviceScanner to ScannerEntity and add config flow",
         "docs": false
@@ -30,7 +30,7 @@
         "date": "2026-08-20",
         "lang": "C++",
         "repo": "duckdb/duckdb",
-        "stars": 42957,
+        "stars": 42990,
         "num": 23782,
         "title": "Fix percentile_cont/disc(0) with descending order",
         "docs": false
@@ -39,7 +39,7 @@
         "date": "2026-07-02",
         "lang": "PY",
         "repo": "PostHog/posthog",
-        "stars": 40728,
+        "stars": 40741,
         "num": 66505,
         "title": "fix: stop bigint filter values from crashing the feature flags page",
         "docs": false
@@ -48,7 +48,7 @@
         "date": "2026-07-21",
         "lang": "TS",
         "repo": "directus/directus",
-        "stars": 38677,
+        "stars": 38692,
         "num": 27864,
         "title": "Fix aliased relational fields returning null in GraphQL when nested inside a M2A field",
         "docs": false
@@ -57,7 +57,7 @@
         "date": "2026-07-14",
         "lang": "JV",
         "repo": "keycloak/keycloak",
-        "stars": 37796,
+        "stars": 37821,
         "num": 50641,
         "title": "Fix ConcurrentModificationException updating organization attributes",
         "docs": false
@@ -66,7 +66,7 @@
         "date": "2026-07-08",
         "lang": "GO",
         "repo": "weaviate/weaviate",
-        "stars": 16945,
+        "stars": 16943,
         "num": 12049,
         "title": "gh-12041 return 422 for batch delete with missing match fields",
         "docs": false
@@ -75,7 +75,7 @@
         "date": "2026-07-09",
         "lang": "PY",
         "repo": "livekit/agents",
-        "stars": 15162,
+        "stars": 15176,
         "num": 6362,
         "title": "fix(azure): recover from STT error cancellations instead of hanging",
         "docs": false
@@ -84,7 +84,7 @@
         "date": "2026-07-03",
         "lang": "JS",
         "repo": "mholt/PapaParse",
-        "stars": 13593,
+        "stars": 13595,
         "num": 1128,
         "title": "fix: guess delimiter by row consistency before field count",
         "docs": false
@@ -93,7 +93,7 @@
         "date": "2026-10-24",
         "lang": "JS",
         "repo": "gka/chroma.js",
-        "stars": 10601,
+        "stars": 10602,
         "num": 395,
         "title": "fix(scale): clamp out-of-domain input before applying gamma",
         "docs": false
@@ -102,7 +102,7 @@
         "date": "2026-07-26",
         "lang": "PY",
         "repo": "sqlfluff/sqlfluff",
-        "stars": 10019,
+        "stars": 10021,
         "num": 8222,
         "title": "Postgres: stop LT01 spacing array types like `int []`",
         "docs": false
@@ -111,7 +111,7 @@
         "date": "2026-07-01",
         "lang": "PY",
         "repo": "falconry/falcon",
-        "stars": 9813,
+        "stars": 9814,
         "num": 2672,
         "title": "fix(uri): preserve literal plus when unquote_plus is disabled",
         "docs": false
@@ -120,7 +120,7 @@
         "date": "2026-07-13",
         "lang": "JS",
         "repo": "MikeMcl/decimal.js",
-        "stars": 7270,
+        "stars": 7271,
         "num": 260,
         "title": "Fix asin losing precision near x = 1",
         "docs": false
@@ -138,7 +138,7 @@
         "date": "2026-06-30",
         "lang": "PY",
         "repo": "mne-tools/mne-python",
-        "stars": 3588,
+        "stars": 3590,
         "num": 13999,
         "title": "Fix write_fine_calibration mangling Neuromag channel names",
         "docs": false
@@ -147,7 +147,7 @@
         "date": "2026-07-10",
         "lang": "PY",
         "repo": "tomerfiliba/plumbum",
-        "stars": 3059,
+        "stars": 3058,
         "num": 830,
         "title": "fix(session): keep the return code off the last line of output",
         "docs": false
@@ -282,9 +282,18 @@
         "date": "2026-09-12",
         "lang": "GO",
         "repo": "containers/prometheus-podman-exporter",
-        "stars": 245,
+        "stars": 246,
         "num": 492,
         "title": "Fix duplicate image metrics that 500 the whole /metrics gather",
+        "docs": false
+      },
+      {
+        "date": "2026-11-11",
+        "lang": "JS",
+        "repo": "accordproject/concerto",
+        "stars": 223,
+        "num": 1276,
+        "title": "fix(concerto-vocabulary): look up terms by own property only",
         "docs": false
       },
       {
@@ -327,7 +336,7 @@
         "date": "2026-04-29",
         "lang": "TS",
         "repo": "supabase/supabase",
-        "stars": 114743,
+        "stars": 114828,
         "num": 45299,
         "title": "docs: fix \"an\" → \"a\" grammar errors before consonant words",
         "docs": true

@@ -1,10 +1,10 @@
 {
-  "generated": "2026-11-11",
+  "generated": "2026-11-12",
   "shipped": {
     "prs": 76,
     "repos": 37,
     "languages": 9,
-    "reach": 578506,
+    "reach": 578869,
     "privatePrs": 0,
     "privateRepos": 0,
     "rows": [
@@ -12,7 +12,7 @@
         "date": "2026-08-08",
         "lang": "RS",
         "repo": "zed-industries/zed",
-        "stars": 94709,
+        "stars": 94801,
         "num": 61128,
         "title": "text_finder: Highlight the query as a regex when the regex filter is on",
         "docs": false
@@ -21,7 +21,7 @@
         "date": "2026-10-22",
         "lang": "PY",
         "repo": "home-assistant/core",
-        "stars": 92192,
+        "stars": 92262,
         "num": 175799,
         "title": "Migrate ubus from DeviceScanner to ScannerEntity and add config flow",
         "docs": false
@@ -30,7 +30,7 @@
         "date": "2026-08-20",
         "lang": "C++",
         "repo": "duckdb/duckdb",
-        "stars": 42990,
+        "stars": 43032,
         "num": 23782,
         "title": "Fix percentile_cont/disc(0) with descending order",
         "docs": false
@@ -39,7 +39,7 @@
         "date": "2026-07-02",
         "lang": "PY",
         "repo": "PostHog/posthog",
-        "stars": 40741,
+        "stars": 40757,
         "num": 66505,
         "title": "fix: stop bigint filter values from crashing the feature flags page",
         "docs": false
@@ -48,7 +48,7 @@
         "date": "2026-07-21",
         "lang": "TS",
         "repo": "directus/directus",
-        "stars": 38692,
+        "stars": 38701,
         "num": 27864,
         "title": "Fix aliased relational fields returning null in GraphQL when nested inside a M2A field",
         "docs": false
@@ -57,7 +57,7 @@
         "date": "2026-07-14",
         "lang": "JV",
         "repo": "keycloak/keycloak",
-        "stars": 37821,
+        "stars": 37835,
         "num": 50641,
         "title": "Fix ConcurrentModificationException updating organization attributes",
         "docs": false
@@ -66,7 +66,7 @@
         "date": "2026-07-08",
         "lang": "GO",
         "repo": "weaviate/weaviate",
-        "stars": 16943,
+        "stars": 16945,
         "num": 12049,
         "title": "gh-12041 return 422 for batch delete with missing match fields",
         "docs": false
@@ -75,7 +75,7 @@
         "date": "2026-07-09",
         "lang": "PY",
         "repo": "livekit/agents",
-        "stars": 15176,
+        "stars": 15196,
         "num": 6362,
         "title": "fix(azure): recover from STT error cancellations instead of hanging",
         "docs": false
@@ -120,7 +120,7 @@
         "date": "2026-07-13",
         "lang": "JS",
         "repo": "MikeMcl/decimal.js",
-        "stars": 7271,
+        "stars": 7272,
         "num": 260,
         "title": "Fix asin losing precision near x = 1",
         "docs": false
@@ -129,7 +129,7 @@
         "date": "2026-07-10",
         "lang": "JV",
         "repo": "redis/lettuce",
-        "stars": 5786,
+        "stars": 5787,
         "num": 3832,
         "title": "Count YIELD_SCORE_AS tokens in FT.HYBRID COMBINE clause #3811",
         "docs": false
@@ -192,7 +192,7 @@
         "date": "2026-07-09",
         "lang": "TS",
         "repo": "eemeli/yaml",
-        "stars": 1702,
+        "stars": 1703,
         "num": 700,
         "title": "fix: Parse a flow collection map key preceded by a blank line or comment",
         "docs": false
@@ -219,7 +219,7 @@
         "date": "2026-10-30",
         "lang": "PY",
         "repo": "python-babel/babel",
-        "stars": 1471,
+        "stars": 1472,
         "num": 1288,
         "title": "Fix JS extractor line numbers being off on CRLF files",
         "docs": false
@@ -237,7 +237,7 @@
         "date": "2026-07-27",
         "lang": "TS",
         "repo": "fullcalendar/temporal-polyfill",
-        "stars": 790,
+        "stars": 791,
         "num": 96,
         "title": "Reject Duration strings with a dangling time designator",
         "docs": false
@@ -336,7 +336,7 @@
         "date": "2026-04-29",
         "lang": "TS",
         "repo": "supabase/supabase",
-        "stars": 114828,
+        "stars": 114921,
         "num": 45299,
         "title": "docs: fix \"an\" → \"a\" grammar errors before consonant words",
         "docs": true

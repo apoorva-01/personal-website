@@ -1,10 +1,10 @@
 {
-  "generated": "2026-11-14",
+  "generated": "2026-11-15",
   "shipped": {
     "prs": 76,
     "repos": 37,
     "languages": 9,
-    "reach": 579334,
+    "reach": 579538,
     "privatePrs": 0,
     "privateRepos": 0,
     "rows": [
@@ -12,7 +12,7 @@
         "date": "2026-08-08",
         "lang": "RS",
         "repo": "zed-industries/zed",
-        "stars": 95018,
+        "stars": 95063,
         "num": 61128,
         "title": "text_finder: Highlight the query as a regex when the regex filter is on",
         "docs": false
@@ -21,7 +21,7 @@
         "date": "2026-10-22",
         "lang": "PY",
         "repo": "home-assistant/core",
-        "stars": 92301,
+        "stars": 92324,
         "num": 175799,
         "title": "Migrate ubus from DeviceScanner to ScannerEntity and add config flow",
         "docs": false
@@ -30,7 +30,7 @@
         "date": "2026-08-20",
         "lang": "C++",
         "repo": "duckdb/duckdb",
-        "stars": 43058,
+        "stars": 43080,
         "num": 23782,
         "title": "Fix percentile_cont/disc(0) with descending order",
         "docs": false
@@ -39,7 +39,7 @@
         "date": "2026-07-02",
         "lang": "PY",
         "repo": "PostHog/posthog",
-        "stars": 40777,
+        "stars": 40796,
         "num": 66505,
         "title": "fix: stop bigint filter values from crashing the feature flags page",
         "docs": false
@@ -48,7 +48,7 @@
         "date": "2026-07-21",
         "lang": "TS",
         "repo": "directus/directus",
-        "stars": 38715,
+        "stars": 38724,
         "num": 27864,
         "title": "Fix aliased relational fields returning null in GraphQL when nested inside a M2A field",
         "docs": false
@@ -57,7 +57,7 @@
         "date": "2026-07-14",
         "lang": "JV",
         "repo": "keycloak/keycloak",
-        "stars": 37865,
+        "stars": 37875,
         "num": 50641,
         "title": "Fix ConcurrentModificationException updating organization attributes",
         "docs": false
@@ -66,7 +66,7 @@
         "date": "2026-07-08",
         "lang": "GO",
         "repo": "weaviate/weaviate",
-        "stars": 16945,
+        "stars": 16948,
         "num": 12049,
         "title": "gh-12041 return 422 for batch delete with missing match fields",
         "docs": false
@@ -75,7 +75,7 @@
         "date": "2026-07-09",
         "lang": "PY",
         "repo": "livekit/agents",
-        "stars": 15222,
+        "stars": 15235,
         "num": 6362,
         "title": "fix(azure): recover from STT error cancellations instead of hanging",
         "docs": false
@@ -93,7 +93,7 @@
         "date": "2026-10-24",
         "lang": "JS",
         "repo": "gka/chroma.js",
-        "stars": 10604,
+        "stars": 10605,
         "num": 395,
         "title": "fix(scale): clamp out-of-domain input before applying gamma",
         "docs": false
@@ -102,7 +102,7 @@
         "date": "2026-07-26",
         "lang": "PY",
         "repo": "sqlfluff/sqlfluff",
-        "stars": 10023,
+        "stars": 10024,
         "num": 8222,
         "title": "Postgres: stop LT01 spacing array types like `int []`",
         "docs": false
@@ -111,7 +111,7 @@
         "date": "2026-07-01",
         "lang": "PY",
         "repo": "falconry/falcon",
-        "stars": 9815,
+        "stars": 9816,
         "num": 2672,
         "title": "fix(uri): preserve literal plus when unquote_plus is disabled",
         "docs": false
@@ -120,7 +120,7 @@
         "date": "2026-07-13",
         "lang": "JS",
         "repo": "MikeMcl/decimal.js",
-        "stars": 7272,
+        "stars": 7273,
         "num": 260,
         "title": "Fix asin losing precision near x = 1",
         "docs": false
@@ -147,7 +147,7 @@
         "date": "2026-07-10",
         "lang": "PY",
         "repo": "tomerfiliba/plumbum",
-        "stars": 3058,
+        "stars": 3060,
         "num": 830,
         "title": "fix(session): keep the return code off the last line of output",
         "docs": false
@@ -165,7 +165,7 @@
         "date": "2026-07-04",
         "lang": "PY",
         "repo": "pyparsing/pyparsing",
-        "stars": 2499,
+        "stars": 2500,
         "num": 644,
         "title": "Escape control characters in set_debug() debug output",
         "docs": false
@@ -174,7 +174,7 @@
         "date": "2026-07-06",
         "lang": "PY",
         "repo": "pygments/pygments",
-        "stars": 2221,
+        "stars": 2222,
         "num": 3177,
         "title": "Swift: keep `func` a keyword in `class func` methods",
         "docs": false
@@ -210,7 +210,7 @@
         "date": "2026-07-10",
         "lang": "JS",
         "repo": "js-joda/js-joda",
-        "stars": 1664,
+        "stars": 1663,
         "num": 807,
         "title": "fix: parse zone ids that share a prefix with a fixed id",
         "docs": false
@@ -255,7 +255,7 @@
         "date": "2026-08-10",
         "lang": "MDX",
         "repo": "langchain-ai/docs",
-        "stars": 451,
+        "stars": 452,
         "num": 4958,
         "title": "Add ShannonBase vector store integration",
         "docs": false
@@ -291,7 +291,7 @@
         "date": "2026-11-11",
         "lang": "JS",
         "repo": "accordproject/concerto",
-        "stars": 224,
+        "stars": 226,
         "num": 1276,
         "title": "fix(concerto-vocabulary): look up terms by own property only",
         "docs": false
@@ -336,7 +336,7 @@
         "date": "2026-04-29",
         "lang": "TS",
         "repo": "supabase/supabase",
-        "stars": 115001,
+        "stars": 115051,
         "num": 45299,
         "title": "docs: fix \"an\" → \"a\" grammar errors before consonant words",
         "docs": true
